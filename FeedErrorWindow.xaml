@@ -1,0 +1,112 @@
+﻿<Window x:Class="FeedCenter.FeedErrorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{x:Static my:Resources.FeedErrorWindow}"
+        Height="300"
+        Width="550"
+        WindowStartupLocation="CenterOwner"
+        Icon="/FeedCenter;component/Resources/Application.ico"
+        xmlns:my="clr-namespace:FeedCenter.Properties"
+        xmlns:LinkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
+        WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="225*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DataGrid AutoGenerateColumns="False"
+                  Name="feedDataGrid"
+                  CanUserReorderColumns="False"
+                  GridLinesVisibility="None"
+                  SelectionMode="Single"
+                  IsReadOnly="True"
+                  CanUserResizeRows="False"
+                  HeadersVisibility="Column"
+                  Margin="6,6,6,0"
+                  Background="{x:Null}"
+                  CanUserSortColumns="True">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness"
+                            Value="0" />
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static my:Resources.FeedNameColumnHeader}"
+                                    Binding="{Binding Name}"
+                                    Width="*"
+                                    SortDirection="Ascending">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static my:Resources.FeedErrorColumnHeader}"
+                                    Binding="{Binding LastReadResultDescription}"
+                                    Width="*">
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding LastUpdated, StringFormat=d}"
+                                    Header="{x:Static my:Resources.LastUpdatedColumnHeader}"
+                                    Width="Auto" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Border Grid.Row="1"
+                BorderThickness="1,0,1,1"
+                Margin="6,0,6,3"
+                BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <StackPanel Orientation="Horizontal"
+                        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <LinkControl:LinkControl Name="editFeedButton"
+                                         Margin="2"
+                                         Click="HandleEditFeedButtonClick"
+                                         Text="{x:Static my:Resources.EditLink}"
+                                         ToolTip="{x:Static my:Resources.EditFeedButton}">
+                </LinkControl:LinkControl>
+                <LinkControl:LinkControl Name="deleteFeedButton"
+                                         Margin="2"
+                                         Click="HandleDeleteFeedButtonClick"
+                                         Text="{x:Static my:Resources.DeleteLink}"
+                                         ToolTip="{x:Static my:Resources.DeleteFeedButton}">
+                </LinkControl:LinkControl>
+                <LinkControl:LinkControl Name="refreshCurrent"
+                                         Margin="2"
+                                         Click="HandleRefreshCurrentButtonClick"
+                                         Text="{x:Static my:Resources.RefreshCurrent}"
+                                         ToolTip="{x:Static my:Resources.RefreshCurrent}">
+                </LinkControl:LinkControl>
+                <LinkControl:LinkControl Name="openPage"
+                                         Margin="6,2,2,2"
+                                         Click="HandleOpenPageButtonClick"
+                                         Text="{x:Static my:Resources.OpenPage}"
+                                         ToolTip="{x:Static my:Resources.OpenPage}">
+                </LinkControl:LinkControl>
+                <LinkControl:LinkControl Name="openFeed"
+                                         Margin="2"
+                                         Click="HandleOpenFeedButtonClick"
+                                         Text="{x:Static my:Resources.OpenFeed}"
+                                         ToolTip="{x:Static my:Resources.OpenFeed}">
+                </LinkControl:LinkControl>
+            </StackPanel>
+        </Border>
+        <Grid DockPanel.Dock="Right"
+              Grid.Row="2"
+              Margin="6,3,6,6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Content="{x:Static my:Resources.OkayButton}"
+                    Height="23"
+                    IsDefault="True"
+                    Name="okButton"
+                    Width="75"
+                    Grid.Column="1"
+                    Click="HandleOkayButtonClick" />
+            <Button Content="{x:Static my:Resources.CancelButton}"
+                    Height="23"
+                    IsCancel="True"
+                    Name="cancelButton"
+                    Width="75"
+                    Margin="6,0,0,0"
+                    Grid.Column="2" />
+        </Grid>
+    </Grid>
+</Window>

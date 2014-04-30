@@ -1,0 +1,286 @@
+﻿<Windows:SnappingWindow x:Class="FeedCenter.MainWindow"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:Properties="clr-namespace:FeedCenter.Properties"
+                        xmlns:Windows="clr-namespace:Common.Wpf.Windows;assembly=Common.Wpf"
+                        xmlns:Toolbar="clr-namespace:Common.Wpf.Toolbar;assembly=Common.Wpf"
+                        xmlns:SplitButton="clr-namespace:Common.Wpf.Toolbar.SplitButton;assembly=Common.Wpf"
+                        xmlns:Markup="clr-namespace:Common.Wpf.MarkupExtensions;assembly=Common.Wpf.MarkupExtensions"
+                        xmlns:LinkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
+                        xmlns:HtmlTextBlock="clr-namespace:Common.Wpf.HtmlTextBlock;assembly=Common.Wpf"
+                        xmlns:System="clr-namespace:System;assembly=mscorlib"
+                        Title="MainWindow"
+                        Height="360"
+                        Width="252"
+                        WindowStyle="None"
+                        ResizeMode="NoResize"
+                        Background="{x:Static SystemColors.DesktopBrush}"
+                        AllowDrop="True"
+                        DragOver="HandleDragOver"
+                        Drop="HandleDragDrop"
+                        ShowInTaskbar="False">
+    <Window.Resources>
+        <Style TargetType="{x:Type ToolBar}">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToolBar}">
+                        <ToolBarPanel IsItemsHost="True"
+                                      Margin="0,1,2,2"
+                                      SnapsToDevicePixels="True" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
+            BorderThickness="1"
+            Name="windowBorder"
+            Padding="0"
+            Background="{x:Static SystemColors.DesktopBrush}">
+        <Grid Name="mainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"
+                               Name="headerRow" />
+                <RowDefinition Height="Auto"
+                               Name="newVersionRow" />
+                <RowDefinition Height="Auto"
+                               Name="feedRow" />
+                <RowDefinition Height="Auto"
+                               Name="topToolbarRow" />
+                <RowDefinition Height="*"
+                               Name="feedListRow" />
+                <RowDefinition Height="Auto"
+                               Name="progressRow" />
+                <RowDefinition Height="Auto"
+                               Name="bottomToolbarRow" />
+                <RowDefinition Height="Auto"
+                               Name="feedErrorsRow" />
+            </Grid.RowDefinitions>
+            <Grid Height="21"
+                  Name="headerGrid"
+                  Grid.Row="{Markup:GridRow RowName=headerRow}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="21" />
+                </Grid.ColumnDefinitions>
+                <Label Content="{x:Static Properties:Resources.ApplicationDisplayName}"
+                       Name="headerLabel"
+                       Padding="3,0"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       MouseLeftButtonDown="HandleHeaderLabelMouseLeftButtonDown"
+                       VerticalContentAlignment="Center"
+                       Grid.Column="0" />
+                <Button Name="closeButton"
+                        Width="13"
+                        Height="13"
+                        Click="HandleCloseButtonClick"
+                        FontFamily="Marlett"
+                        Content="r"
+                        FontSize="8"
+                        Grid.Column="1"></Button>
+            </Grid>
+            <LinkControl:LinkControl Name="newVersionLink"
+                                     Height="21"
+                                     Grid.Row="{Markup:GridRow newVersionRow}"
+                                     Text="{x:Static Properties:Resources.NewVersionLink}"
+                                     Background="AntiqueWhite"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalContentAlignment="Center"
+                                     Visibility="Collapsed"
+                                     Click="HandleNewVersionLinkClick">
+            </LinkControl:LinkControl>
+            <Grid Height="21"
+                  Name="feedGrid"
+                  Grid.Row="{Markup:GridRow RowName=feedRow}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="21" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="*Feed Name"
+                           Name="feedLabel"
+                           Padding="3,0"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Width="Auto"
+                           Cursor="Hand"
+                           TextTrimming="CharacterEllipsis"
+                           MouseDown="HandleFeedLabelMouseDown"
+                           Grid.Column="0" />
+                <Button Name="feedButton"
+                        Width="13"
+                        Height="13"
+                        Click="HandleFeedButtonClick"
+                        FontFamily="Marlett"
+                        Content="u"
+                        FontSize="8"
+                        Grid.Column="1" />
+            </Grid>
+            <ListBox Name="linkTextList"
+                     BorderThickness="0"
+                     Background="{x:Static SystemColors.DesktopBrush}"
+                     MouseUp="HandleLinkTextListMouseUp"
+                     Foreground="White"
+                     Grid.Row="{Markup:GridRow RowName=feedListRow}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBoxItem Content="Test item" />
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <HtmlTextBlock:HtmlTextBlock Html="{Binding}"
+                                                     TextWrapping="Wrap"
+                                                     Margin="0,1" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border BorderThickness="{TemplateBinding Border.BorderThickness}"
+                                            Padding="{TemplateBinding Control.Padding}"
+                                            BorderBrush="{TemplateBinding Border.BorderBrush}"
+                                            Background="{TemplateBinding Panel.Background}"
+                                            Name="Bd"
+                                            SnapsToDevicePixels="True">
+                                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
+                                                          ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                                          ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                                          HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                                          VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="Selector.IsMouseOver">
+                                            <Trigger.Value>
+                                                <System:Boolean>True</System:Boolean>
+                                            </Trigger.Value>
+                                            <Setter Property="Panel.Background"
+                                                    TargetName="Bd">
+                                                <Setter.Value>
+                                                    <DynamicResource ResourceKey="{x:Static SystemColors.HighlightBrushKey}" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="TextElement.Foreground">
+                                                <Setter.Value>
+                                                    <DynamicResource ResourceKey="{x:Static SystemColors.HighlightTextBrushKey}" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Panel.Cursor"
+                                                    TargetName="Bd"
+                                                    Value="Hand">
+                                            </Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <EventSetter Event="MouseDoubleClick"
+                                     Handler="HandleLinkTextListListItemMouseDoubleClick" />
+                        <EventSetter Event="MouseUp"
+                                     Handler="HandleLinkTextListListItemMouseUp" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <ProgressBar Name="feedReadProgress"
+                         Height="15"
+                         Visibility="Collapsed"
+                         Grid.Row="{Markup:GridRow RowName=progressRow}" />
+            <ToolBarTray Name="navigationToolbarTray"
+                         Background="Transparent"
+                         Orientation="Horizontal"
+                         Grid.Row="{Markup:GridRow RowName=bottomToolbarRow}">
+                <ToolBar Name="navigationToolbar"
+                         ToolBarTray.IsLocked="True"
+                         Background="Transparent"
+                         ToolBar.OverflowMode="Never">
+                    <Toolbar:ImageButton Height="20"
+                                         Width="20"
+                                         Name="previousToolbarButton"
+                                         Click="HandlePreviousToolbarButtonClick"
+                                         ToolTip="{x:Static Properties:Resources.previousToolbarButton}"
+                                         ImageSource="Resources/Left.ico" />
+                    <Toolbar:ImageButton Height="20"
+                                         Width="20"
+                                         Name="nextToolbarButton"
+                                         Click="HandleNextToolbarButtonClick"
+                                         ToolTip="{x:Static Properties:Resources.nextToolbarButton}"
+                                         ImageSource="Resources/Right.ico" />
+                    <SplitButton:SplitButton Name="refreshToolbarButton"
+                                             Image="Resources/Rss-Download.ico"
+                                             ToolTip="{x:Static Properties:Resources.refreshAllToolbarButton}"
+                                             Height="20"
+                                             MinWidth="35"
+                                             Margin="5,0,0,0"
+                                             Click="HandleRefreshToolbarButtonClick">
+                        <SplitButton:SplitButton.DropDownContextMenu>
+                            <ContextMenu MenuItem.Click="HandleRefreshMenuItemClick">
+                                <MenuItem Name="menuRefreshAll"
+                                          Header="{x:Static Properties:Resources.refreshAllToolbarButton}" />
+                                <MenuItem Name="menuRefresh"
+                                          Header="{x:Static Properties:Resources.refreshToolbarButton}" />
+                            </ContextMenu>
+                        </SplitButton:SplitButton.DropDownContextMenu>
+                    </SplitButton:SplitButton>
+                    <SplitButton:SplitButton Name="openAllToolbarButton"
+                                             Image="Resources/News.ico"
+                                             ToolTip="{x:Static Properties:Resources.openAllMultipleToolbarButton}"
+                                             Height="20"
+                                             MinWidth="35"
+                                             Margin="5,0,0,0"
+                                             Click="HandleOpenAllToolbarButtonClick">
+                        <SplitButton:SplitButton.DropDownContextMenu>
+                            <ContextMenu MenuItem.Click="HandleOpenAllMenuItemClick">
+                                <MenuItem Name="menuOpenAllMultiplePages"
+                                          Header="{x:Static Properties:Resources.openAllMultipleToolbarButton}" />
+                                <MenuItem Name="menuOpenAllSinglePage"
+                                          Header="{x:Static Properties:Resources.openAllSingleToolbarButton}" />
+                            </ContextMenu>
+                        </SplitButton:SplitButton.DropDownContextMenu>
+                    </SplitButton:SplitButton>
+                    <Toolbar:ImageButton Height="20"
+                                         Width="20"
+                                         Margin="5,0,0,0"
+                                         Name="markReadToolbarButton"
+                                         Click="HandleMarkReadToolbarButtonClick"
+                                         ToolTip="{x:Static Properties:Resources.markReadToolbarButton}"
+                                         ImageSource="Resources/Comments-edit.ico" />
+                    <SplitButton:SplitButton Height="20"
+                                             MinWidth="35"
+                                             Margin="5,0,0,0"
+                                             Name="optionsToolbarButton"
+                                             Click="HandleOptionsToolbarButtonClick"
+                                             ToolTip="{x:Static Properties:Resources.optionsToolbarButton}"
+                                             Image="Resources/Compile.ico">
+                        <SplitButton:SplitButton.DropDownContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static Properties:Resources.lockWindowCheckBox}"
+                                          IsCheckable="True"
+                                          IsChecked="{Binding Source={x:Static Properties:Settings.Default}, Path=WindowLocked}" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:Resources.CurrentFeed}">
+                                    <MenuItem Header="{x:Static Properties:Resources.EditMenu}"
+                                              Click="HandleEditCurrentFeedMenuItemClick" />
+                                    <MenuItem Header="{x:Static Properties:Resources.DeleteMenu}"
+                                              Click="HandleDeleteCurrentFeedMenuItemClick" />
+                                </MenuItem>
+                            </ContextMenu>
+                        </SplitButton:SplitButton.DropDownContextMenu>
+                    </SplitButton:SplitButton>
+                </ToolBar>
+            </ToolBarTray>
+            <LinkControl:LinkControl Name="feedErrorsLink"
+                                     Height="21"
+                                     Grid.Row="{Markup:GridRow feedErrorsRow}"
+                                     Text="{x:Static Properties:Resources.FeedErrorsLink}"
+                                     ToolTip="{x:Static Properties:Resources.showErrorsToolbarButton}"
+                                     Background="AntiqueWhite"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalContentAlignment="Center"
+                                     Visibility="Collapsed"
+                                     Click="HandleShowErrorsButtonClick">
+            </LinkControl:LinkControl>
+        </Grid>
+    </Border>
+</Windows:SnappingWindow>

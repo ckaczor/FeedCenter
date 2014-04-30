@@ -1,0 +1,30 @@
+﻿ALTER TABLE		FeedItem 
+ALTER COLUMN	Description 
+DROP DEFAULT
+GO
+
+ALTER TABLE		FeedItem
+ALTER COLUMN	Description ntext NOT NULL 
+GO
+
+ALTER TABLE		FeedItem
+ALTER COLUMN	Description SET DEFAULT '' 
+GO
+
+ALTER TABLE		FeedItem 
+ALTER COLUMN	Title 
+DROP DEFAULT
+GO
+
+ALTER TABLE		FeedItem
+ALTER COLUMN	Title ntext NOT NULL 
+GO
+
+ALTER TABLE		FeedItem
+ALTER COLUMN	Title SET DEFAULT '' 
+GO
+
+UPDATE	Setting
+SET		Value = '3'
+WHERE	Name = 'DatabaseVersion'
+GO

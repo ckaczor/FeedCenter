@@ -1,0 +1,9 @@
+﻿UPDATE	Category
+SET		Name = '< default >'
+WHERE	Name = 'Default'
+GO
+
+UPDATE	Setting
+SET		Value = '4'
+WHERE	Name = 'DatabaseVersion'
+GO

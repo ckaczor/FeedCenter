@@ -1,0 +1,18 @@
+﻿ALTER TABLE Feed ADD COLUMN MultipleOpenAction int
+GO
+
+UPDATE	Feed
+SET		MultipleOpenAction = 0
+WHERE	MultipleOpenAction IS NULL
+GO
+
+ALTER TABLE Feed ALTER COLUMN MultipleOpenAction int NOT NULL
+GO
+
+ALTER TABLE Feed ALTER COLUMN MultipleOpenAction SET DEFAULT 0
+GO
+
+UPDATE	Setting
+SET		Value = '6'
+WHERE	Name = 'DatabaseVersion'
+GO

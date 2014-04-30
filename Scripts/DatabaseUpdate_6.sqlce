@@ -1,0 +1,14 @@
+﻿CREATE TABLE DatabaseVersion
+(
+	Value				int		NOT NULL		DEFAULT 0
+)
+GO
+
+INSERT	DatabaseVersion
+		(Value)
+VALUES	(7)
+GO
+
+DELETE	Setting
+WHERE	Name = 'DatabaseVersion'
+GO

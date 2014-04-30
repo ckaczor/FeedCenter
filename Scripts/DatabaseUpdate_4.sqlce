@@ -1,0 +1,8 @@
+﻿ALTER TABLE		Feed
+DROP COLUMN		Sequence
+GO
+
+UPDATE	Setting
+SET		Value = '5'
+WHERE	Name = 'DatabaseVersion'
+GO

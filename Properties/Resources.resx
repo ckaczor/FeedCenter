@@ -1,0 +1,530 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Application.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CreateDatabase" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scripts\CreateDatabase.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DatabaseUpdate_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scripts\DatabaseUpdate_1.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DatabaseUpdate_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scripts\DatabaseUpdate_2.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DatabaseUpdate_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scripts\DatabaseUpdate_3.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DatabaseUpdate_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scripts\DatabaseUpdate_4.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FeedActionDescription" xml:space="preserve">
+    <value>In field '{0}' - search for '{1}' - replace with '{2}'</value>
+  </data>
+  <data name="NotificationIconContextMenuExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="NotificationIconContextMenuLocked" xml:space="preserve">
+    <value>Lock window</value>
+  </data>
+  <data name="NoTitleText" xml:space="preserve">
+    <value>&lt; no title &gt;</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version: {0}</value>
+  </data>
+  <data name="SplashCheckingForUpdate" xml:space="preserve">
+    <value>Checking for update...</value>
+  </data>
+  <data name="SplashCheckingForDatabase" xml:space="preserve">
+    <value>Checking database existence...</value>
+  </data>
+  <data name="SplashCreatingDatabase" xml:space="preserve">
+    <value>Creating database...</value>
+  </data>
+  <data name="SplashRestarting" xml:space="preserve">
+    <value>Restarting...</value>
+  </data>
+  <data name="SplashInstallingUpdate" xml:space="preserve">
+    <value>Installing update...</value>
+  </data>
+  <data name="SplashMaintainingDatabase" xml:space="preserve">
+    <value>Maintaining database...</value>
+  </data>
+  <data name="SplashUpdatingDatabase" xml:space="preserve">
+    <value>Updating database...</value>
+  </data>
+  <data name="SplashStarting" xml:space="preserve">
+    <value>Starting...</value>
+  </data>
+  <data name="ApplicationDisplayName" xml:space="preserve">
+    <value>Feed Center</value>
+  </data>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>FeedCenter</value>
+  </data>
+  <data name="UpdateCheckNewVersion" xml:space="preserve">
+    <value>Version {1} of {0} is now available.
+
+Would you like to download and install it now?</value>
+  </data>
+  <data name="UpdateCheckCurrent" xml:space="preserve">
+    <value>You are already running the most recent version.
+
+No updates are available at this time.</value>
+  </data>
+  <data name="UpdateCheckTitle" xml:space="preserve">
+    <value>{0} Update</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>An update to version {0} is now available.</value>
+  </data>
+  <data name="FeedAddedNotification" xml:space="preserve">
+    <value>"{0}" has been successfully added to your feed list.</value>
+  </data>
+  <data name="optionCategoryGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="startWithWindowsCheckBox" xml:space="preserve">
+    <value>_Start when Windows starts</value>
+  </data>
+  <data name="nextToolbarButton" xml:space="preserve">
+    <value>Next feed</value>
+  </data>
+  <data name="optionsToolbarButton" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="previousToolbarButton" xml:space="preserve">
+    <value>Previous feed</value>
+  </data>
+  <data name="refreshToolbarButton" xml:space="preserve">
+    <value>Refresh current feed</value>
+  </data>
+  <data name="refreshAllToolbarButton" xml:space="preserve">
+    <value>Refresh all feeds</value>
+  </data>
+  <data name="markReadToolbarButton" xml:space="preserve">
+    <value>Mark feed as read</value>
+  </data>
+  <data name="optionCategoryDisplay" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="displayEmptyFeedsCheckBox" xml:space="preserve">
+    <value>_Display empty feeds</value>
+  </data>
+  <data name="lockWindowCheckBox" xml:space="preserve">
+    <value>_Lock window</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="OkayButton" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="optionCategoryAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="optionCategoryFeeds" xml:space="preserve">
+    <value>Feeds</value>
+  </data>
+  <data name="optionCategoryUpdate" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="OptionsWindow" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="AddFeedButton" xml:space="preserve">
+    <value>Add Feed</value>
+  </data>
+  <data name="DeleteFeedButton" xml:space="preserve">
+    <value>Delete Feed</value>
+  </data>
+  <data name="EditFeedButton" xml:space="preserve">
+    <value>Edit Feed</value>
+  </data>
+  <data name="ImportExportFilter" xml:space="preserve">
+    <value>OPML Files (*.opml)|*.opml|All Files (*.*)|*.*</value>
+  </data>
+  <data name="ActionsButton" xml:space="preserve">
+    <value>A_ctions</value>
+  </data>
+  <data name="ImportFeedsButton" xml:space="preserve">
+    <value>Import Feeds</value>
+  </data>
+  <data name="ExportFeedsButton" xml:space="preserve">
+    <value>Export Feeds</value>
+  </data>
+  <data name="SortFeeds" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="authenticationTab" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
+  <data name="feedNameLabel" xml:space="preserve">
+    <value>Feed _name:</value>
+  </data>
+  <data name="feedReadIntervalPrefix" xml:space="preserve">
+    <value>_Refresh feed every</value>
+  </data>
+  <data name="feedReadIntervalSuffix" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="feedUrlLabel" xml:space="preserve">
+    <value>Feed _URL:</value>
+  </data>
+  <data name="FeedWindowAdd" xml:space="preserve">
+    <value>Add Feed</value>
+  </data>
+  <data name="FeedWindowEdit" xml:space="preserve">
+    <value>Edit Feed</value>
+  </data>
+  <data name="generalTab" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="checkVersionNowButton" xml:space="preserve">
+    <value>Check _Now</value>
+  </data>
+  <data name="checkVersionOnStartupCheckBox" xml:space="preserve">
+    <value>_Check for a new version on startup</value>
+  </data>
+  <data name="authenticationPasswordLabel" xml:space="preserve">
+    <value>_Password:</value>
+  </data>
+  <data name="authenticationUserNameLabel" xml:space="preserve">
+    <value>_User name:</value>
+  </data>
+  <data name="requiresAuthenticationCheckBox" xml:space="preserve">
+    <value>_Feed requires authentication</value>
+  </data>
+  <data name="FeedAuthenticationUserNameError" xml:space="preserve">
+    <value>Authentication user name must be specified</value>
+  </data>
+  <data name="FeedNameError" xml:space="preserve">
+    <value>Feed name must be specified</value>
+  </data>
+  <data name="FeedUrlError" xml:space="preserve">
+    <value>Feed URL must be specified</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="toolbarLocationLabel" xml:space="preserve">
+    <value>_Tool bar location:</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="showErrorsToolbarButton" xml:space="preserve">
+    <value>Show problems from last refresh</value>
+  </data>
+  <data name="FeedErrorColumnHeader" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="FeedNameColumnHeader" xml:space="preserve">
+    <value>Feed</value>
+  </data>
+  <data name="CloseButton" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="FeedErrorWindow" xml:space="preserve">
+    <value>Feed Reading Errors</value>
+  </data>
+  <data name="openAllSingleToolbarButton" xml:space="preserve">
+    <value>Open all links on single page</value>
+  </data>
+  <data name="registerAsDefaultFeedReaderCheckBox" xml:space="preserve">
+    <value>_Register as default feed reader</value>
+  </data>
+  <data name="browserLabel" xml:space="preserve">
+    <value>_Browser:</value>
+  </data>
+  <data name="DefaultBrowserCaption" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="feedCategoryLabel" xml:space="preserve">
+    <value>_Category:</value>
+  </data>
+  <data name="optionCategoryCategories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="AddCategoryButton" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="EditCategoryButton" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="multipleLineDisplayLabel" xml:space="preserve">
+    <value>_Multi-line items:</value>
+  </data>
+  <data name="multipleLineDisplayFirstLine" xml:space="preserve">
+    <value>Show only first line</value>
+  </data>
+  <data name="multipleLineDisplayNormal" xml:space="preserve">
+    <value>Leave alone</value>
+  </data>
+  <data name="multipleLineDisplaySingleLine" xml:space="preserve">
+    <value>Flatten to single line</value>
+  </data>
+  <data name="CategoryWindowAdd" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="CategoryWindowEdit" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="DeleteCategoryButton" xml:space="preserve">
+    <value>Delete Category</value>
+  </data>
+  <data name="showOnSinglePageToolbarButton" xml:space="preserve">
+    <value>Show all items on a single page</value>
+  </data>
+  <data name="openAllMultipleToolbarButton" xml:space="preserve">
+    <value>Open all links on individual pages</value>
+  </data>
+  <data name="CurrentFeed" xml:space="preserve">
+    <value>Current Feed</value>
+  </data>
+  <data name="DeleteMenu" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EditMenu" xml:space="preserve">
+    <value>Edit...</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this feed?</value>
+  </data>
+  <data name="optionCategoryReading" xml:space="preserve">
+    <value>Reading</value>
+  </data>
+  <data name="openLabel" xml:space="preserve">
+    <value>"Open all" _action:</value>
+  </data>
+  <data name="DatabaseUpdate_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scripts\DatabaseUpdate_5.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="readingTab" xml:space="preserve">
+    <value>Reading</value>
+  </data>
+  <data name="BulkFeedWindow" xml:space="preserve">
+    <value>Edit Multiple Feeds</value>
+  </data>
+  <data name="FeedLinkFilterLabel" xml:space="preserve">
+    <value>Feed _link contains:</value>
+  </data>
+  <data name="SelectAllLabel" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="SelectInvertLabel" xml:space="preserve">
+    <value>Invert</value>
+  </data>
+  <data name="SelectLabel" xml:space="preserve">
+    <value>Select:</value>
+  </data>
+  <data name="SelectNoneLabel" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="AddLink" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="CategoriesHeader" xml:space="preserve">
+    <value>Categories:</value>
+  </data>
+  <data name="DeleteLink" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ExportLink" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="FeedsHeader" xml:space="preserve">
+    <value>Feeds:</value>
+  </data>
+  <data name="ImportLink" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="MultipleEditButton" xml:space="preserve">
+    <value>Edit Multiple Feeds</value>
+  </data>
+  <data name="MultipleEditLink" xml:space="preserve">
+    <value>Multiple Edit</value>
+  </data>
+  <data name="CategoryNameColumnHeader" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="LastUpdatedColumnHeader" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="FeedErrorLink" xml:space="preserve">
+    <value>One feed has an error</value>
+  </data>
+  <data name="FeedErrorsLink" xml:space="preserve">
+    <value>{0} feeds have errors</value>
+  </data>
+  <data name="NewVersionLink" xml:space="preserve">
+    <value>New version available</value>
+  </data>
+  <data name="OpenFeed" xml:space="preserve">
+    <value>Open Feed</value>
+  </data>
+  <data name="OpenPage" xml:space="preserve">
+    <value>Open Page</value>
+  </data>
+  <data name="FeedReadResult_NotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="FeedReadResult_ServerError" xml:space="preserve">
+    <value>Server error</value>
+  </data>
+  <data name="FeedReadResult_ConnectionFailed" xml:space="preserve">
+    <value>Connection failed</value>
+  </data>
+  <data name="FeedReadResult_InvalidXml" xml:space="preserve">
+    <value>Invalid format</value>
+  </data>
+  <data name="FeedReadResult_NoResponse" xml:space="preserve">
+    <value>No response</value>
+  </data>
+  <data name="FeedReadResult_Timeout" xml:space="preserve">
+    <value>Timeout</value>
+  </data>
+  <data name="FeedReadResult_Unauthorized" xml:space="preserve">
+    <value>Not authorized</value>
+  </data>
+  <data name="RefreshCurrent" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="DisableHint" xml:space="preserve">
+    <value>Right click to disable</value>
+  </data>
+  <data name="EnableHint" xml:space="preserve">
+    <value>Right click to enable</value>
+  </data>
+  <data name="DatabaseUpdate_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scripts\DatabaseUpdate_6.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+</root>

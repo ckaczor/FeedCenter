@@ -1,0 +1,378 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FeedCenterModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="FeedCenterModelStoreContainer">
+          <EntitySet Name="Category" EntityType="FeedCenterModel.Store.Category" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Feed" EntityType="FeedCenterModel.Store.Feed" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="FeedAction" EntityType="FeedCenterModel.Store.FeedAction" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="FeedItem" EntityType="FeedCenterModel.Store.FeedItem" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Setting" EntityType="FeedCenterModel.Store.Setting" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <AssociationSet Name="FK_Feed_Category" Association="FeedCenterModel.Store.FK_Feed_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Feed" EntitySet="Feed" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedAction_Feed" Association="FeedCenterModel.Store.FK_FeedAction_Feed">
+            <End Role="Feed" EntitySet="Feed" />
+            <End Role="FeedAction" EntitySet="FeedAction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedItem_Feed" Association="FeedCenterModel.Store.FK_FeedItem_Feed">
+            <End Role="Feed" EntitySet="Feed" />
+            <End Role="FeedItem" EntitySet="FeedItem" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Feed">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Source" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Link" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Description" Type="ntext" Nullable="false" />
+          <Property Name="LastChecked" Type="datetime" Nullable="false" />
+          <Property Name="CheckInterval" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="Authenticate" Type="bit" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Domain" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="LastReadResult" Type="int" Nullable="false" />
+          <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+          <Property Name="ItemComparison" Type="tinyint" Nullable="false" />
+          <Property Name="CategoryID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="MultipleOpenAction" Type="int" Nullable="false" />          
+        </EntityType>
+        <EntityType Name="FeedAction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FeedID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Field" Type="int" Nullable="false" />
+          <Property Name="Search" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Replace" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Sequence" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FeedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FeedID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Title" Type="ntext" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Description" Type="ntext" Nullable="false" />
+          <Property Name="BeenRead" Type="bit" Nullable="false" />
+          <Property Name="LastFound" Type="datetime" Nullable="false" />
+          <Property Name="New" Type="bit" Nullable="false" />
+          <Property Name="Sequence" Type="int" Nullable="false" />
+          <Property Name="Guid" Type="nvarchar" Nullable="false" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="Value" Type="nvarchar" Nullable="false" MaxLength="3500" />
+          <Property Name="Version" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Feed_Category">
+          <End Role="Category" Type="FeedCenterModel.Store.Category" Multiplicity="1" />
+          <End Role="Feed" Type="FeedCenterModel.Store.Feed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Feed">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedAction_Feed">
+          <End Role="Feed" Type="FeedCenterModel.Store.Feed" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FeedAction" Type="FeedCenterModel.Store.FeedAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feed">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FeedAction">
+              <PropertyRef Name="FeedID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedItem_Feed">
+          <End Role="Feed" Type="FeedCenterModel.Store.Feed" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FeedItem" Type="FeedCenterModel.Store.FeedItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feed">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FeedItem">
+              <PropertyRef Name="FeedID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FeedCenterModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="FeedCenterEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <EntitySet Name="Categories" EntityType="FeedCenterModel.Category" />
+          <EntitySet Name="Feeds" EntityType="FeedCenterModel.Feed" />
+          <EntitySet Name="FeedActions" EntityType="FeedCenterModel.FeedAction" />
+          <EntitySet Name="FeedItems" EntityType="FeedCenterModel.FeedItem" />
+          <EntitySet Name="Settings" EntityType="FeedCenterModel.Setting" />
+          <AssociationSet Name="FK_Feed_Category" Association="FeedCenterModel.FK_Feed_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Feed" EntitySet="Feeds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedAction_Feed" Association="FeedCenterModel.FK_FeedAction_Feed">
+            <End Role="Feed" EntitySet="Feeds" />
+            <End Role="FeedAction" EntitySet="FeedActions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedItem_Feed" Association="FeedCenterModel.FK_FeedItem_Feed">
+            <End Role="Feed" EntitySet="Feeds" />
+            <End Role="FeedItem" EntitySet="FeedItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feeds" Relationship="FeedCenterModel.FK_Feed_Category" FromRole="Category" ToRole="Feed" />
+        </EntityType>
+        <EntityType Name="Feed">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Source" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Link" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="DateTime" Name="LastChecked" Nullable="false" DefaultValue="1900-01-01 00:00:00.000Z" />
+          <Property Type="Int32" Name="CheckInterval" Nullable="false" DefaultValue="60" />
+          <Property Type="Boolean" Name="Enabled" Nullable="false" DefaultValue="True" />
+          <Property Type="Boolean" Name="Authenticate" Nullable="false" DefaultValue="False" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Domain" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="Int32" Name="LastReadResult" Nullable="false" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="false" DefaultValue="1900-01-01 00:00:00.000Z" />
+          <Property Type="Byte" Name="ItemComparison" Nullable="false" DefaultValue="0" />
+          <Property Type="Guid" Name="CategoryID" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="FeedCenterModel.FK_Feed_Category" FromRole="Feed" ToRole="Category" />
+          <NavigationProperty Name="Actions" Relationship="FeedCenterModel.FK_FeedAction_Feed" FromRole="Feed" ToRole="FeedAction" />
+          <NavigationProperty Name="Items" Relationship="FeedCenterModel.FK_FeedItem_Feed" FromRole="Feed" ToRole="FeedItem" />
+          <Property Type="Int32" Name="MultipleOpenAction" Nullable="false" DefaultValue="0" />
+        </EntityType>
+        <EntityType Name="FeedAction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="Guid" Name="FeedID" Nullable="false" />
+          <Property Type="Int32" Name="Field" Nullable="false" />
+          <Property Type="String" Name="Search" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Replace" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sequence" Nullable="false" />
+          <NavigationProperty Name="Feed" Relationship="FeedCenterModel.FK_FeedAction_Feed" FromRole="FeedAction" ToRole="Feed" />
+        </EntityType>
+        <EntityType Name="FeedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="Guid" Name="FeedID" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Link" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" DefaultValue="" />
+          <Property Type="Boolean" Name="BeenRead" Nullable="false" />
+          <Property Type="DateTime" Name="LastFound" Nullable="false" DefaultValue="1900-01-01 00:00:00.000Z" />
+          <Property Type="Boolean" Name="New" Nullable="false" />
+          <NavigationProperty Name="Feed" Relationship="FeedCenterModel.FK_FeedItem_Feed" FromRole="FeedItem" ToRole="Feed" />
+          <Property Type="String" Name="Guid" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sequence" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Value" Nullable="false" MaxLength="3500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Version" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Feed_Category">
+          <End Type="FeedCenterModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="FeedCenterModel.Feed" Role="Feed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Feed">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedAction_Feed">
+          <End Type="FeedCenterModel.Feed" Role="Feed" Multiplicity="1" />
+          <End Type="FeedCenterModel.FeedAction" Role="FeedAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feed">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FeedAction">
+              <PropertyRef Name="FeedID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedItem_Feed">
+          <End Type="FeedCenterModel.Feed" Role="Feed" Multiplicity="1" />
+          <End Type="FeedCenterModel.FeedItem" Role="FeedItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feed">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FeedItem">
+              <PropertyRef Name="FeedID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FeedCenterModelStoreContainer" CdmEntityContainer="FeedCenterEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="FeedCenterModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feeds">
+            <EntityTypeMapping TypeName="FeedCenterModel.Feed">
+              <MappingFragment StoreEntitySet="Feed">                
+                <ScalarProperty Name="MultipleOpenAction" ColumnName="MultipleOpenAction" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ItemComparison" ColumnName="ItemComparison" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="LastReadResult" ColumnName="LastReadResult" />
+                <ScalarProperty Name="Domain" ColumnName="Domain" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Authenticate" ColumnName="Authenticate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="CheckInterval" ColumnName="CheckInterval" />
+                <ScalarProperty Name="LastChecked" ColumnName="LastChecked" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FeedActions">
+            <EntityTypeMapping TypeName="FeedCenterModel.FeedAction">
+              <MappingFragment StoreEntitySet="FeedAction">
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="Replace" ColumnName="Replace" />
+                <ScalarProperty Name="Search" ColumnName="Search" />
+                <ScalarProperty Name="Field" ColumnName="Field" />
+                <ScalarProperty Name="FeedID" ColumnName="FeedID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FeedItems">
+            <EntityTypeMapping TypeName="FeedCenterModel.FeedItem">
+              <MappingFragment StoreEntitySet="FeedItem">
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="New" ColumnName="New" />
+                <ScalarProperty Name="LastFound" ColumnName="LastFound" />
+                <ScalarProperty Name="BeenRead" ColumnName="BeenRead" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="FeedID" ColumnName="FeedID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="FeedCenterModel.Setting">
+              <MappingFragment StoreEntitySet="Setting">
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model">
+        <EntityTypeShape EntityType="FeedCenterModel.Category" Width="1.5" PointX="0.75" PointY="3.375" Height="1.5956835937499996" />
+        <EntityTypeShape EntityType="FeedCenterModel.Feed" Width="1.5" PointX="3" PointY="1.625" Height="5.057109375" />
+        <EntityTypeShape EntityType="FeedCenterModel.FeedAction" Width="1.5" PointX="5.25" PointY="1.125" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="FeedCenterModel.FeedItem" Width="1.5" PointX="5.25" PointY="4.25" Height="2.9417936197916656" />
+        <EntityTypeShape EntityType="FeedCenterModel.Setting" Width="1.5" PointX="7.75" PointY="0.75" Height="1.5956835937499996" />
+        <AssociationConnector Association="FeedCenterModel.FK_Feed_Category">
+          <ConnectorPoint PointX="2.25" PointY="4.172841796875" />
+          <ConnectorPoint PointX="3" PointY="4.172841796875" />
+        </AssociationConnector>
+        <AssociationConnector Association="FeedCenterModel.FK_FeedAction_Feed">
+          <ConnectorPoint PointX="4.5" PointY="2.5574446614583337" />
+          <ConnectorPoint PointX="5.25" PointY="2.5574446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="FeedCenterModel.FK_FeedItem_Feed">
+          <ConnectorPoint PointX="4.5" PointY="5.4660546875" />
+          <ConnectorPoint PointX="5.25" PointY="5.4660546875" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

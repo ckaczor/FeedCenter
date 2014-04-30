@@ -1,0 +1,18 @@
+﻿ALTER TABLE FeedItem ADD COLUMN Guid nvarchar(1000)
+GO
+
+UPDATE	FeedItem
+SET		Guid = ''
+WHERE	Guid IS NULL
+GO
+
+ALTER TABLE FeedItem ALTER COLUMN Guid nvarchar(1000) NOT NULL
+GO
+
+ALTER TABLE FeedItem ALTER COLUMN Guid SET DEFAULT ''
+GO
+
+UPDATE	Setting
+SET		Value = '2'
+WHERE	Name = 'DatabaseVersion'
+GO

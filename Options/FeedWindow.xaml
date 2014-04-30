@@ -1,0 +1,195 @@
+﻿<Window x:Class="FeedCenter.Options.FeedWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Properties="clr-namespace:FeedCenter.Properties"
+        xmlns:Options="clr-namespace:FeedCenter.Options"
+        Title="FeedWindow"
+        Height="300"
+        Width="450"
+        WindowStartupLocation="CenterOwner"
+        Icon="/FeedCenter;component/Resources/Application.ico"
+        FocusManager.FocusedElement="{Binding ElementName=urlTextBox}">
+    <Window.Resources>
+        <Options:MultipleOpenActionConverter x:Key="multipleOpenActionConverter" />
+    </Window.Resources>
+    <Grid Name="mainGrid">
+        <TabControl Name="optionsTabControl"
+                    Margin="12,12,12,41">
+            <TabItem Header="{x:Static Properties:Resources.generalTab}"
+                     Name="generalTab">
+                <Grid Name="generalGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="{x:Static Properties:Resources.feedUrlLabel}"
+                           Name="urlLabel"
+                           VerticalContentAlignment="Center"
+                           Target="{Binding ElementName=urlTextBox}"
+                           Margin="6"
+                           Padding="0" />
+                    <TextBox Name="urlTextBox"
+                             Grid.Column="1"
+                             Text="{Binding Path=Source, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
+                             Margin="6" />
+                    <Label Content="{x:Static Properties:Resources.feedNameLabel}"
+                           Name="nameLabel"
+                           VerticalContentAlignment="Center"
+                           Target="{Binding ElementName=nameTextBox}"
+                           Grid.Row="1"
+                           Margin="6"
+                           Padding="0" />
+                    <TextBox Name="nameTextBox"
+                             Grid.Column="1"
+                             Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=true}"
+                             Grid.Row="1"
+                             Margin="6" />
+                    <Label Content="{x:Static Properties:Resources.feedCategoryLabel}"
+                           Name="feedCategoryLabel"
+                           Target="{Binding ElementName=categoryComboBox}"
+                           VerticalContentAlignment="Center"
+                           Grid.Row="2"
+                           Margin="6"
+                           Padding="0" />
+                    <ComboBox Grid.Column="1"
+                              Name="categoryComboBox"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="ID"
+                              SelectedValue="{Binding Path=CategoryID}"
+                              Grid.Row="2"
+                              Margin="6" />
+
+                    <CheckBox Grid.ColumnSpan="2"
+                              Name="readIntervalCheckBox"
+                              VerticalContentAlignment="Center"
+                              IsChecked="{Binding Path=Enabled, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
+                              Grid.Row="3"
+                              Margin="6">
+                        <DockPanel>
+                            <Label Content="{x:Static Properties:Resources.feedReadIntervalPrefix}"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,0,5,0"
+                                   VerticalAlignment="Center"
+                                   Padding="0" />
+                            <TextBox Width="50"
+                                     Name="readIntervalTextBox"
+                                     Text="{Binding Path=CheckInterval, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
+                                     IsEnabled="{Binding ElementName=readIntervalCheckBox, Path=IsChecked}" />
+                            <Label Content="{x:Static Properties:Resources.feedReadIntervalSuffix}"
+                                   HorizontalAlignment="Left"
+                                   Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Padding="0" />
+                        </DockPanel>
+                    </CheckBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{x:Static Properties:Resources.readingTab}"
+                     Name="readingTab">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="{x:Static Properties:Resources.openLabel}"
+                           Name="openLabel"
+                           Target="{Binding ElementName=openComboBox}"
+                           Padding="0"
+                           VerticalContentAlignment="Center"
+                           Margin="6" />
+                    <ComboBox Name="openComboBox"
+                              VerticalContentAlignment="Center"
+                              SelectedValue="{Binding Path=MultipleOpenAction, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=true, Converter={StaticResource multipleOpenActionConverter}}"
+                              SelectedValuePath="Tag"
+                              Grid.Column="1"
+                              Margin="6">
+
+                        <ComboBoxItem Content="{x:Static Properties:Resources.openAllSingleToolbarButton}"
+                                      Tag="{x:Static Options:MultipleOpenAction.SinglePage}" />
+                        <ComboBoxItem Content="{x:Static Properties:Resources.openAllMultipleToolbarButton}"
+                                      Tag="{x:Static Options:MultipleOpenAction.IndividualPages}" />
+                    </ComboBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{x:Static Properties:Resources.authenticationTab}"
+                     Name="authenticationTab">
+                <Grid Name="authenticationGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="{x:Static Properties:Resources.requiresAuthenticationCheckBox}"
+                              Name="requiresAuthenticationCheckBox"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="0"
+                              Grid.Column="0"
+                              IsChecked="{Binding Path=Authenticate, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
+                              Margin="6" />
+                    <Label Content="{x:Static Properties:Resources.authenticationUserNameLabel}"
+                           Name="authenticationUserNameLabel"
+                           Target="{Binding ElementName=authenticationUserNameTextBox}"
+                           VerticalContentAlignment="Center"
+                           IsEnabled="{Binding ElementName=requiresAuthenticationCheckBox, Path=IsChecked}"
+                           Grid.Row="1"
+                           Margin="6"
+                           Padding="20,0,0,0" />
+                    <TextBox Name="authenticationUserNameTextBox"
+                             Text="{Binding Path=UserName, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
+                             Grid.Column="1"
+                             IsEnabled="{Binding ElementName=requiresAuthenticationCheckBox, Path=IsChecked}"
+                             Grid.Row="1"
+                             Margin="6" />
+                    <Label Content="{x:Static Properties:Resources.authenticationPasswordLabel}"
+                           Name="authenticationPasswordLabel"
+                           Target="{Binding ElementName=authenticationPasswordTextBox}"
+                           VerticalContentAlignment="Center"
+                           IsEnabled="{Binding ElementName=requiresAuthenticationCheckBox, Path=IsChecked}"
+                           Grid.Row="2"
+                           Margin="6"
+                           Padding="20,0,0,0" />
+                    <TextBox Name="authenticationPasswordTextBox"
+                             Text="{Binding Path=Password, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
+                             Grid.Column="1"
+                             IsEnabled="{Binding ElementName=requiresAuthenticationCheckBox, Path=IsChecked}"
+                             Grid.Row="2"
+                             Margin="6" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button Content="{x:Static Properties:Resources.OkayButton}"
+                Height="23"
+                HorizontalAlignment="Right"
+                Name="okButton"
+                VerticalAlignment="Bottom"
+                Width="75"
+                IsDefault="True"
+                Margin="0,0,93,12"
+                Click="HandleOkayButtonClick" />
+        <Button Content="{x:Static Properties:Resources.CancelButton}"
+                Height="23"
+                HorizontalAlignment="Right"
+                Name="cancelButton"
+                VerticalAlignment="Bottom"
+                Width="75"
+                IsCancel="True"
+                Margin="0,0,12,12" />
+
+    </Grid>
+</Window>

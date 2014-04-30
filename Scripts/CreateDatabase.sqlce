@@ -1,0 +1,85 @@
+﻿CREATE TABLE Category
+(
+	ID					uniqueidentifier	NOT NULL,
+	Name				nvarchar(1000)		NOT NULL		DEFAULT '',
+
+	CONSTRAINT PK_Category PRIMARY KEY (ID)
+)
+GO
+
+CREATE TABLE Setting
+(
+	Name				nvarchar(500)		NOT NULL		DEFAULT '',
+	Value				nvarchar(3500)		NOT NULL		DEFAULT '',
+	Version				nvarchar(50)		NOT NULL		DEFAULT '',
+
+	CONSTRAINT PK_Setting PRIMARY KEY (Name, Version)
+)
+GO
+
+CREATE TABLE Feed
+(
+	ID					uniqueidentifier	NOT NULL,
+	Name				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Title				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Source				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Link				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Description			ntext				NOT NULL		DEFAULT '',
+	LastChecked			datetime			NOT NULL		DEFAULT 0,
+	CheckInterval		int					NOT NULL		DEFAULT 0,
+	Enabled				bit					NOT NULL		DEFAULT 1,
+	Authenticate		bit					NOT NULL		DEFAULT 0,
+	Username			nvarchar(1000)		NOT NULL		DEFAULT '',
+	Password			nvarchar(1000)		NOT NULL		DEFAULT '',
+	Domain				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Sequence			int					NOT NULL		DEFAULT 0,
+	LastReadResult		int					NOT NULL		DEFAULT 0,
+	LastUpdated			datetime			NOT NULL		DEFAULT 0,
+	ItemComparison		tinyint				NOT NULL		DEFAULT 0,
+	CategoryID			uniqueidentifier	NOT NULL,
+
+	CONSTRAINT	PK_Feed PRIMARY KEY (ID),
+	CONSTRAINT	FK_Feed_Category	FOREIGN KEY (CategoryID)	REFERENCES Category(ID)
+)
+GO
+
+CREATE TABLE FeedItem
+(
+	ID					uniqueidentifier	NOT NULL,
+	FeedID				uniqueidentifier	NOT NULL,	
+	Title				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Link				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Description			nvarchar(1000)		NOT NULL		DEFAULT '',
+	BeenRead			bit					NOT NULL		DEFAULT 0,
+	LastFound			datetime			NOT NULL		DEFAULT 0,
+	New					bit					NOT NULL		DEFAULT 0,
+	Sequence			int					NOT NULL		DEFAULT 0,
+
+	CONSTRAINT	PK_FeedItem			PRIMARY KEY (ID),
+	CONSTRAINT	FK_FeedItem_Feed	FOREIGN KEY (FeedID)		REFERENCES Feed(ID) ON UPDATE CASCADE ON DELETE CASCADE
+)
+GO
+
+CREATE TABLE FeedAction
+(
+	ID					uniqueidentifier	NOT NULL, 
+	FeedID				uniqueidentifier	NOT NULL, 
+	Field				int					NOT NULL		DEFAULT 0, 
+	Search				nvarchar(1000)		NOT NULL		DEFAULT '', 
+	Replace				nvarchar(1000)		NOT NULL		DEFAULT '',
+	Sequence			int					NOT NULL		DEFAULT 0,
+
+	CONSTRAINT	PK_FeedAction		PRIMARY KEY (ID),
+	CONSTRAINT	FK_FeedAction_Feed	FOREIGN KEY (FeedID)		REFERENCES Feed(ID) ON UPDATE CASCADE ON DELETE CASCADE
+)
+GO
+
+INSERT	Category
+		(ID, Name)
+VALUES	(newid(), 'Default')
+GO
+
+INSERT	Setting
+		(Name, Value, Version)
+VALUES	('DatabaseVersion', '1', '')
+GO
