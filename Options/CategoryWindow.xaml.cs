@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Common.Wpf.Extensions;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-
-using Common.Wpf.Extensions;
 
 namespace FeedCenter.Options
 {
@@ -33,25 +31,22 @@ namespace FeedCenter.Options
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
             // Get a list of all explicit binding expressions
-            Dictionary<FrameworkElement, BindingExpression> bindingExpressionDictionary = this.GetExplicitBindingExpressions();
-
-            // Get the values as a list
-            List<BindingExpression> bindingExpressions = bindingExpressionDictionary.Values.ToList();
+            var bindingExpressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
 
             // Loop over each binding expression and clear any existing error
-            bindingExpressions.ForEach(Validation.ClearInvalid);
+            bindingExpressions.ForEach(b => Validation.ClearInvalid(b.BindingExpression));
 
             // Force all explicit bindings to update the source
-            bindingExpressions.ForEach(bindingExpression => bindingExpression.UpdateSource());
+            bindingExpressions.ForEach(bindingExpression => bindingExpression.BindingExpression.UpdateSource());
 
             // See if there are any errors
-            bool hasError = bindingExpressions.Exists(bindingExpression => bindingExpression.HasError);
+            var hasError = bindingExpressions.Exists(bindingExpression => bindingExpression.BindingExpression.HasError);
 
             // If there was an error then set focus to the bad controls
             if (hasError)
             {
                 // Get the first framework element with an error
-                FrameworkElement firstErrorElement = bindingExpressionDictionary.First(pair => pair.Value.HasError).Key;
+                var firstErrorElement = bindingExpressions.First(b => b.BindingExpression.HasError).FrameworkElement;
 
                 // Set focus
                 firstErrorElement.Focus();

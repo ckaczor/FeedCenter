@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
-
-using Common.Internet;
+﻿using Common.Internet;
 using Common.Wpf.Extensions;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace FeedCenter.Options
 {
@@ -30,11 +30,12 @@ namespace FeedCenter.Options
         {
             var settings = Properties.Settings.Default;
 
-            string browser = (string) ((ComboBoxItem) browserComboBox.SelectedItem).Tag;
-            if (settings.Browser != browser)
-                settings.Browser = browser;
+            var browser = (string) ((ComboBoxItem) browserComboBox.SelectedItem).Tag;
 
-            this.UpdateAllSources();
+            settings.Browser = browser;
+
+            var expressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
+            this.UpdateAllSources(expressions);
         }
 
         public override string CategoryName
@@ -51,7 +52,7 @@ namespace FeedCenter.Options
             var browsers = Browser.DetectInstalledBrowsers();
             foreach (var browser in browsers)
             {
-                ComboBoxItem item = new ComboBoxItem { Content = browser.Value.Name, Tag = browser.Key };
+                var item = new ComboBoxItem { Content = browser.Value.Name, Tag = browser.Key };
 
                 comboBox.Items.Add(item);
 

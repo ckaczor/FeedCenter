@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Common.Wpf.Extensions;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-
-using Common.Wpf.Extensions;
 
 namespace FeedCenter.Options
 {
@@ -36,11 +34,8 @@ namespace FeedCenter.Options
 
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
-            // Get a dictionary of all framework elements and explicit binding expressions
-            Dictionary<FrameworkElement, BindingExpression> bindingExpressionDictionary = this.GetExplicitBindingExpressions();
-
-            // Get just the binding expressions
-            var bindingExpressions = bindingExpressionDictionary.Values;
+            // Get a list of all framework elements and explicit binding expressions
+            var bindingExpressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
 
             // Loop over each binding expression and clear any existing error
             this.ClearAllValidationErrors(bindingExpressions);
@@ -49,19 +44,19 @@ namespace FeedCenter.Options
             this.UpdateAllSources(bindingExpressions);
 
             // See if there are any errors
-            bool hasError = bindingExpressions.Any(b => b.HasError);
+            var hasError = bindingExpressions.Any(b => b.BindingExpression.HasError);
 
             // If there was an error then set focus to the bad controls
             if (hasError)
             {
                 // Get the first framework element with an error
-                FrameworkElement firstErrorElement = bindingExpressionDictionary.First(pair => pair.Value.HasError).Key;
+                var firstErrorElement = bindingExpressions.First(b => b.BindingExpression.HasError).FrameworkElement;
 
                 // Loop over each tab item
                 foreach (TabItem tabItem in optionsTabControl.Items)
                 {
                     // Cast the content as visual
-                    Visual content = (Visual) tabItem.Content;
+                    var content = (Visual) tabItem.Content;
 
                     // See if the control with the error is a descendant 
                     if (firstErrorElement.IsDescendantOf(content))
