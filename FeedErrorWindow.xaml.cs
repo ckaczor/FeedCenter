@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using FeedCenter.Options;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using FeedCenter.Options;
 
 namespace FeedCenter
 {
@@ -38,9 +38,9 @@ namespace FeedCenter
 
         private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
         {
-            Feed feed = (Feed) e.Item;
+            var feed = (Feed) e.Item;
 
-            e.Accepted = (feed.LastReadResult != (int) FeedReadResult.Success);
+            e.Accepted = (feed.LastReadResult != FeedReadResult.Success);
         }
 
         private void HandleEditFeedButtonClick(object sender, RoutedEventArgs e)
@@ -58,18 +58,18 @@ namespace FeedCenter
             if (feedDataGrid.SelectedItem == null)
                 return;
 
-            Feed feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) feedDataGrid.SelectedItem;
 
-            FeedWindow feedWindow = new FeedWindow();
+            var feedWindow = new FeedWindow();
 
             feedWindow.Display(_database, feed, GetWindow(this));
         }
 
         private void DeleteSelectedFeed()
         {
-            Feed feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) feedDataGrid.SelectedItem;
 
-            _database.Feeds.DeleteObject(feed);
+            _database.Feeds.Remove(feed);
 
             SetFeedButtonStates();
         }
@@ -85,13 +85,13 @@ namespace FeedCenter
 
         private void HandleOpenPageButtonClick(object sender, RoutedEventArgs e)
         {
-            Feed feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) feedDataGrid.SelectedItem;
             BrowserCommon.OpenLink(feed.Link);
         }
 
         private void HandleOpenFeedButtonClick(object sender, RoutedEventArgs e)
         {
-            Feed feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) feedDataGrid.SelectedItem;
             BrowserCommon.OpenLink(feed.Source);
         }
 
@@ -109,7 +109,7 @@ namespace FeedCenter
         {
             Mouse.OverrideCursor = Cursors.Wait;
 
-            Feed feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) feedDataGrid.SelectedItem;
             feed.Read(_database, true);
 
             _collectionViewSource.View.Refresh();

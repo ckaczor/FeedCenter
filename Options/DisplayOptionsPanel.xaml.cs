@@ -1,7 +1,6 @@
-﻿using System.Linq;
+﻿using FeedCenter.Properties;
+using System.Linq;
 using System.Windows.Controls;
-
-using FeedCenter.Properties;
 
 namespace FeedCenter.Options
 {
@@ -35,13 +34,11 @@ namespace FeedCenter.Options
             if (displayEmptyFeedsCheckBox.IsChecked.HasValue && Settings.Default.DisplayEmptyFeeds != displayEmptyFeedsCheckBox.IsChecked.Value)
                 Settings.Default.DisplayEmptyFeeds = displayEmptyFeedsCheckBox.IsChecked.Value;
 
-            Dock dock = (Dock) ((ComboBoxItem) toolbarLocationComboBox.SelectedItem).Tag;
-            if (Settings.Default.ToolbarLocation != dock)
-                Settings.Default.ToolbarLocation = dock;
+            var dock = (Dock) ((ComboBoxItem) toolbarLocationComboBox.SelectedItem).Tag;
+            Settings.Default.ToolbarLocation = dock;
 
-            MultipleLineDisplay multipleLineDisplay = (MultipleLineDisplay) ((ComboBoxItem) multipleLineDisplayComboBox.SelectedItem).Tag;
-            if (Settings.Default.MultipleLineDisplay != multipleLineDisplay)
-                Settings.Default.MultipleLineDisplay = multipleLineDisplay;
+            var multipleLineDisplay = (MultipleLineDisplay) ((ComboBoxItem) multipleLineDisplayComboBox.SelectedItem).Tag;
+            Settings.Default.MultipleLineDisplay = multipleLineDisplay;
         }
 
         public override string CategoryName

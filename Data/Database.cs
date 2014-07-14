@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Common.Debug;
+using FeedCenter.Properties;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlServerCe;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
-
-using Common.Debug;
-
-using FeedCenter.Properties;
 
 namespace FeedCenter.Data
 {
@@ -45,10 +43,10 @@ namespace FeedCenter.Data
             try
             {
                 // Open the database file
-                using (FileStream stream = new FileStream(databasePath, FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(databasePath, FileMode.Open, FileAccess.Read))
                 {
                     // Read the file using the binary reader
-                    BinaryReader reader = new BinaryReader(stream);
+                    var reader = new BinaryReader(stream);
 
                     // Seek to the version signature
                     stream.Seek(16, SeekOrigin.Begin);
@@ -81,7 +79,7 @@ namespace FeedCenter.Data
             Tracer.WriteLine("Creating database engine");
 
             // Create the database engine
-            using (SqlCeEngine engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
+            using (var engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
             {
                 Tracer.WriteLine("Creating database");
 
@@ -95,20 +93,20 @@ namespace FeedCenter.Data
             }
         }
 
-        private static int getVersion(SqlCeConnection connection)
+        private static int GetVersion(SqlCeConnection connection)
         {
-            string versionString = string.Empty;
+            string versionString;
 
             try
             {
                 // Check the database version table
-                using (SqlCeCommand command = new SqlCeCommand("SELECT Value FROM DatabaseVersion", connection))
+                using (var command = new SqlCeCommand("SELECT Value FROM DatabaseVersion", connection))
                     versionString = command.ExecuteScalar().ToString();
             }
             catch (SqlCeException)
             {
                 // Check the setting table for the version
-                using (SqlCeCommand command = new SqlCeCommand("SELECT Value FROM Setting WHERE Name = 'DatabaseVersion'", connection))
+                using (var command = new SqlCeCommand("SELECT Value FROM Setting WHERE Name = 'DatabaseVersion'", connection))
                     versionString = command.ExecuteScalar().ToString();
             }
 
@@ -125,7 +123,7 @@ namespace FeedCenter.Data
             Tracer.WriteLine("Getting database file version");
 
             // Get the database file version
-            SqlServerCeFileVersion fileVersion = GetFileVersion(DatabasePath);
+            var fileVersion = GetFileVersion(DatabasePath);
 
             Tracer.WriteLine("Database file version: {0}", fileVersion);
 
@@ -135,7 +133,7 @@ namespace FeedCenter.Data
                 Tracer.WriteLine("Creating database engine");
 
                 // Create the database engine
-                using (SqlCeEngine engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
+                using (var engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
                 {
                     Tracer.WriteLine("Upgrading database");
 
@@ -147,13 +145,13 @@ namespace FeedCenter.Data
             Tracer.WriteLine("Getting database version");
 
             // Create a database connection
-            using (SqlCeConnection connection = new SqlCeConnection(string.Format("Data Source={0}", DatabasePath)))
+            using (var connection = new SqlCeConnection(string.Format("Data Source={0}", DatabasePath)))
             {
                 // Open the connection
                 connection.Open();
 
                 // Get the database version
-                int databaseVersion = getVersion(connection);
+                var databaseVersion = GetVersion(connection);
 
                 // Create a dictionary of database upgrade scripts and their version numbers
                 var scriptList = new Dictionary<int, string>();
@@ -162,10 +160,10 @@ namespace FeedCenter.Data
                 foreach (var property in typeof(Resources).GetProperties().Where(property => property.Name.StartsWith("DatabaseUpdate")))
                 {
                     // Get the name of the property
-                    string propertyName = property.Name;
+                    var propertyName = property.Name;
 
                     // Extract the version from the name
-                    int version = int.Parse(propertyName.Substring(propertyName.IndexOf("_", StringComparison.Ordinal) + 1));
+                    var version = int.Parse(propertyName.Substring(propertyName.IndexOf("_", StringComparison.Ordinal) + 1));
 
                     // Add to the script list
                     scriptList[version] = propertyName;
@@ -178,7 +176,7 @@ namespace FeedCenter.Data
                     if (databaseVersion <= pair.Key)
                     {
                         // Get the script text
-                        string scriptText = Resources.ResourceManager.GetString(pair.Value);
+                        var scriptText = Resources.ResourceManager.GetString(pair.Value);
 
                         // Run the script
                         ExecuteScript(scriptText);
@@ -192,7 +190,7 @@ namespace FeedCenter.Data
             Tracer.WriteLine("Creating database engine");
 
             // Create the database engine
-            using (SqlCeEngine engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
+            using (var engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
             {
                 Tracer.WriteLine("Shrinking database");
 
@@ -204,22 +202,22 @@ namespace FeedCenter.Data
         private static void ExecuteScript(string scriptText)
         {
             // Create a database connection
-            using (SqlCeConnection connection = new SqlCeConnection(string.Format("Data Source={0}", DatabasePath)))
+            using (var connection = new SqlCeConnection(string.Format("Data Source={0}", DatabasePath)))
             {
                 // Open the connection
                 connection.Open();
 
                 // Setup the delimiters
-                string[] delimiters = new[] { "\r\nGO\r\n" };
+                var delimiters = new[] { "\r\nGO\r\n" };
 
                 // Split the script at the delimiters
-                string[] statements = scriptText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                var statements = scriptText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
                 // Loop over each statement in the script
-                foreach (string statement in statements)
+                foreach (var statement in statements)
                 {
                     // Execute the statement
-                    using (SqlCeCommand command = new SqlCeCommand(statement, connection))
+                    using (var command = new SqlCeCommand(statement, connection))
                         command.ExecuteNonQuery();
                 }
             }

@@ -1,6 +1,5 @@
-﻿using System.Windows.Forms;
-
-using FeedCenter.Properties;
+﻿using FeedCenter.Properties;
+using System.Windows.Forms;
 
 namespace FeedCenter
 {
@@ -19,9 +18,9 @@ namespace FeedCenter
             _notificationIcon.DoubleClick += HandleNotificationIconDoubleClick;
 
             // Setup the menu
-            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+            var contextMenuStrip = new ContextMenuStrip();
 
-            ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem(Resources.NotificationIconContextMenuLocked, null, HandleLockWindowClicked)
+            var toolStripMenuItem = new ToolStripMenuItem(Resources.NotificationIconContextMenuLocked, null, HandleLockWindowClicked)
                                                       {
                                                           Checked = Settings.Default.WindowLocked
                                                       };

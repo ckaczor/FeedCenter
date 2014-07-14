@@ -6,14 +6,10 @@ namespace FeedCenter
 {
     public partial class FeedItem
     {
-        #region Constructor
-
-        public FeedItem()
+        public static FeedItem Create()
         {
-            ID = System.Guid.NewGuid();
+            return new FeedItem { ID = System.Guid.NewGuid() };
         }
-
-        #endregion
 
         #region Methods
 
@@ -31,7 +27,7 @@ namespace FeedCenter
                     break;
 
                 case Options.MultipleLineDisplay.FirstLine:
-                    
+
                     // Find the first newline
                     int newlineIndex = title.IndexOf("\n", StringComparison.Ordinal);
 
@@ -46,7 +42,7 @@ namespace FeedCenter
             title = Regex.Replace(title, @"[ ]{2,}", " ");
 
             // Condense tabs to one space
-            title = Regex.Replace(title, @"\t", " ");            
+            title = Regex.Replace(title, @"\t", " ");
 
             // If the title is blank then put in the "no title" title
             if (title.Length == 0)

@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Common.Debug;
+using FeedCenter.Data;
+using FeedCenter.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Deployment.Application;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-
-using Common.Debug;
-using FeedCenter.Data;
-using FeedCenter.Properties;
 
 namespace FeedCenter
 {
@@ -103,7 +102,7 @@ namespace FeedCenter
             progressBar.Value += e.ProgressPercentage;
 
             // Get the message
-            string message = (string) e.UserState;
+            var message = (string) e.UserState;
 
             // Update the status label if one was supplied
             if (!string.IsNullOrEmpty(message))

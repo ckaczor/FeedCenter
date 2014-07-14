@@ -1,7 +1,6 @@
-﻿using System.Xml;
-
-using Common.Debug;
+﻿using Common.Debug;
 using Common.Xml;
+using System.Xml;
 
 namespace FeedCenter.FeedParsers
 {
@@ -14,7 +13,7 @@ namespace FeedCenter.FeedParsers
             try
             {
                 // Create the XML document
-                XmlDocument document = new XmlDocument { XmlResolver = null };
+                var document = new XmlDocument { XmlResolver = null };
 
                 // Load the XML document from the text
                 document.LoadXml(feedText);
@@ -75,7 +74,7 @@ namespace FeedCenter.FeedParsers
         protected override FeedItem ParseFeedItem(XmlNamespaceManager namespaceManager, XmlNode node)
         {
             // Create a new feed item
-            FeedItem feedItem = new FeedItem();
+            FeedItem feedItem = FeedItem.Create();
 
             // Loop over all nodes in the feed node
             foreach (XmlNode childNode in node.ChildNodes)

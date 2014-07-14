@@ -7,14 +7,14 @@ namespace FeedCenter
     {
         public static object OpenDataStore()
         {
-            FeedCenterEntities entities = new FeedCenterEntities();
+            var entities = new FeedCenterEntities();
 
-            return entities.DatabaseExists() ? entities : null;
+            return entities.Database.Exists() ? entities : null;
         }
 
         public static void CloseDataStore(object dataStore)
         {
-            FeedCenterEntities entities = (FeedCenterEntities) dataStore;
+            var entities = (FeedCenterEntities) dataStore;
 
             if (entities == null)
                 return;
@@ -26,25 +26,25 @@ namespace FeedCenter
 
         public static string GetSettingValue(object dataStore, string name, string version)
         {
-            FeedCenterEntities entities = (FeedCenterEntities) dataStore;
+            var entities = (FeedCenterEntities) dataStore;
 
             if (entities == null)
                 return null;
 
-            Setting setting = entities.Settings.FirstOrDefault(s => s.Name == name && s.Version == version);
+            var setting = entities.Settings.FirstOrDefault(s => s.Name == name && s.Version == version);
 
             return setting == null ? null : setting.Value;
         }
 
         public static void SetSettingValue(object dataStore, string name, string version, string value)
         {
-            FeedCenterEntities entities = (FeedCenterEntities) dataStore;
+            var entities = (FeedCenterEntities) dataStore;
 
             if (entities == null)
                 return;
 
             // Try to get the setting from the database that matches the name and version
-            Setting setting = entities.Settings.FirstOrDefault(s => s.Name == name && s.Version == version);
+            var setting = entities.Settings.FirstOrDefault(s => s.Name == name && s.Version == version);
 
             // If there was no setting we need to create it
             if (setting == null)
@@ -53,7 +53,7 @@ namespace FeedCenter
                 setting = new Setting { Name = name, Version = version };
 
                 // Add the setting to the database
-                entities.Settings.AddObject(setting);
+                entities.Settings.Add(setting);
             }
 
             // Set the value into the setting
@@ -62,7 +62,7 @@ namespace FeedCenter
 
         public static List<string> GetVersionList(object dataStore)
         {
-            FeedCenterEntities entities = (FeedCenterEntities) dataStore;
+            var entities = (FeedCenterEntities) dataStore;
 
             if (entities == null)
                 return null;
@@ -73,7 +73,7 @@ namespace FeedCenter
 
         public static void DeleteSettingsForVersion(object dataStore, string version)
         {
-            FeedCenterEntities entities = (FeedCenterEntities) dataStore;
+            var entities = (FeedCenterEntities) dataStore;
 
             if (entities == null)
                 return;
@@ -82,8 +82,8 @@ namespace FeedCenter
             var settings = entities.Settings.Where(setting => setting.Version == version);
 
             // Delete each setting
-            foreach (Setting setting in settings)
-                entities.Settings.DeleteObject(setting);
+            foreach (var setting in settings)
+                entities.Settings.Remove(setting);
         }
     }
 }

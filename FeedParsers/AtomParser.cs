@@ -1,7 +1,6 @@
-﻿using System.Xml;
-
-using Common.Debug;
+﻿using Common.Debug;
 using Common.Xml;
+using System.Xml;
 
 namespace FeedCenter.FeedParsers
 {
@@ -14,13 +13,13 @@ namespace FeedCenter.FeedParsers
             try
             {
                 // Create the XML document
-                XmlDocument document = new XmlDocument { XmlResolver = null };
+                var document = new XmlDocument { XmlResolver = null };
 
                 // Load the XML document from the text
                 document.LoadXml(feedText);
 
                 // Create the namespace manager
-                XmlNamespaceManager namespaceManager = document.GetAllNamespaces();
+                var namespaceManager = document.GetAllNamespaces();
 
                 // Get the root node
                 XmlNode rootNode = document.DocumentElement;
@@ -30,7 +29,7 @@ namespace FeedCenter.FeedParsers
                     return FeedReadResult.UnknownError;
 
                 // Initialize the sequence number for items
-                int sequence = 0;
+                var sequence = 0;
 
                 // Loop over all nodes in the root node
                 foreach (XmlNode node in rootNode.ChildNodes)
@@ -81,7 +80,7 @@ namespace FeedCenter.FeedParsers
         protected override FeedItem ParseFeedItem(XmlNamespaceManager namespaceManager, XmlNode node)
         {
             // Create a new feed item
-            FeedItem feedItem = new FeedItem();
+            var feedItem = FeedItem.Create();
 
             // Loop over all nodes in the feed node
             foreach (XmlNode childNode in node.ChildNodes)
@@ -114,7 +113,7 @@ namespace FeedCenter.FeedParsers
 
                         if (string.IsNullOrEmpty(rel) || rel == "alternate")
                         {
-                            string link = childNode.Attributes["href"].InnerText;
+                            var link = childNode.Attributes["href"].InnerText;
 
                             if (link.StartsWith("/"))
                             {

@@ -1,7 +1,6 @@
-﻿using System.Xml;
-
-using Common.Debug;
+﻿using Common.Debug;
 using Common.Xml;
+using System.Xml;
 
 namespace FeedCenter.FeedParsers
 {
@@ -14,13 +13,13 @@ namespace FeedCenter.FeedParsers
             try
             {
                 // Create the XML document
-                XmlDocument document = new XmlDocument { XmlResolver = null };
+                var document = new XmlDocument { XmlResolver = null };
 
                 // Load the XML document from the text
                 document.LoadXml(feedText);
 
                 // Create the namespace manager
-                XmlNamespaceManager namespaceManager = document.GetAllNamespaces();                    
+                XmlNamespaceManager namespaceManager = document.GetAllNamespaces();
 
                 // Get the root node
                 XmlNode rootNode = document.DocumentElement;
@@ -28,7 +27,7 @@ namespace FeedCenter.FeedParsers
                 // If we didn't find a root node then bail
                 if (rootNode == null)
                     return FeedReadResult.UnknownError;
-                
+
                 // Get the channel node
                 XmlNode channelNode = rootNode.SelectSingleNode("default:channel", namespaceManager);
 
@@ -83,7 +82,7 @@ namespace FeedCenter.FeedParsers
         protected override FeedItem ParseFeedItem(XmlNamespaceManager namespaceManager, XmlNode node)
         {
             // Create a new feed item
-            FeedItem feedItem = new FeedItem();
+            FeedItem feedItem = FeedItem.Create();
 
             // Loop over all nodes in the feed node
             foreach (XmlNode childNode in node.ChildNodes)
@@ -97,10 +96,10 @@ namespace FeedCenter.FeedParsers
 
                     case "link":
                         feedItem.Link = childNode.InnerText.Trim();
-                        
+
                         // RDF doesn't have a GUID node so we'll just use the link
                         feedItem.Guid = feedItem.Link;
-                        
+
                         break;
 
                     case "description":

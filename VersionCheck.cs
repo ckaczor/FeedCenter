@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Common.Debug;
+using FeedCenter.Properties;
+using System;
 using System.ComponentModel;
 using System.Deployment.Application;
 using System.Windows;
-
-using Common.Debug;
-
-using FeedCenter.Properties;
 using Application = System.Windows.Forms.Application;
 
 namespace FeedCenter

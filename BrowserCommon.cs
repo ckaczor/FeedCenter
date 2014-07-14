@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using Common.Debug;
+﻿using Common.Debug;
 using Common.Internet;
 using FeedCenter.Properties;
+using System;
+using System.Diagnostics;
 
 namespace FeedCenter
 {

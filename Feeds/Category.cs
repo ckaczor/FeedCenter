@@ -4,14 +4,10 @@ namespace FeedCenter
 {
     public partial class Category
     {
-        #region Constructor
-
-        public Category()
+        public static Category Create()
         {
-            ID = Guid.NewGuid();
+            return new Category { ID = Guid.NewGuid() };
         }
-
-        #endregion
 
         public bool IsDefault
         {

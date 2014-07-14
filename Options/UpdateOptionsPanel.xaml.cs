@@ -1,6 +1,6 @@
 ﻿namespace FeedCenter.Options
 {
-    public partial class UpdateOptionsPanel 
+    public partial class UpdateOptionsPanel
     {
         public UpdateOptionsPanel()
         {

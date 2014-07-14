@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Common.Wpf;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-
-using Common.Wpf;
 
 namespace FeedCenter.Options
 {
@@ -39,9 +38,9 @@ namespace FeedCenter.Options
 
         void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
         {
-            CheckedListItem<Feed> checkedListBoxItem = (CheckedListItem<Feed>) e.Item;
+            var checkedListBoxItem = (CheckedListItem<Feed>) e.Item;
 
-            Feed feed = checkedListBoxItem.Item;
+            var feed = checkedListBoxItem.Item;
 
             e.Accepted = feed.Link.Contains(feedLinkFilterText.Text);
         }
@@ -56,7 +55,7 @@ namespace FeedCenter.Options
             foreach (var item in _checkedListBoxItems.Where(i => i.IsChecked))
             {
                 if (openComboBox.IsEnabled)
-                    item.Item.MultipleOpenAction = (int) ((ComboBoxItem) openComboBox.SelectedItem).Tag;
+                    item.Item.MultipleOpenAction = (MultipleOpenAction) ((ComboBoxItem) openComboBox.SelectedItem).Tag;
             }
 
             DialogResult = true;

@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Common.Debug;
+using System;
 using System.Linq;
 using System.Xml;
-
-using Common.Debug;
 
 namespace FeedCenter.FeedParsers
 {
     [Serializable]
     internal class InvalidFeedFormatException : ApplicationException
     {
-        internal InvalidFeedFormatException(Exception exception) : base(string.Empty, exception)
-        {            
+        internal InvalidFeedFormatException(Exception exception)
+            : base(string.Empty, exception)
+        {
         }
     }
 
@@ -124,7 +124,7 @@ namespace FeedCenter.FeedParsers
             try
             {
                 // Create the XML document
-                XmlDocument document = new XmlDocument { XmlResolver = null };
+                var document = new XmlDocument { XmlResolver = null };
 
                 // Load the XML document from the text
                 document.LoadXml(feedText);

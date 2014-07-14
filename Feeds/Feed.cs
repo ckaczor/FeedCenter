@@ -3,14 +3,22 @@ using Common.Xml;
 using FeedCenter.FeedParsers;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Windows.Data;
 
 namespace FeedCenter
 {
     #region Enumerations
+
+    public enum MultipleOpenAction
+    {
+        IndividualPages,
+        SinglePage
+    }
 
     public enum FeedType
     {
@@ -20,7 +28,7 @@ namespace FeedCenter
         Atom
     }
 
-    public enum FeedItemComparison
+    public enum FeedItemComparison : byte
     {
         Default,
         Title
@@ -44,16 +52,26 @@ namespace FeedCenter
 
     #endregion
 
-    public partial class Feed
+    [ValueConversion(typeof(int), typeof(MultipleOpenAction))]
+    public class MultipleOpenActionConverter : IValueConverter
     {
-        #region Constructor
-
-        public Feed()
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ID = Guid.NewGuid();
+            return (MultipleOpenAction) value;
         }
 
-        #endregion
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (int) value;
+        }
+    }
+
+    public partial class Feed
+    {
+        public static Feed Create()
+        {
+            return new Feed { ID = Guid.NewGuid() };
+        }
 
         #region Event delegates
 
@@ -81,7 +99,7 @@ namespace FeedCenter
 
                 default:
                     // Save as last result
-                    LastReadResult = (int) result;
+                    LastReadResult = result;
 
                     break;
             }
@@ -268,7 +286,7 @@ namespace FeedCenter
                 foreach (var itemToRemove in removedItems)
                 {
                     // Delete the item from the database
-                    database.FeedItems.DeleteObject(itemToRemove);
+                    database.FeedItems.Remove(itemToRemove);
 
                     // Remove the item from the list
                     Items.Remove(itemToRemove);
@@ -315,7 +333,7 @@ namespace FeedCenter
             get
             {
                 // Cast the last read result to the proper enum
-                var lastReadResult = (FeedReadResult) LastReadResult;
+                var lastReadResult = LastReadResult;
 
                 // Build the name of the resource using the enum name and the value
                 var resourceName = string.Format("{0}_{1}", typeof(FeedReadResult).Name, lastReadResult);

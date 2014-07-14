@@ -1,24 +1,22 @@
-﻿using System;
+﻿using Common.Debug;
+using Common.Helpers;
+using Common.IO;
+using Common.Wpf.Extensions;
+using FeedCenter.Options;
+using FeedCenter.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Deployment.Application;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Web.UI;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Linq;
-using System.Threading;
-
-using Common.Debug;
-using Common.Helpers;
-using Common.IO;
-using Common.Internet;
-using Common.Wpf.Extensions;
-using FeedCenter.Options;
-using FeedCenter.Properties;
 
 namespace FeedCenter
 {
@@ -180,14 +178,14 @@ namespace FeedCenter
         private void LoadWindowSettings()
         {
             // Get the last window location
-            Point windowLocation = Settings.Default.WindowLocation;
+            var windowLocation = Settings.Default.WindowLocation;
 
             // Set the window into position
             Left = windowLocation.X;
             Top = windowLocation.Y;
 
             // Get the last window size
-            Size windowSize = Settings.Default.WindowSize;
+            var windowSize = Settings.Default.WindowSize;
 
             // Set the window into the previous size if it is valid
             if (!windowSize.Width.Equals(0) && !windowSize.Height.Equals(0))
@@ -315,7 +313,7 @@ namespace FeedCenter
         private void InitializeFeed()
         {
             // Cache the feed count to save (a little) time
-            int feedCount = _database.Feeds.Count();
+            var feedCount = _database.Feeds.Count();
 
             // Set button states
             previousToolbarButton.IsEnabled = (feedCount > 1);
@@ -343,7 +341,7 @@ namespace FeedCenter
 
         private void NextFeed()
         {
-            int feedCount = _database.Feeds.Count();
+            var feedCount = _database.Feeds.Count();
 
             if (feedCount == 0)
                 return;
@@ -359,10 +357,10 @@ namespace FeedCenter
             else
             {
                 // Keep track if we found something
-                bool found = false;
+                var found = false;
 
                 // Remember our starting position
-                int startIndex = (_feedIndex == -1 ? 0 : _feedIndex);
+                var startIndex = (_feedIndex == -1 ? 0 : _feedIndex);
 
                 // Increment the index and adjust if we've gone around the end
                 _feedIndex = (_feedIndex + 1) % feedCount;
@@ -402,7 +400,7 @@ namespace FeedCenter
 
         private void PreviousFeed()
         {
-            int feedCount = _database.Feeds.Count();
+            var feedCount = _database.Feeds.Count();
 
             if (feedCount == 0)
                 return;
@@ -422,10 +420,10 @@ namespace FeedCenter
             else
             {
                 // Keep track if we found something
-                bool found = false;
+                var found = false;
 
                 // Remember our starting position
-                int startIndex = (_feedIndex == -1 ? 0 : _feedIndex);
+                var startIndex = (_feedIndex == -1 ? 0 : _feedIndex);
 
                 // Decrement the feed index
                 _feedIndex--;
@@ -473,7 +471,7 @@ namespace FeedCenter
 
         private void UpdateOpenAllButton()
         {
-            var multipleOpenAction = (MultipleOpenAction) _currentFeed.MultipleOpenAction;
+            var multipleOpenAction = _currentFeed.MultipleOpenAction;
 
             switch (multipleOpenAction)
             {
@@ -509,7 +507,7 @@ namespace FeedCenter
             var sortedItems = _currentFeed.Items.Where(item => !item.BeenRead).OrderBy(item => item.Sequence);
 
             // Loop over all items in the current feed
-            foreach (FeedItem feedItem in sortedItems)
+            foreach (var feedItem in sortedItems)
             {
                 // Add the list item
                 linkTextList.Items.Add(feedItem);
@@ -575,7 +573,7 @@ namespace FeedCenter
             SetProgressMode(true, 1);
 
             // Create the input class
-            FeedReadWorkerInput workerInput = new FeedReadWorkerInput { ForceRead = forceRead, Feed = _currentFeed };
+            var workerInput = new FeedReadWorkerInput { ForceRead = forceRead, Feed = _currentFeed };
 
             // Start the worker
             _feedReadWorker.RunWorkerAsync(workerInput);
@@ -595,7 +593,7 @@ namespace FeedCenter
             SetProgressMode(true, _database.Feeds.Count());
 
             // Create the input class
-            FeedReadWorkerInput workerInput = new FeedReadWorkerInput { ForceRead = forceRead, Feed = null };
+            var workerInput = new FeedReadWorkerInput { ForceRead = forceRead, Feed = null };
 
             // Start the worker
             _feedReadWorker.RunWorkerAsync(workerInput);
@@ -610,7 +608,7 @@ namespace FeedCenter
         private void HandleFeedReadWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Get the state info
-            FeedReadWorkerOutput workerOutput = (FeedReadWorkerOutput) e.Result;
+            var workerOutput = (FeedReadWorkerOutput) e.Result;
 
             // Reset the database to current settings
             ResetDatabase();
@@ -628,7 +626,7 @@ namespace FeedCenter
             SetProgressMode(false, 0);
 
             // Check for update information
-            UpdateCheckInfo updateCheckInfo = workerOutput.UpdateResult;
+            var updateCheckInfo = workerOutput.UpdateResult;
 
             if (updateCheckInfo != null && updateCheckInfo.UpdateAvailable)
                 newVersionLink.Visibility = Visibility.Visible;
@@ -638,7 +636,7 @@ namespace FeedCenter
 
         private void UpdateErrorLink()
         {
-            var feedErrorCount = _database.Feeds.Count(f => f.LastReadResult != (int) FeedReadResult.Success);
+            var feedErrorCount = _database.Feeds.Count(f => f.LastReadResult != FeedReadResult.Success);
 
             // Set the visibility of the error link
             feedErrorsLink.Visibility = feedErrorCount == 0 ? Visibility.Collapsed : Visibility.Visible;
@@ -652,22 +650,22 @@ namespace FeedCenter
         private static void HandleFeedReadWorkerStart(object sender, DoWorkEventArgs e)
         {
             // Create a new database instance for just this thread
-            FeedCenterEntities database = new FeedCenterEntities();
+            var database = new FeedCenterEntities();
 
             // Get the worker
-            BackgroundWorker worker = (BackgroundWorker) sender;
+            var worker = (BackgroundWorker) sender;
 
             // Get the input information
-            FeedReadWorkerInput workerInput = (FeedReadWorkerInput) e.Argument;
+            var workerInput = (FeedReadWorkerInput) e.Argument;
 
             // Create the output 
-            FeedReadWorkerOutput workerOutput = new FeedReadWorkerOutput();
+            var workerOutput = new FeedReadWorkerOutput();
 
             // Setup for progress
-            int currentProgress = 0;
+            var currentProgress = 0;
 
             // Create the list of feeds to read
-            List<Feed> feedsToRead = new List<Feed>();
+            var feedsToRead = new List<Feed>();
 
             // If we have a single feed then add it to the list - otherwise add them all
             if (workerInput.Feed != null)
@@ -676,7 +674,7 @@ namespace FeedCenter
                 feedsToRead.AddRange(database.Feeds);
 
             // Loop over each feed and read it
-            foreach (Feed feed in feedsToRead)
+            foreach (var feed in feedsToRead)
             {
                 // Read the feed
                 feed.Read(database, workerInput.ForceRead);
@@ -743,10 +741,10 @@ namespace FeedCenter
                 return;
 
             // Pad the command line with a trailing space just to be lazy in parsing
-            string commandLine = e.Message + " ";
+            var commandLine = e.Message + " ";
 
             // Look for the feed URL in the command line
-            int startPosition = commandLine.IndexOf("feed://", StringComparison.Ordinal);
+            var startPosition = commandLine.IndexOf("feed://", StringComparison.Ordinal);
 
             // If we found one then we should extract and process it
             if (startPosition > 0)
@@ -755,10 +753,10 @@ namespace FeedCenter
                 startPosition += 7;
 
                 // Starting at the URL position look for the next space
-                int endPosition = commandLine.IndexOf(" ", startPosition, StringComparison.Ordinal);
+                var endPosition = commandLine.IndexOf(" ", startPosition, StringComparison.Ordinal);
 
                 // Extract the feed URL
-                string feedUrl = commandLine.Substring(startPosition, endPosition - startPosition);
+                var feedUrl = commandLine.Substring(startPosition, endPosition - startPosition);
 
                 // Add the HTTP protocol by default
                 feedUrl = "http://" + feedUrl;
@@ -772,14 +770,12 @@ namespace FeedCenter
         private void HandleNewFeed(string feedUrl)
         {
             // Create and configure the new feed
-            Feed feed = new Feed
-            {
-                Source = feedUrl,
-                Category = _database.Categories.ToList().First(category => category.IsDefault),
-            };
+            var feed = Feed.Create();
+            feed.Source = feedUrl;
+            feed.Category = _database.Categories.ToList().First(category => category.IsDefault);
 
             // Read the feed for the first time
-            FeedReadResult feedReadResult = feed.Read(_database);
+            var feedReadResult = feed.Read(_database);
 
             // See if we read the feed okay
             if (feedReadResult == FeedReadResult.Success)
@@ -788,7 +784,7 @@ namespace FeedCenter
                 feed.Name = feed.Title;
 
                 // Add the feed to the feed table
-                _database.Feeds.AddObject(feed);
+                _database.Feeds.Add(feed);
 
                 // Save the changes
                 _database.SaveChanges();
@@ -802,15 +798,15 @@ namespace FeedCenter
             else
             {
                 // Feed read failed - ceate a new feed window
-                FeedWindow feedForm = new FeedWindow();
+                var feedForm = new FeedWindow();
 
-                bool? dialogResult = feedForm.Display(_database, feed, this);
+                var dialogResult = feedForm.Display(_database, feed, this);
 
                 // Display the new feed form
                 if (dialogResult.HasValue && dialogResult.Value)
                 {
                     // Add the feed to the feed table
-                    _database.Feeds.AddObject(feed);
+                    _database.Feeds.Add(feed);
 
                     // Save the changes
                     _database.SaveChanges();
@@ -828,7 +824,7 @@ namespace FeedCenter
         private void ResetDatabase()
         {
             // Get the ID of the current feed
-            Guid currentId = _currentFeed.ID;
+            var currentId = _currentFeed.ID;
 
             // Create a new database object
             _database = new FeedCenterEntities();
@@ -872,7 +868,7 @@ namespace FeedCenter
                 return;
 
             // Get the data as a string
-            string data = (string) e.Data.GetData(DataFormats.Text);
+            var data = (string) e.Data.GetData(DataFormats.Text);
 
             // If the data doesn't look like a URI then it is not allowed
             if (!Uri.IsWellFormedUriString(data, UriKind.Absolute))
@@ -885,7 +881,7 @@ namespace FeedCenter
         private void HandleDragDrop(object sender, DragEventArgs e)
         {
             // Get the data as a string
-            string data = (string) e.Data.GetData(DataFormats.Text);
+            var data = (string) e.Data.GetData(DataFormats.Text);
 
             // Handle the new feed but allow the drag/drop to complete
             Dispatcher.BeginInvoke(new NewFeedDelegate(HandleNewFeed), data);
@@ -918,7 +914,7 @@ namespace FeedCenter
                 return;
 
             // Get the feed item
-            FeedItem feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
+            var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
 
             // The feed item has been read and is no longer new
             feedItem.BeenRead = true;
@@ -935,7 +931,7 @@ namespace FeedCenter
         private void HandleLinkTextListListItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // Get the feed item
-            FeedItem feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
+            var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
 
             // Open the item link
             if (BrowserCommon.OpenLink(feedItem.Link))
@@ -959,16 +955,16 @@ namespace FeedCenter
         private void HandleFeedButtonClick(object sender, RoutedEventArgs e)
         {
             // Create a new context menu
-            ContextMenu contextMenu = new ContextMenu();
+            var contextMenu = new ContextMenu();
 
             // Loop over each feed
-            foreach (Feed feed in _database.Feeds.OrderBy(feed => feed.Name))
+            foreach (var feed in _database.Feeds.OrderBy(feed => feed.Name))
             {
                 // Build a string to display the feed name and the unread count
-                string display = string.Format("{0} ({1:d})", feed.Name, feed.Items.Count(item => !item.BeenRead));
+                var display = string.Format("{0} ({1:d})", feed.Name, feed.Items.Count(item => !item.BeenRead));
 
                 // Create a menu item
-                MenuItem menuItem = new MenuItem
+                var menuItem = new MenuItem
                                         {
                                             Header = display,
                                             Tag = feed,
@@ -995,14 +991,14 @@ namespace FeedCenter
         private void HandleFeedMenuItemClick(object sender, RoutedEventArgs e)
         {
             // Get the menu item clicked
-            MenuItem menuItem = (MenuItem) sender;
+            var menuItem = (MenuItem) sender;
 
             // Get the feed from the menu item tab
-            Feed feed = (Feed) menuItem.Tag;
+            var feed = (Feed) menuItem.Tag;
 
             // Loop over all feeds and look for the index of the new one		
-            int feedIndex = 0;
-            foreach (Feed loopFeed in _database.Feeds.OrderBy(loopFeed => loopFeed.Name))
+            var feedIndex = 0;
+            foreach (var loopFeed in _database.Feeds.OrderBy(loopFeed => loopFeed.Name))
             {
                 if (loopFeed == feed)
                 {
@@ -1029,11 +1025,11 @@ namespace FeedCenter
 
         private void UpdateBorder()
         {
-            WindowInteropHelper windowInteropHelper = new WindowInteropHelper(this);
+            var windowInteropHelper = new WindowInteropHelper(this);
 
-            System.Windows.Forms.Screen screen = System.Windows.Forms.Screen.FromHandle(windowInteropHelper.Handle);
+            var screen = System.Windows.Forms.Screen.FromHandle(windowInteropHelper.Handle);
 
-            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle
+            var rectangle = new System.Drawing.Rectangle
                                                      {
                                                          X = (int) Left,
                                                          Y = (int) Top,
@@ -1041,7 +1037,7 @@ namespace FeedCenter
                                                          Height = (int) Height
                                                      };
 
-            Thickness borderThickness = new Thickness();
+            var borderThickness = new Thickness();
 
             if (rectangle.Right != screen.WorkingArea.Right)
                 borderThickness.Right = 1;
@@ -1116,16 +1112,16 @@ namespace FeedCenter
             var feedItems = (from FeedItem feedItem in linkTextList.Items select feedItem).ToList();
 
             // Get the browser 
-            Browser browser = BrowserCommon.FindBrowser(Settings.Default.Browser);
+            var browser = BrowserCommon.FindBrowser(Settings.Default.Browser);
 
             // Cache the settings object
             var settings = Settings.Default;
 
             // Start with a longer sleep interval to give time for the browser to come up
-            int sleepInterval = settings.OpenAllSleepIntervalFirst;
+            var sleepInterval = settings.OpenAllSleepIntervalFirst;
 
             // Loop over all items 
-            foreach (FeedItem feedItem in feedItems)
+            foreach (var feedItem in feedItems)
             {
                 // Try to open the link
                 if (BrowserCommon.OpenLink(browser, feedItem.Link))
@@ -1151,10 +1147,10 @@ namespace FeedCenter
         private void HandleOptionsToolbarButtonClick(object sender, RoutedEventArgs e)
         {
             // Create the options form
-            OptionsWindow optionsWindow = new OptionsWindow { Owner = this };
+            var optionsWindow = new OptionsWindow { Owner = this };
 
             // Show the options form and get the result
-            bool? result = optionsWindow.ShowDialog();
+            var result = optionsWindow.ShowDialog();
 
             // If okay was selected
             if (result.HasValue && result.Value)
@@ -1175,10 +1171,10 @@ namespace FeedCenter
         private void HandleShowErrorsButtonClick(object sender, RoutedEventArgs e)
         {
             // Create the feed error window
-            FeedErrorWindow feedErrorWindow = new FeedErrorWindow();
+            var feedErrorWindow = new FeedErrorWindow();
 
             // Display the window
-            bool? result = feedErrorWindow.Display(this);
+            var result = feedErrorWindow.Display(this);
 
             // If okay was selected
             if (result.GetValueOrDefault())
@@ -1195,11 +1191,11 @@ namespace FeedCenter
 
         private void HandleRefreshMenuItemClick(object sender, RoutedEventArgs e)
         {
-            MenuItem menuItem = (MenuItem) e.Source;
+            var menuItem = (MenuItem) e.Source;
 
-            if (menuItem == menuRefresh)
+            if (Equals(menuItem, menuRefresh))
                 ReadCurrentFeed(true);
-            else if (menuItem == menuRefreshAll)
+            else if (Equals(menuItem, menuRefreshAll))
                 ReadFeeds(true);
         }
 
@@ -1210,11 +1206,11 @@ namespace FeedCenter
 
         private void HandleOpenAllMenuItemClick(object sender, RoutedEventArgs e)
         {
-            MenuItem menuItem = (MenuItem) e.Source;
+            var menuItem = (MenuItem) e.Source;
 
-            if (menuItem == menuOpenAllSinglePage)
+            if (Equals(menuItem, menuOpenAllSinglePage))
                 OpenAllFeedItemsOnSinglePage();
-            else if (menuItem == menuOpenAllMultiplePages)
+            else if (Equals(menuItem, menuOpenAllMultiplePages))
                 OpenAllFeedItemsIndividually();
         }
 
@@ -1236,10 +1232,10 @@ namespace FeedCenter
         private void HandleEditCurrentFeedMenuItemClick(object sender, RoutedEventArgs e)
         {
             // Create a new feed window
-            FeedWindow feedWindow = new FeedWindow();
+            var feedWindow = new FeedWindow();
 
             // Display the feed window and get the result
-            bool? result = feedWindow.Display(_database, _currentFeed, this);
+            var result = feedWindow.Display(_database, _currentFeed, this);
 
             // If OK was clicked...
             if (result.HasValue && result.Value)
@@ -1259,17 +1255,17 @@ namespace FeedCenter
                 return;
 
             // Get the current feed
-            Feed feedToDelete = _currentFeed;
+            var feedToDelete = _currentFeed;
 
             // Move to the next feed
             NextFeed();
 
             // Delete all items
             foreach (var item in feedToDelete.Items.ToList())
-                _database.FeedItems.DeleteObject(item);
+                _database.FeedItems.Remove(item);
 
             // Delete the feed
-            _database.Feeds.DeleteObject(feedToDelete);
+            _database.Feeds.Remove(feedToDelete);
 
             // Save
             _database.SaveChanges();
@@ -1281,10 +1277,10 @@ namespace FeedCenter
 
         private void OpenAllFeedItemsOnSinglePage()
         {
-            string fileName = Path.GetTempFileName() + ".html";
+            var fileName = Path.GetTempFileName() + ".html";
             TextWriter textWriter = new StreamWriter(fileName);
 
-            using (HtmlTextWriter htmlTextWriter = new HtmlTextWriter(textWriter))
+            using (var htmlTextWriter = new HtmlTextWriter(textWriter))
             {
                 htmlTextWriter.RenderBeginTag(HtmlTextWriterTag.Html);
 
@@ -1305,7 +1301,7 @@ namespace FeedCenter
 
                 var sortedItems = from item in _currentFeed.Items where !item.BeenRead orderby item.Sequence ascending select item;
 
-                bool firstItem = true;
+                var firstItem = true;
 
                 foreach (var item in sortedItems)
                 {
@@ -1351,28 +1347,5 @@ namespace FeedCenter
             // Display update information
             VersionCheck.DisplayUpdateInformation(true);
         }
-
-        #region Hover selection events
-
-        private void HandleListItemMouseEnter(object sender, MouseEventArgs e)
-        {
-            // Get the list box item
-            ListBoxItem listBoxItem = (ListBoxItem) sender;
-
-            // Select the data context
-            linkTextList.SelectedItem = listBoxItem.DataContext;
-
-            // Set the cursor
-            listBoxItem.Cursor = Cursors.Hand;
-        }
-
-        private void HandleListItemMouseLeave(object sender, MouseEventArgs e)
-        {
-            // Clear selection
-            linkTextList.SelectedItem = null;
-        }
-
-        #endregion
-
     }
 }

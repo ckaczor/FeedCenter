@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace FeedCenter.Options
 {
-    public partial class AboutOptionsPanel 
+    public partial class AboutOptionsPanel
     {
         public AboutOptionsPanel()
         {

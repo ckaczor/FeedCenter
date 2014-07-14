@@ -7,6 +7,7 @@
         xmlns:my="clr-namespace:FeedCenter.Properties"
         xmlns:Options="clr-namespace:FeedCenter.Options"
         xmlns:LinkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
+        xmlns:feedCenter="clr-namespace:FeedCenter"
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
         FocusManager.FocusedElement="{Binding ElementName=feedLinkFilterText}">
@@ -97,9 +98,9 @@
                       ToolTip="{x:Static my:Resources.DisableHint}"
                       IsEnabled="False">
                 <ComboBoxItem Content="{x:Static my:Resources.openAllMultipleToolbarButton}"
-                              Tag="{x:Static Options:MultipleOpenAction.IndividualPages}" />
+                              Tag="{x:Static feedCenter:MultipleOpenAction.IndividualPages}" />
                 <ComboBoxItem Content="{x:Static my:Resources.openAllSingleToolbarButton}"
-                              Tag="{x:Static Options:MultipleOpenAction.SinglePage}" />
+                              Tag="{x:Static feedCenter:MultipleOpenAction.SinglePage}" />
             </ComboBox>
         </Grid>
         <Button Content="{x:Static my:Resources.OkayButton}"

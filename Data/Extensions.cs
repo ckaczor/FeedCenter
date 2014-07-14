@@ -26,7 +26,7 @@ namespace FeedCenter.Data
                 return null;
 
             // Get the first table
-            DataTable firstTable = dataSet.Tables[0];
+            var firstTable = dataSet.Tables[0];
 
             // If the table has no rows then return nothing
             if (firstTable.Rows.Count == 0)
@@ -43,13 +43,13 @@ namespace FeedCenter.Data
         public static void SetStatement(this SqlCeCommand command, string statement, params object[] parameters)
         {
             // Create a new array to hold the updated parameters
-            object[] formattedParameters = new object[parameters.Length];
+            var formattedParameters = new object[parameters.Length];
 
             // Initialize our position
-            int position = 0;
+            var position = 0;
 
             // Loop over each parameter
-            foreach (object parameter in parameters)
+            foreach (var parameter in parameters)
             {
                 // If the parameter is a DateTime then we need to reformat
                 if (parameter == null)
@@ -60,10 +60,10 @@ namespace FeedCenter.Data
                 else if (parameter is DateTime)
                 {
                     // Cast the parameter back to a DateTime
-                    DateTime dateTime = (DateTime) parameter;
+                    var dateTime = (DateTime) parameter;
 
                     // Convert the DateTime to sortable format
-                    string formatted = dateTime.ToString("s");
+                    var formatted = dateTime.ToString("s");
 
                     // Set into the formatted array
                     formattedParameters[position++] = formatted;
@@ -101,7 +101,7 @@ namespace FeedCenter.Data
         public static void ExecuteNonQuery(this SqlCeConnection connection, string query, params object[] parameters)
         {
             // Create the command object 
-            SqlCeCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
 
             // Set the statement based on the query and parameters
             command.SetStatement(query, parameters);
@@ -115,16 +115,16 @@ namespace FeedCenter.Data
         public static DataSet ExecuteDataSet(this SqlCeConnection connection, string query, params object[] parameters)
         {
             // Create the command object
-            SqlCeCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
 
             // Set the statement based on the query and parameters
             command.SetStatement(query, parameters);
 
             // Create a new data adapter
-            using (SqlCeDataAdapter adapter = new SqlCeDataAdapter(command))
+            using (var adapter = new SqlCeDataAdapter(command))
             {
                 // Create the new data set
-                using (DataSet dataSet = new DataSet())
+                using (var dataSet = new DataSet())
                 {
                     //Tracer.WriteLine("Executing SQL query: {0}", command.CommandText);
 
@@ -139,7 +139,7 @@ namespace FeedCenter.Data
         public static object ExecuteScalar(this SqlCeConnection connection, string query, params object[] parameters)
         {
             // Create the command object 
-            SqlCeCommand command = connection.CreateCommand();
+            var command = connection.CreateCommand();
 
             // Set the statement based on the query and parameters
             command.SetStatement(query, parameters);

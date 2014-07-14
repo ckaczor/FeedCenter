@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity.Infrastructure;
 
 namespace FeedCenter
 {
@@ -11,7 +12,8 @@ namespace FeedCenter
         {
             if (disposing)
             {
-                ObjectStateManager.ObjectStateManagerChanged -= HandleObjectStateManagerObjectStateManagerChanged;
+                var manager = ((IObjectContextAdapter) this).ObjectContext.ObjectStateManager;
+                manager.ObjectStateManagerChanged -= HandleObjectStateManagerObjectStateManagerChanged;
                 _hookedStateManager = false;
             }
 
@@ -36,7 +38,8 @@ namespace FeedCenter
 
                     if (!_hookedStateManager)
                     {
-                        ObjectStateManager.ObjectStateManagerChanged += HandleObjectStateManagerObjectStateManagerChanged;
+                        var manager = ((IObjectContextAdapter) this).ObjectContext.ObjectStateManager;
+                        manager.ObjectStateManagerChanged += HandleObjectStateManagerObjectStateManagerChanged;
                         _hookedStateManager = true;
                     }
                 }
@@ -61,7 +64,8 @@ namespace FeedCenter
 
                     if (!_hookedStateManager)
                     {
-                        ObjectStateManager.ObjectStateManagerChanged += HandleObjectStateManagerObjectStateManagerChanged;
+                        var manager = ((IObjectContextAdapter) this).ObjectContext.ObjectStateManager;
+                        manager.ObjectStateManagerChanged += HandleObjectStateManagerObjectStateManagerChanged;
                         _hookedStateManager = true;
                     }
                 }
@@ -80,8 +84,8 @@ namespace FeedCenter
             {
                 if (_allCategories == null)
                     return;
-                
-                Category category = e.Element as Category;
+
+                var category = e.Element as Category;
 
                 switch (e.Action)
                 {
@@ -93,7 +97,7 @@ namespace FeedCenter
                         break;
                     case CollectionChangeAction.Refresh:
                         _allCategories.Clear();
-                        foreach (Category loopCategory in Categories)
+                        foreach (var loopCategory in Categories)
                             _allCategories.Add(loopCategory);
                         break;
                 }
@@ -103,7 +107,7 @@ namespace FeedCenter
                 if (_allFeeds == null)
                     return;
 
-                Feed feed = e.Element as Feed;
+                var feed = e.Element as Feed;
 
                 switch (e.Action)
                 {
@@ -115,10 +119,10 @@ namespace FeedCenter
                         break;
                     case CollectionChangeAction.Refresh:
                         _allFeeds.Clear();
-                        foreach (Feed loopfeed in Feeds)
+                        foreach (var loopfeed in Feeds)
                             _allFeeds.Add(loopfeed);
                         break;
-                }                
+                }
             }
         }
 
