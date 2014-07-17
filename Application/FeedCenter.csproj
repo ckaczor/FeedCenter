@@ -130,16 +130,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Wpf.MarkupExtensions">
-      <HintPath>..\Common.Wpf.MarkupExtensions\bin\Release\Common.Wpf.MarkupExtensions.dll</HintPath>
+      <HintPath>..\..\Common.Wpf.MarkupExtensions\bin\Release\Common.Wpf.MarkupExtensions.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServerCompact">
-      <HintPath>packages\EntityFramework.SqlServerCompact.6.1.1\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.6.1.1\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -147,11 +147,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>packages\Microsoft.SqlServer.Compact.4.0.8854.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8854.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>packages\Microsoft.SqlServer.Compact.4.0.8854.1\lib\net40\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8854.1\lib\net40\System.Data.SqlServerCe.Entity.dll</HintPath>
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -413,15 +413,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Native\Common.Native.csproj">
+    <ProjectReference Include="..\..\Common.Native\Common.Native.csproj">
       <Project>{ED1C07A1-54F5-4796-8B06-2A0BB1960D84}</Project>
       <Name>Common.Native</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common.Wpf\Common.Wpf.csproj">
+    <ProjectReference Include="..\..\Common.Wpf\Common.Wpf.csproj">
       <Project>{0074C983-550E-4094-9E8C-F566FB669297}</Project>
       <Name>Common.Wpf</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common\Common.csproj">
+    <ProjectReference Include="..\..\Common\Common.csproj">
       <Project>{17864D82-457D-4A0A-BC10-1D07F2B3A5D6}</Project>
       <Name>Common</Name>
     </ProjectReference>
