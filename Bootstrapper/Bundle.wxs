@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
+	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
+	<?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
+
+	<Bundle Name="Bootstrapper"
+			Version="1.0.0.0"
+			Manufacturer="$(var.CompanyName)"
+			UpgradeCode="5e5c13a5-635e-4310-a653-0f9760f46935">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+
+		<Chain>
+			<PackageGroupRef Id="NetFx451Web"/>
+			
+			<MsiPackage Id="FeedCenter"
+						SourceFile="$(var.Setup.TargetPath)"/>
+		</Chain>
+	</Bundle>
+</Wix>
