@@ -40,7 +40,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>Publish.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>208</ApplicationRevision>
+    <ApplicationRevision>215</ApplicationRevision>
     <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -93,10 +93,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>BC151B601A9608463CB7A5371944A97EDEE60B1A</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>DD5418A1D7E4C0C16C84534C34CC696D5F8F9ABB</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>FeedCenter_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>FeedCenter_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -363,6 +363,7 @@
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="FeedCenter_1_TemporaryKey.pfx" />
+    <None Include="FeedCenter_2_TemporaryKey.pfx" />
     <None Include="FeedCenter_TemporaryKey.pfx" />
     <None Include="Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
