@@ -1,4 +1,5 @@
-﻿using Common.Debug;
+﻿using System.Text.RegularExpressions;
+using Common.Debug;
 using Common.Xml;
 using FeedCenter.FeedParsers;
 using System;
@@ -171,6 +172,10 @@ namespace FeedCenter
 
                 // Clean up common invalid XML characters
                 feedText = feedText.Replace("&nbsp;", "&#160;");
+
+                // Find ampersands that aren't properly escaped and replace them with escaped versions
+                var r = new Regex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)");
+                feedText = r.Replace(feedText, "&amp;");
 
                 return Tuple.Create(FeedReadResult.Success, feedText);
             }
