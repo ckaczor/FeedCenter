@@ -4,15 +4,21 @@
 	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
 	<?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
 
-	<Bundle Name="Bootstrapper"
-			Version="1.0.0.0"
+	<Bundle Name="$(var.ProductName)"
+			Version="$(var.ProductVersion)"
 			Manufacturer="$(var.CompanyName)"
 			UpgradeCode="5e5c13a5-635e-4310-a653-0f9760f46935">
-		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
 
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense">
+			<bal:WixStandardBootstrapperApplication
+				LicenseUrl=""
+				SuppressOptionsUI="yes"
+				xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" />
+		</BootstrapperApplicationRef>
+ 
 		<Chain>
 			<PackageGroupRef Id="NetFx451Web"/>
-			
+
 			<MsiPackage Id="FeedCenter"
 						SourceFile="$(var.Setup.TargetPath)"/>
 		</Chain>
