@@ -1,5 +1,6 @@
 ﻿using Common.Debug;
 using Common.Xml;
+using System;
 using System.Xml;
 
 namespace FeedCenter.FeedParsers
@@ -101,7 +102,7 @@ namespace FeedCenter.FeedParsers
                             permaLink = (permaLinkNode == null || permaLinkNode.Value == "true");
                         }
 
-                        if (permaLink)
+                        if (permaLink && Uri.IsWellFormedUriString(feedItem.Guid, UriKind.Absolute))
                             feedItem.Link = feedItem.Guid;
 
                         break;
