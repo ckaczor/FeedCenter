@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FeedCenter</RootNamespace>
     <AssemblyName>FeedCenter</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -75,7 +75,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>FeedCenter_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\Application.ico</ApplicationIcon>
@@ -132,11 +133,32 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Wpf.MarkupExtensions">
       <HintPath>..\..\Common.Wpf.MarkupExtensions\bin\Release\Common.Wpf.MarkupExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
@@ -159,15 +181,10 @@
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -350,21 +367,10 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest">
-      <Link>amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest">
-      <Link>x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <EntityDeploy Include="Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="FeedCenter_1_TemporaryKey.pfx" />
-    <None Include="FeedCenter_2_TemporaryKey.pfx" />
-    <None Include="FeedCenter_TemporaryKey.pfx" />
     <None Include="Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model.Context.cs</LastGenOutput>
@@ -419,7 +425,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common.Native\Common.Native.csproj">
-      <Project>{ED1C07A1-54F5-4796-8B06-2A0BB1960D84}</Project>
+      <Project>{ed1c07a1-54f5-4796-8b06-2a0bb1960d84}</Project>
       <Name>Common.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common.Wpf\Common.Wpf.csproj">
@@ -432,34 +438,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\Microsoft.VC90.CRT\msvcr90.dll">
-      <Link>amd64\Microsoft.VC90.CRT\msvcr90.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\sqlceca40.dll">
-      <Link>amd64\sqlceca40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\sqlcecompact40.dll">
-      <Link>amd64\sqlcecompact40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\sqlceer40EN.dll">
-      <Link>amd64\sqlceer40EN.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\sqlceme40.dll">
-      <Link>amd64\sqlceme40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\sqlceqp40.dll">
-      <Link>amd64\sqlceqp40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\amd64\sqlcese40.dll">
-      <Link>amd64\sqlcese40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Resources\Rss-Download.ico" />
     <Resource Include="Resources\Comments-edit.ico" />
     <Resource Include="Resources\Warning.ico" />
@@ -467,42 +445,6 @@
     <Resource Include="Resources\Compile.ico" />
     <Resource Include="Resources\Left.ico" />
     <Resource Include="Resources\Right.ico" />
-    <None Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\System.Data.SqlServerCe.dll">
-      <Link>Libraries\System.Data.SqlServerCe.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\System.Data.SqlServerCe.Entity.dll">
-      <Link>Libraries\System.Data.SqlServerCe.Entity.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\Microsoft.VC90.CRT\msvcr90.dll">
-      <Link>x86\Microsoft.VC90.CRT\msvcr90.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\sqlceca40.dll">
-      <Link>x86\sqlceca40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\sqlcecompact40.dll">
-      <Link>x86\sqlcecompact40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\sqlceer40EN.dll">
-      <Link>x86\sqlceer40EN.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\sqlceme40.dll">
-      <Link>x86\sqlceme40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\sqlceqp40.dll">
-      <Link>x86\sqlceqp40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="C:\Program Files\Microsoft SQL Server Compact Edition\v4.0\Private\x86\sqlcese40.dll">
-      <Link>x86\sqlcese40.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
