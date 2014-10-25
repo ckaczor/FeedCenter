@@ -1,4 +1,5 @@
-﻿using Common.Wpf.Extensions;
+﻿using System.Data.Entity;
+using Common.Wpf.Extensions;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,8 +17,10 @@ namespace FeedCenter.Options
 
         public bool? Display(FeedCenterEntities database, Feed feed, Window owner)
         {
+            database.Categories.Load();
+
             // Bind the category combo box
-            categoryComboBox.ItemsSource = database.Categories;
+            categoryComboBox.ItemsSource = database.Categories.Local;
 
             // Set the data context
             DataContext = feed;
