@@ -1,4 +1,4 @@
-﻿using System.Deployment.Application;
+﻿using FeedCenter.Update;
 using System.Reflection;
 
 namespace FeedCenter.Options
@@ -16,7 +16,7 @@ namespace FeedCenter.Options
 
             applicationNameLabel.Text = Properties.Resources.ApplicationDisplayName;
 
-            string version = (ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : "0");
+            string version = UpdateCheck.CurrentVersion.ToString();
             versionLabel.Text = string.Format(Properties.Resources.Version, version);
 
             companyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;

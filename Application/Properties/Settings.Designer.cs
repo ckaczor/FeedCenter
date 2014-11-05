@@ -272,5 +272,23 @@ namespace FeedCenter.Properties {
                 this["MultipleLineDisplay"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("FeedCenterSetup.xml")]
+        public string VersionFile {
+            get {
+                return ((string)(this["VersionFile"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://server/FeedCenter/")]
+        public string VersionLocation {
+            get {
+                return ((string)(this["VersionLocation"]));
+            }
+        }
     }
 }

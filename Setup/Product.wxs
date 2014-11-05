@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-	 xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	 xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+	 xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
 	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
 	<?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
@@ -11,11 +12,19 @@
 			 Version="$(var.ProductVersion)"
 			 Manufacturer="$(var.CompanyName)"
 			 UpgradeCode="47f30e4a-a861-47ac-b82d-35e4b886992a">
-		<Package InstallerVersion="200"
+		<Package InstallerVersion="405"
 				 Compressed="yes"
 				 InstallScope="perUser" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<util:CloseApplication Id="CloseApplication"
+							   Target="FeedCenter.exe"
+							   CloseMessage="yes"
+							   Timeout="5" />
+
+		<MajorUpgrade Schedule="afterInstallValidate"
+					  AllowDowngrades="no"
+					  AllowSameVersionUpgrades="no"
+					  DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
 		<MediaTemplate />
 
@@ -132,7 +141,8 @@
 				<File Source="$(var.FeedCenter.TargetDir)\System.Data.SqlServerCe.Entity.dll" />
 
 				<File Source="$(var.FeedCenter.TargetPath).config" />
-				<File Source="$(var.FeedCenter.TargetPath)" />
+				<File Id="FeedCenter.exe"
+					  Source="$(var.FeedCenter.TargetPath)" />
 
 				<RemoveFolder Id='INSTALLFOLDER'
 							  On='uninstall' />

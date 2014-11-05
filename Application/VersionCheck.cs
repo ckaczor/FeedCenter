@@ -2,44 +2,23 @@
 using FeedCenter.Properties;
 using System;
 using System.ComponentModel;
-using System.Deployment.Application;
 using System.Windows;
+using FeedCenter.Update;
 using Application = System.Windows.Forms.Application;
 
 namespace FeedCenter
 {
     internal static class VersionCheck
     {
-        public static void DisplayUpdateInformation(bool showIfCurrent)
+        public static async void DisplayUpdateInformation(bool showIfCurrent)
         {
-            if (!ApplicationDeployment.IsNetworkDeployed)
-                return;
-
-            UpdateCheckInfo updateCheckInfo = null;
-
-            try
-            {
-                updateCheckInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-            }
-            catch (Exception exception)
-            {
-                Tracer.WriteException(exception);
-            }
-
-            DisplayUpdateInformation(updateCheckInfo, showIfCurrent);
-        }
-
-        public static void DisplayUpdateInformation(UpdateCheckInfo updateCheckInfo, bool showIfCurrent)
-        {
-            // If we didn't get any information then do nothing
-            if (updateCheckInfo == null)
-                return;
+            UpdateCheck.CheckForUpdate();
 
             // Check for an update
-            if (updateCheckInfo.UpdateAvailable)
+            if (UpdateCheck.UpdateAvailable)
             {
                 // Load the version string from the server
-                Version serverVersion = updateCheckInfo.AvailableVersion;
+                Version serverVersion = UpdateCheck.VersionFile.Version;
 
                 // Format the check title
                 string updateCheckTitle = string.Format(Resources.UpdateCheckTitle, Resources.ApplicationDisplayName);
@@ -52,7 +31,10 @@ namespace FeedCenter
                     return;
 
                 // Get the update
-                ApplicationDeployment.CurrentDeployment.Update();
+                await UpdateCheck.DownloadUpdate();
+
+                // Install the update
+                UpdateCheck.InstallUpdate();
 
                 // Set to restart
                 ((App) System.Windows.Application.Current).Restart = true;
@@ -101,18 +83,16 @@ namespace FeedCenter
             _backgroundWorker = null;
         }
 
-        static void HandleBackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
+        private static void HandleBackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
         {
-            // If the application isn't installed then do nothing
-            if (!ApplicationDeployment.IsNetworkDeployed)
-                return;
-
             e.Result = null;
 
             try
             {
+                UpdateCheck.CheckForUpdate();
+
                 // Get the update information and set it into the result
-                e.Result = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
+                e.Result = UpdateCheck.UpdateAvailable;
             }
             catch (Exception exception)
             {
@@ -123,7 +103,7 @@ namespace FeedCenter
         private static void HandleBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Display any update info
-            DisplayUpdateInformation(e.Result as UpdateCheckInfo, false);
+            DisplayUpdateInformation(false);
         }
 
         #endregion

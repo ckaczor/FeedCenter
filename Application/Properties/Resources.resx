@@ -166,6 +166,9 @@
   <data name="SplashInstallingUpdate" xml:space="preserve">
     <value>Installing update...</value>
   </data>
+  <data name="SplashDownloadingUpdate" xml:space="preserve">
+    <value>Downloading update...</value>
+  </data>
   <data name="SplashMaintainingDatabase" xml:space="preserve">
     <value>Maintaining database...</value>
   </data>

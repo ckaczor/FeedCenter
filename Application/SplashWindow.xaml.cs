@@ -1,12 +1,10 @@
-﻿using Common.Debug;
-using FeedCenter.Data;
+﻿using FeedCenter.Data;
 using FeedCenter.Properties;
+using FeedCenter.Update;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Deployment.Application;
 using System.Threading;
-using System.Windows;
 using System.Windows.Threading;
 
 namespace FeedCenter
@@ -51,7 +49,7 @@ namespace FeedCenter
             _dispatcher = Dispatcher.CurrentDispatcher;
 
             // Get the version to display
-            string version = (ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : "0");
+            string version = UpdateCheck.CurrentVersion.ToString();
 
             // Show the version
             lblVersion.Content = string.Format(Properties.Resources.Version, version);
@@ -183,16 +181,14 @@ namespace FeedCenter
         private void LoadProgressSteps()
         {
             // Load the progress steps
-            _progressSteps.Add(new ProgressStep(ProgressKey.Update, Properties.Resources.SplashCheckingForUpdate, CheckUpdate));
-            _progressSteps.Add(new ProgressStep(ProgressKey.Update, Properties.Resources.SplashInstallingUpdate, DownloadUpdate));
-            _progressSteps.Add(new ProgressStep(ProgressKey.Update, Properties.Resources.SplashRestarting, RestartAfterUpdate));
-
             _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseCreate, Properties.Resources.SplashCheckingForDatabase, CheckDatabase));
             _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseCreate, Properties.Resources.SplashCreatingDatabase, CreateDatabase));
 
             _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseUpdate, Properties.Resources.SplashUpdatingDatabase, UpdateDatabase));
 
             _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseMaintenance, Properties.Resources.SplashMaintainingDatabase, MaintainDatabase));
+
+            _progressSteps.Add(new ProgressStep(ProgressKey.Update, Properties.Resources.SplashCheckingForUpdate, CheckUpdate));
         }
 
         private static bool CheckUpdate()
@@ -201,47 +197,8 @@ namespace FeedCenter
             if (!Settings.Default.CheckVersionAtStartup)
                 return false;
 
-            // If the application isn't install then skip
-            if (!ApplicationDeployment.IsNetworkDeployed)
-                return false;
-
-            UpdateCheckInfo updateCheckInfo;
-
-            try
-            {
-                // Get detailed version information
-                updateCheckInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-            }
-            catch (Exception exception)
-            {
-                // Log the exception
-                Tracer.WriteException(exception);
-
-                // No update at this time
-                return false;
-            }
-
-            // Return if an update is available
-            return updateCheckInfo.UpdateAvailable;
-        }
-
-        private static bool DownloadUpdate()
-        {
-            // Download and installthe update
-            ApplicationDeployment.CurrentDeployment.Update();
-
-            return true;
-        }
-
-        private bool RestartAfterUpdate()
-        {
-            // We need to restart
-            ((App) Application.Current).Restart = true;
-
-            // Cancel the worker
-            _backgroundWorker.CancelAsync();
-
-            return true;
+            // Return if the check worked and an update is available
+            return UpdateCheck.CheckForUpdate() && UpdateCheck.UpdateAvailable;
         }
 
         private static bool CheckDatabase()

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+
 	<?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
 	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
 	<?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
@@ -9,18 +11,21 @@
 			Manufacturer="$(var.CompanyName)"
 			UpgradeCode="5e5c13a5-635e-4310-a653-0f9760f46935">
 
-		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense">
-			<bal:WixStandardBootstrapperApplication
+		<BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.HyperlinkLicense">
+			<bal:WixExtendedBootstrapperApplication
 				LicenseUrl=""
 				SuppressOptionsUI="yes"
-				xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" />
+				ShowVersion="yes"
+				LaunchPassive="yes"
+				LaunchQuiet="yes"
+				LaunchTarget="[LocalAppDataFolder]$(var.ProductName)\FeedCenter.exe" />
 		</BootstrapperApplicationRef>
- 
+
 		<Chain>
-			<PackageGroupRef Id="NetFx451Web"/>
+			<PackageGroupRef Id="NetFx451Web" />
 
 			<MsiPackage Id="FeedCenter"
-						SourceFile="$(var.Setup.TargetPath)"/>
+						SourceFile="$(var.Setup.TargetPath)" />
 		</Chain>
 	</Bundle>
 </Wix>

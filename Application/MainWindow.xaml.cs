@@ -7,7 +7,6 @@ using FeedCenter.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -17,6 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using FeedCenter.Update;
 
 namespace FeedCenter
 {
@@ -97,6 +97,10 @@ namespace FeedCenter
 
             // Initialize the feed display
             InitializeFeed();
+
+            // Check for update
+            if (UpdateCheck.UpdateAvailable)
+                newVersionLink.Visibility = Visibility.Visible;
 
             Tracer.WriteLine("MainForm creation finished");
         }
@@ -539,11 +543,6 @@ namespace FeedCenter
             public Feed Feed;
         }
 
-        private class FeedReadWorkerOutput
-        {
-            public UpdateCheckInfo UpdateResult;
-        }
-
         private void SetProgressMode(bool value, int feedCount)
         {
             // Reset the progress bar if we need it
@@ -607,9 +606,6 @@ namespace FeedCenter
 
         private void HandleFeedReadWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // Get the state info
-            var workerOutput = (FeedReadWorkerOutput) e.Result;
-
             // Reset the database to current settings
             ResetDatabase();
 
@@ -625,10 +621,8 @@ namespace FeedCenter
             // Switch to normal mode
             SetProgressMode(false, 0);
 
-            // Check for update information
-            var updateCheckInfo = workerOutput.UpdateResult;
-
-            if (updateCheckInfo != null && updateCheckInfo.UpdateAvailable)
+            // Check for update
+            if (UpdateCheck.UpdateAvailable)
                 newVersionLink.Visibility = Visibility.Visible;
 
             UpdateErrorLink();
@@ -657,9 +651,6 @@ namespace FeedCenter
 
             // Get the input information
             var workerInput = (FeedReadWorkerInput) e.Argument;
-
-            // Create the output 
-            var workerOutput = new FeedReadWorkerOutput();
 
             // Setup for progress
             var currentProgress = 0;
@@ -696,22 +687,10 @@ namespace FeedCenter
             worker.ReportProgress(currentProgress);
 
             // See if we're due for a version check
-            if (DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval && ApplicationDeployment.IsNetworkDeployed)
+            if (DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval)
             {
-                UpdateCheckInfo updateCheckInfo = null;
-
-                try
-                {
-                    // Get the update information
-                    updateCheckInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-                }
-                catch (Exception exception)
-                {
-                    Tracer.WriteException(exception);
-                }
-
-                // Store the update information in the output
-                workerOutput.UpdateResult = updateCheckInfo;
+                // Get the update information
+                UpdateCheck.CheckForUpdate();
 
                 // Update the last check time
                 Settings.Default.LastVersionCheck = DateTime.Now;
@@ -722,9 +701,6 @@ namespace FeedCenter
 
             // Report progress
             worker.ReportProgress(currentProgress);
-
-            // Save the output
-            e.Result = workerOutput;
 
             // Sleep for a little bit so the user can see the update
             Thread.Sleep(Settings.Default.ProgressSleepInterval * 3);

@@ -1280,6 +1280,15 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading update....
+        /// </summary>
+        public static string SplashDownloadingUpdate {
+            get {
+                return ResourceManager.GetString("SplashDownloadingUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Installing update....
         /// </summary>
         public static string SplashInstallingUpdate {

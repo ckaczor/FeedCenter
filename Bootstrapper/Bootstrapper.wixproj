@@ -24,6 +24,10 @@
     <Compile Include="Bundle.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixBalExtensionExt">
+      <HintPath>..\..\..\Public\WixBalExtensionExt\wixext\bin\Debug\WixBalExtensionExt.dll</HintPath>
+      <Name>WixBalExtensionExt</Name>
+    </WixExtension>
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
@@ -31,10 +35,6 @@
     <WixExtension Include="WixFileVersionExtension">
       <HintPath>..\..\WixFileVersionExtension\bin\Release\WixFileVersionExtension.dll</HintPath>
       <Name>WixFileVersionExtension</Name>
-    </WixExtension>
-    <WixExtension Include="WixBalExtension">
-      <HintPath>$(WixExtDir)\WixBalExtension.dll</HintPath>
-      <Name>WixBalExtension</Name>
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +57,9 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PostBuildEvent>D:\Code\Personal\CreateInstallDescriptor\bin\Debug\CreateInstallDescriptor.exe !(TargetPath) $(TargetDir)\$(TargetName).xml</PostBuildEvent>
+    <PostBuildEvent>D:\Code\Personal\CreateInstallDescriptor\bin\Debug\CreateInstallDescriptor.exe !(TargetPath) $(TargetDir)\$(TargetName).xml
+copy $(TargetDir)\$(TargetName).xml \\server\d\FeedCenter
+copy $(TargetDir)\$(TargetName).exe \\server\d\FeedCenter</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
