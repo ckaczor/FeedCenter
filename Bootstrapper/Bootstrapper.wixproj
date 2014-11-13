@@ -25,7 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixBalExtensionExt">
-      <HintPath>..\..\..\Public\WixBalExtensionExt\wixext\bin\Debug\WixBalExtensionExt.dll</HintPath>
+      <HintPath>..\..\WixBalExtensionExt\wixext\bin\Release\WixBalExtensionExt.dll</HintPath>
       <Name>WixBalExtensionExt</Name>
     </WixExtension>
     <WixExtension Include="WixNetFxExtension">
