@@ -1,4 +1,4 @@
-﻿using FeedCenter.Update;
+﻿using Common.Update;
 using System.Reflection;
 
 namespace FeedCenter.Options

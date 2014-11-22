@@ -261,8 +261,6 @@
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Update\UpdateCheck.cs" />
-    <Compile Include="Update\VersionFile.cs" />
     <Compile Include="VersionCheck.cs" />
     <Page Include="FeedErrorWindow.xaml">
       <SubType>Designer</SubType>

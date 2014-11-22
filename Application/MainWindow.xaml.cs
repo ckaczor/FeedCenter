@@ -1,6 +1,7 @@
 ﻿using Common.Debug;
 using Common.Helpers;
 using Common.IO;
+using Common.Update;
 using Common.Wpf.Extensions;
 using FeedCenter.Options;
 using FeedCenter.Properties;
@@ -16,7 +17,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using FeedCenter.Update;
 
 namespace FeedCenter
 {
@@ -690,7 +690,7 @@ namespace FeedCenter
             if (DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval)
             {
                 // Get the update information
-                UpdateCheck.CheckForUpdate();
+                UpdateCheck.CheckForUpdate(Settings.Default.VersionLocation, Settings.Default.VersionFile);
 
                 // Update the last check time
                 Settings.Default.LastVersionCheck = DateTime.Now;

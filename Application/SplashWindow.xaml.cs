@@ -1,6 +1,6 @@
-﻿using FeedCenter.Data;
+﻿using Common.Update;
+using FeedCenter.Data;
 using FeedCenter.Properties;
-using FeedCenter.Update;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -198,7 +198,7 @@ namespace FeedCenter
                 return false;
 
             // Return if the check worked and an update is available
-            return UpdateCheck.CheckForUpdate() && UpdateCheck.UpdateAvailable;
+            return UpdateCheck.CheckForUpdate(Settings.Default.VersionLocation, Settings.Default.VersionFile) && UpdateCheck.UpdateAvailable;
         }
 
         private static bool CheckDatabase()
