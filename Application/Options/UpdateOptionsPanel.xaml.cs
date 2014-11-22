@@ -1,4 +1,6 @@
-﻿namespace FeedCenter.Options
+﻿using Common.Update;
+
+namespace FeedCenter.Options
 {
     public partial class UpdateOptionsPanel
     {
@@ -32,7 +34,7 @@
 
         private void HandleCheckVersionNowButtonClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            VersionCheck.DisplayUpdateInformation(true);
+            UpdateCheck.DisplayUpdateInformation(true);
         }
     }
 }

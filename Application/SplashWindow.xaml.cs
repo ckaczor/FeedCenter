@@ -49,7 +49,7 @@ namespace FeedCenter
             _dispatcher = Dispatcher.CurrentDispatcher;
 
             // Get the version to display
-            string version = UpdateCheck.CurrentVersion.ToString();
+            string version = UpdateCheck.LocalVersion.ToString();
 
             // Show the version
             lblVersion.Content = string.Format(Properties.Resources.Version, version);
@@ -198,7 +198,7 @@ namespace FeedCenter
                 return false;
 
             // Return if the check worked and an update is available
-            return UpdateCheck.CheckForUpdate(Settings.Default.VersionLocation, Settings.Default.VersionFile) && UpdateCheck.UpdateAvailable;
+            return UpdateCheck.CheckForUpdate() && UpdateCheck.UpdateAvailable;
         }
 
         private static bool CheckDatabase()

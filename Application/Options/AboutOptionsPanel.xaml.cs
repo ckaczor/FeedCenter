@@ -16,7 +16,7 @@ namespace FeedCenter.Options
 
             applicationNameLabel.Text = Properties.Resources.ApplicationDisplayName;
 
-            string version = UpdateCheck.CurrentVersion.ToString();
+            string version = UpdateCheck.LocalVersion.ToString();
             versionLabel.Text = string.Format(Properties.Resources.Version, version);
 
             companyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;

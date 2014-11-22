@@ -66,6 +66,14 @@ namespace FeedCenter
 
         public void Initialize()
         {
+            // Setup the update message properties and callbacks
+            UpdateCheck.ApplicationName = Properties.Resources.ApplicationDisplayName;
+            UpdateCheck.UpdateServer = Settings.Default.VersionLocation;
+            UpdateCheck.UpdateFile = Settings.Default.VersionFile;
+            UpdateCheck.ApplicationShutdown = ApplicationShutdown;
+            UpdateCheck.ApplicationCurrentMessage = ApplicationCurrentMessage;
+            UpdateCheck.ApplicationUpdateMessage = ApplicationUpdateMessage;
+
             // Show the notification icon
             NotificationIcon.Initialize(this);
 
@@ -103,6 +111,21 @@ namespace FeedCenter
                 newVersionLink.Visibility = Visibility.Visible;
 
             Tracer.WriteLine("MainForm creation finished");
+        }
+
+        private static bool ApplicationUpdateMessage(string title, string message)
+        {
+            return MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes;
+        }
+
+        private static void ApplicationCurrentMessage(string title, string message)
+        {
+            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private static void ApplicationShutdown()
+        {
+            Application.Current.Shutdown();
         }
 
         #endregion
@@ -385,7 +408,7 @@ namespace FeedCenter
                     // Increment the index and adjust if we've gone around the end
                     _feedIndex = (_feedIndex + 1) % feedCount;
                 }
-                while (startIndex != _feedIndex);
+                while (_feedIndex != startIndex);
 
                 // If nothing was found then clear the current feed
                 if (!found)
@@ -456,7 +479,7 @@ namespace FeedCenter
                     if (_feedIndex < 0)
                         _feedIndex = feedCount - 1;
                 }
-                while (startIndex != _feedIndex);
+                while (_feedIndex != startIndex);
 
                 // If nothing was found then clear the current feed
                 if (!found)
@@ -690,7 +713,7 @@ namespace FeedCenter
             if (DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval)
             {
                 // Get the update information
-                UpdateCheck.CheckForUpdate(Settings.Default.VersionLocation, Settings.Default.VersionFile);
+                UpdateCheck.CheckForUpdate();
 
                 // Update the last check time
                 Settings.Default.LastVersionCheck = DateTime.Now;
@@ -1192,7 +1215,7 @@ namespace FeedCenter
 
         private void HandleOpenAllToolbarButtonClick(object sender, RoutedEventArgs e)
         {
-            var multipleOpenAction = (MultipleOpenAction) _currentFeed.MultipleOpenAction;
+            var multipleOpenAction = _currentFeed.MultipleOpenAction;
 
             switch (multipleOpenAction)
             {
@@ -1321,7 +1344,7 @@ namespace FeedCenter
         private void HandleNewVersionLinkClick(object sender, RoutedEventArgs e)
         {
             // Display update information
-            VersionCheck.DisplayUpdateInformation(true);
+            UpdateCheck.DisplayUpdateInformation(true);
         }
     }
 }

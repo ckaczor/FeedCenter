@@ -184,22 +184,6 @@
   <data name="ApplicationName" xml:space="preserve">
     <value>FeedCenter</value>
   </data>
-  <data name="UpdateCheckNewVersion" xml:space="preserve">
-    <value>Version {1} of {0} is now available.
-
-Would you like to download and install it now?</value>
-  </data>
-  <data name="UpdateCheckCurrent" xml:space="preserve">
-    <value>You are already running the most recent version.
-
-No updates are available at this time.</value>
-  </data>
-  <data name="UpdateCheckTitle" xml:space="preserve">
-    <value>{0} Update</value>
-  </data>
-  <data name="UpdateAvailable" xml:space="preserve">
-    <value>An update to version {0} is now available.</value>
-  </data>
   <data name="FeedAddedNotification" xml:space="preserve">
     <value>"{0}" has been successfully added to your feed list.</value>
   </data>

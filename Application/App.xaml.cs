@@ -1,18 +1,15 @@
-﻿using System;
+﻿using Common.Debug;
+using Common.Helpers;
+using Common.IO;
+using Common.Settings;
+using Common.Wpf.Extensions;
+using FeedCenter.Properties;
+using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Threading;
-using Microsoft.Win32;
-
-using Common.Debug;
-using Common.Helpers;
-using Common.IO;
-using Common.Wpf.Extensions;
-using Common.Settings;
-
-using FeedCenter.Properties;
 
 namespace FeedCenter
 {
@@ -20,13 +17,7 @@ namespace FeedCenter
     {
         #region Debug properties
 
-        public static bool UseDebugPath;
-
-        #endregion
-
-        #region Properties
-
-        public bool Restart;
+        private static bool _useDebugPath;
 
         #endregion
 
@@ -35,12 +26,14 @@ namespace FeedCenter
         [STAThread]
         public static void Main()
         {
+            _useDebugPath = Environment.CommandLine.IndexOf("/debugPath", StringComparison.InvariantCultureIgnoreCase) != -1;
+
             // Create and initialize the app object
-            App app = new App();
+            var app = new App();
             app.InitializeComponent();
 
             // Create an isolation handle to see if we are already running
-            IDisposable isolationHandle = ApplicationIsolation.GetIsolationHandle(FeedCenter.Properties.Resources.ApplicationName);
+            var isolationHandle = ApplicationIsolation.GetIsolationHandle(FeedCenter.Properties.Resources.ApplicationName);
 
             // If there is another copy then pass it the command line and exit
             if (isolationHandle == null)
@@ -54,7 +47,7 @@ namespace FeedCenter
             {
                 // Set the data directory based on debug or not
                 AppDomain.CurrentDomain.SetData("DataDirectory",
-                                                UseDebugPath
+                                                _useDebugPath
                                                     ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                                                     : UserSettingsPath);
 
@@ -87,35 +80,21 @@ namespace FeedCenter
                 }
 
                 // Create the main window before the splash otherwise WPF gets messed up
-                MainWindow mainWindow = new MainWindow();
+                var mainWindow = new MainWindow();
 
                 // Show the splash window
-                SplashWindow splashWindow = new SplashWindow();
+                var splashWindow = new SplashWindow();
                 splashWindow.ShowDialog();
 
-                // If we don't need to restart then fire up the main window
-                if (!app.Restart)
-                {
-                    // Update the registry settings
-                    SetStartWithWindows(Settings.Default.StartWithWindows);
-                    SetDefaultFeedReader(Settings.Default.RegisterAsDefaultFeedReader);
+                // Update the registry settings
+                SetStartWithWindows(Settings.Default.StartWithWindows);
+                SetDefaultFeedReader(Settings.Default.RegisterAsDefaultFeedReader);
 
-                    // Initialize the window
-                    mainWindow.Initialize();
+                // Initialize the window
+                mainWindow.Initialize();
 
-                    // Run the app
-                    app.Run(mainWindow);
-                }
-
-                // If we need to restart
-                if (app.Restart)
-                {
-                    // Wait a bit to make sure any previous upgrade has settled
-                    Thread.Sleep(2000);
-
-                    // Restart the application
-                    Current.Restart();
-                }
+                // Run the app
+                app.Run(mainWindow);
 
                 // Terminate the tracer
                 Tracer.Dispose();
@@ -143,11 +122,11 @@ namespace FeedCenter
             get
             {
                 // If we're running in debug mode then use a local path for the database and logs
-                if (UseDebugPath)
+                if (_useDebugPath)
                     return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
                 // Get the path to the local application data directory
-                string path = Path.Combine(
+                var path = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     FeedCenter.Properties.Resources.ApplicationName);
 
@@ -162,13 +141,13 @@ namespace FeedCenter
         public static void SetStartWithWindows(bool value)
         {
             // Get the application name
-            string applicationName = FeedCenter.Properties.Resources.ApplicationDisplayName;
+            var applicationName = FeedCenter.Properties.Resources.ApplicationDisplayName;
 
             // Get application details
-            string publisherName = applicationName;
-            string productName = applicationName;
-            string allProgramsPath = Environment.GetFolderPath(Environment.SpecialFolder.Programs);
-            string shortcutPath = Path.Combine(allProgramsPath, publisherName);
+            var publisherName = applicationName;
+            var productName = applicationName;
+            var allProgramsPath = Environment.GetFolderPath(Environment.SpecialFolder.Programs);
+            var shortcutPath = Path.Combine(allProgramsPath, publisherName);
 
             // Build the auto start path
             shortcutPath = "\"" + Path.Combine(shortcutPath, productName) + ".appref-ms\"";
@@ -180,10 +159,10 @@ namespace FeedCenter
         public static void SetDefaultFeedReader(bool value)
         {
             // Get the location of the assembly
-            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
 
             // Open the registry key (creating if needed)
-            using (RegistryKey registryKey = Registry.CurrentUser.CreateSubKey("Software\\Classes\\feed", RegistryKeyPermissionCheck.ReadWriteSubTree))
+            using (var registryKey = Registry.CurrentUser.CreateSubKey("Software\\Classes\\feed", RegistryKeyPermissionCheck.ReadWriteSubTree))
             {
                 if (registryKey == null)
                     return;
@@ -193,7 +172,7 @@ namespace FeedCenter
                 registryKey.SetValue("URL Protocol", string.Empty);
 
                 // Open the icon subkey (creating if needed)
-                using (RegistryKey subKey = registryKey.CreateSubKey("DefaultIcon", RegistryKeyPermissionCheck.ReadWriteSubTree))
+                using (var subKey = registryKey.CreateSubKey("DefaultIcon", RegistryKeyPermissionCheck.ReadWriteSubTree))
                 {
                     if (subKey != null)
                     {
@@ -206,7 +185,7 @@ namespace FeedCenter
                 }
 
                 // Open the subkey for the command (creating if needed)
-                using (RegistryKey subKey = registryKey.CreateSubKey("shell\\open\\command", RegistryKeyPermissionCheck.ReadWriteSubTree))
+                using (var subKey = registryKey.CreateSubKey("shell\\open\\command", RegistryKeyPermissionCheck.ReadWriteSubTree))
                 {
                     if (subKey != null)
                     {
