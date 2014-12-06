@@ -1,4 +1,7 @@
-﻿namespace FeedCenter.Options
+﻿using System.Windows;
+using Common.Wpf.Extensions;
+
+namespace FeedCenter.Options
 {
     public partial class GeneralOptionsPanel
     {
@@ -32,8 +35,8 @@
             if (registerAsDefaultFeedReaderCheckBox.IsChecked.HasValue && settings.RegisterAsDefaultFeedReader != registerAsDefaultFeedReaderCheckBox.IsChecked.Value)
                 settings.RegisterAsDefaultFeedReader = registerAsDefaultFeedReaderCheckBox.IsChecked.Value;
 
-            App.SetStartWithWindows(settings.StartWithWindows);
-            App.SetDefaultFeedReader(settings.RegisterAsDefaultFeedReader);
+            Application.Current.SetStartWithWindows(settings.StartWithWindows);
+            SystemConfiguration.SetDefaultFeedReader(settings.RegisterAsDefaultFeedReader);
         }
 
         public override string CategoryName
