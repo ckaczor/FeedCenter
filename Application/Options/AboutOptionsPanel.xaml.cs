@@ -19,7 +19,7 @@ namespace FeedCenter.Options
             string version = UpdateCheck.LocalVersion.ToString();
             versionLabel.Text = string.Format(Properties.Resources.Version, version);
 
-            companyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;
+            companyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;
         }
 
         public override bool ValidatePanel()

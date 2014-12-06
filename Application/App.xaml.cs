@@ -48,7 +48,7 @@ namespace FeedCenter
                 // Set the data directory based on debug or not
                 AppDomain.CurrentDomain.SetData("DataDirectory",
                                                 _useDebugPath
-                                                    ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                                                    ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
                                                     : UserSettingsPath);
 
                 // Get the generic provider
@@ -64,6 +64,7 @@ namespace FeedCenter
                 genericProvider.SetSettingValue = SettingsStore.SetSettingValue;
                 genericProvider.DeleteSettingsForVersion = SettingsStore.DeleteSettingsForVersion;
                 genericProvider.GetVersionList = SettingsStore.GetVersionList;
+                genericProvider.DeleteOldVersionsOnUpgrade = false;
 
                 // Initialize the tracer with the current process ID
                 Tracer.Initialize(UserSettingsPath, FeedCenter.Properties.Resources.ApplicationName, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), false);
@@ -123,7 +124,7 @@ namespace FeedCenter
             {
                 // If we're running in debug mode then use a local path for the database and logs
                 if (_useDebugPath)
-                    return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
                 // Get the path to the local application data directory
                 var path = Path.Combine(
@@ -159,7 +160,7 @@ namespace FeedCenter
         public static void SetDefaultFeedReader(bool value)
         {
             // Get the location of the assembly
-            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            var assemblyLocation = Assembly.GetEntryAssembly().Location;
 
             // Open the registry key (creating if needed)
             using (var registryKey = Registry.CurrentUser.CreateSubKey("Software\\Classes\\feed", RegistryKeyPermissionCheck.ReadWriteSubTree))
