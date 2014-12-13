@@ -10,9 +10,19 @@ using System.Globalization;
 
 namespace FeedCenter
 {
-    public partial class App 
+    public partial class App
     {
-        #region Main function
+        public static bool IsDebugBuild
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
 
         [STAThread]
         public static void Main()
@@ -35,7 +45,7 @@ namespace FeedCenter
             using (isolationHandle)
             {
                 // Set the data directory based on debug or not
-                AppDomain.CurrentDomain.SetData("DataDirectory", SystemConfiguration.DataDirectory);                                                
+                AppDomain.CurrentDomain.SetData("DataDirectory", SystemConfiguration.DataDirectory);
 
                 // Get the generic provider
                 var genericProvider = (GenericSettingsProvider) Settings.Default.Providers[typeof(GenericSettingsProvider).Name];
@@ -50,7 +60,7 @@ namespace FeedCenter
                 genericProvider.SetSettingValue = SettingsStore.SetSettingValue;
                 genericProvider.DeleteSettingsForVersion = SettingsStore.DeleteSettingsForVersion;
                 genericProvider.GetVersionList = SettingsStore.GetVersionList;
-                genericProvider.DeleteOldVersionsOnUpgrade = true;
+                genericProvider.DeleteOldVersionsOnUpgrade = !IsDebugBuild;
 
                 // Initialize the tracer with the current process ID
                 Tracer.Initialize(SystemConfiguration.UserSettingsPath, FeedCenter.Properties.Resources.ApplicationName, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), false);
@@ -101,7 +111,5 @@ namespace FeedCenter
             Tracer.WriteException(e.Exception);
             Tracer.Flush();
         }
-
-        #endregion
     }
 }
