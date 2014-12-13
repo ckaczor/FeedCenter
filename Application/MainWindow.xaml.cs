@@ -337,7 +337,7 @@ namespace FeedCenter
 
         #region Feed display
 
-        private void InitializeFeed()
+        private void UpdateToolbarButtonState()
         {
             // Cache the feed count to save (a little) time
             var feedCount = _database.Feeds.Count();
@@ -350,7 +350,15 @@ namespace FeedCenter
             openAllToolbarButton.IsEnabled = (feedCount > 0);
             markReadToolbarButton.IsEnabled = (feedCount > 0);
             feedLabel.Visibility = (feedCount == 0 ? Visibility.Hidden : Visibility.Visible);
-            feedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);
+            feedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);            
+        }
+
+        private void InitializeFeed()
+        {
+            UpdateToolbarButtonState();
+
+            // Cache the feed count to save (a little) time
+            var feedCount = _database.Feeds.Count();
 
             // Clear the link list
             linkTextList.Items.Clear();
@@ -826,10 +834,12 @@ namespace FeedCenter
         private void ResetDatabase()
         {
             // Get the ID of the current feed
-            var currentId = _currentFeed.ID;
+            var currentId = _currentFeed == null ? Guid.Empty : _currentFeed.ID;
 
             // Create a new database object
             _database = new FeedCenterEntities();
+
+            UpdateToolbarButtonState();
 
             // Get a list of feeds ordered by name
             var feedList = _database.Feeds.OrderBy(f => f.Name).ToList();
