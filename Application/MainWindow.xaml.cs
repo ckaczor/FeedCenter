@@ -346,6 +346,9 @@ namespace FeedCenter
             previousToolbarButton.IsEnabled = (feedCount > 1);
             nextToolbarButton.IsEnabled = (feedCount > 1);
             refreshToolbarButton.IsEnabled = (feedCount > 0);
+            feedButton.IsEnabled = (feedCount > 0);
+            openAllToolbarButton.IsEnabled = (feedCount > 0);
+            markReadToolbarButton.IsEnabled = (feedCount > 0);
             feedLabel.Visibility = (feedCount == 0 ? Visibility.Hidden : Visibility.Visible);
             feedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);
 
