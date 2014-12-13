@@ -50,7 +50,7 @@ namespace FeedCenter
                 genericProvider.SetSettingValue = SettingsStore.SetSettingValue;
                 genericProvider.DeleteSettingsForVersion = SettingsStore.DeleteSettingsForVersion;
                 genericProvider.GetVersionList = SettingsStore.GetVersionList;
-                genericProvider.DeleteOldVersionsOnUpgrade = false;
+                genericProvider.DeleteOldVersionsOnUpgrade = true;
 
                 // Initialize the tracer with the current process ID
                 Tracer.Initialize(SystemConfiguration.UserSettingsPath, FeedCenter.Properties.Resources.ApplicationName, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), false);
