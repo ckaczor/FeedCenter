@@ -53,20 +53,6 @@ namespace FeedCenter
 
     #endregion
 
-    [ValueConversion(typeof(int), typeof(MultipleOpenAction))]
-    public class MultipleOpenActionConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (MultipleOpenAction) value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (int) value;
-        }
-    }
-
     public partial class Feed
     {
         public static Feed Create()

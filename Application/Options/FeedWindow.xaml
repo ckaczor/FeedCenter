@@ -9,9 +9,6 @@
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
         FocusManager.FocusedElement="{Binding ElementName=urlTextBox}">
-    <Window.Resources>
-        <feedCenter:MultipleOpenActionConverter x:Key="multipleOpenActionConverter" />
-    </Window.Resources>
     <Grid Name="mainGrid">
         <TabControl Name="optionsTabControl"
                     Margin="12,12,12,41">
@@ -110,7 +107,7 @@
                            Margin="6" />
                     <ComboBox Name="openComboBox"
                               VerticalContentAlignment="Center"
-                              SelectedValue="{Binding Path=MultipleOpenAction, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=true, Converter={StaticResource multipleOpenActionConverter}}"
+                              SelectedValue="{Binding Path=MultipleOpenAction, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=true}"
                               SelectedValuePath="Tag"
                               Grid.Column="1"
                               Margin="6">
