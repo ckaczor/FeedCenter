@@ -61,7 +61,11 @@ namespace FeedCenter.Options
 
         private void AddFeed()
         {
-            var feed = Feed.Create();
+            var feed = Feed.Create(Database);
+
+            var category = (Category) categoryListBox.SelectedItem;
+
+            feed.Category = category;
 
             var feedWindow = new FeedWindow();
 
@@ -228,8 +232,8 @@ namespace FeedCenter.Options
                 while (xmlReader.NodeType != XmlNodeType.EndElement)
                 {
                     // Create a new feed
-                    var feed = Feed.Create();
-                    feed.Category = Database.Categories.ToList().First(c => c.IsDefault);
+                    var feed = Feed.Create(Database);
+                    feed.Category = Database.Categories.First(c => c.IsDefault);
 
                     // Loop over all attributes
                     while (xmlReader.MoveToNextAttribute())
@@ -379,7 +383,7 @@ namespace FeedCenter.Options
 
             var feed = (Feed) e.Item;
 
-            e.Accepted = (feed.Category == selectedCategory);
+            e.Accepted = (feed.Category.ID == selectedCategory.ID);
         }
 
         private void HandleTextBlockDrop(object sender, DragEventArgs e)

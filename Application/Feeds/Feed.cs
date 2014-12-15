@@ -1,15 +1,13 @@
-﻿using System.Text.RegularExpressions;
-using Common.Debug;
+﻿using Common.Debug;
 using Common.Xml;
 using FeedCenter.FeedParsers;
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Windows.Data;
+using System.Text.RegularExpressions;
 
 namespace FeedCenter
 {
@@ -55,9 +53,9 @@ namespace FeedCenter
 
     public partial class Feed
     {
-        public static Feed Create()
+        public static Feed Create(FeedCenterEntities database)
         {
-            return new Feed { ID = Guid.NewGuid() };
+            return new Feed { ID = Guid.NewGuid(), CategoryID = database.DefaultCategory.ID };
         }
 
         #region Event delegates

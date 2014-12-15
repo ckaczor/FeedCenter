@@ -780,9 +780,9 @@ namespace FeedCenter
         private void HandleNewFeed(string feedUrl)
         {
             // Create and configure the new feed
-            var feed = Feed.Create();
+            var feed = Feed.Create(_database);
             feed.Source = feedUrl;
-            feed.Category = _database.Categories.ToList().First(category => category.IsDefault);
+            feed.Category = _database.Categories.First(category => category.IsDefault);
 
             // Read the feed for the first time
             var feedReadResult = feed.Read(_database);

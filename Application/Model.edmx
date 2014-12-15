@@ -180,7 +180,7 @@
           <Property Type="FeedCenterModel.FeedReadResult" Name="LastReadResult" Nullable="false" />
           <Property Type="DateTime" Name="LastUpdated" Nullable="false" DefaultValue="1900-01-01 00:00:00.000Z" Precision="3" />
           <Property Type="FeedCenterModel.FeedItemComparison" Name="ItemComparison" Nullable="false" />
-          <Property Type="Guid" Name="CategoryID" Nullable="false" />
+          <Property Type="Guid" Name="CategoryID" Nullable="false" a:GetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" a:SetterAccess="Private" />
           <NavigationProperty Name="Category" Relationship="FeedCenterModel.FK_Feed_Category" FromRole="Feed" ToRole="Category" />
           <NavigationProperty Name="Actions" Relationship="FeedCenterModel.FK_FeedAction_Feed" FromRole="Feed" ToRole="FeedAction" />
           <NavigationProperty Name="Items" Relationship="FeedCenterModel.FK_FeedItem_Feed" FromRole="Feed" ToRole="FeedItem" />

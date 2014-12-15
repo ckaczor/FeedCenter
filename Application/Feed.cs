@@ -49,7 +49,7 @@ namespace FeedCenter
         public FeedCenter.FeedReadResult LastReadResult { get; set; }
         public System.DateTime LastUpdated { get; set; }
         public FeedCenter.FeedItemComparison ItemComparison { get; set; }
-        public System.Guid CategoryID { get; set; }
+        private System.Guid CategoryID { get; set; }
         public FeedCenter.MultipleOpenAction MultipleOpenAction { get; set; }
     
         public virtual Category Category { get; set; }

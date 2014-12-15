@@ -120,6 +120,8 @@ namespace FeedCenter.Options
             _database.SaveChanges();
             Properties.Settings.Default.Save();
 
+            DialogResult = true;
+
             // Close the window
             Close();
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 
 namespace FeedCenter
 {
@@ -46,6 +47,11 @@ namespace FeedCenter
 
                 return _allCategories;
             }
+        }
+
+        public Category DefaultCategory
+        {
+            get { return _allCategories.First(c => c.IsDefault); }
         }
 
         #endregion

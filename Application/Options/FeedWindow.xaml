@@ -59,7 +59,7 @@
                               Name="categoryComboBox"
                               DisplayMemberPath="Name"
                               SelectedValuePath="ID"
-                              SelectedValue="{Binding Path=CategoryID}"
+                              SelectedValue="{Binding Path=Category.ID}"
                               Grid.Row="2"
                               Margin="6" />
 
