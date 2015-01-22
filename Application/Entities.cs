@@ -51,7 +51,7 @@ namespace FeedCenter
 
         public Category DefaultCategory
         {
-            get { return _allCategories.First(c => c.IsDefault); }
+            get { return AllCategories.First(c => c.IsDefault); }
         }
 
         #endregion

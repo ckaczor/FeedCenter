@@ -172,7 +172,6 @@ namespace FeedCenter
 
         private static class ProgressKey
         {
-            public const string Update = "Update";
             public const string DatabaseCreate = "CreateDatabase";
             public const string DatabaseUpdate = "UpdateDatabase";
             public const string DatabaseMaintenance = "MaintainDatabase";
@@ -187,18 +186,6 @@ namespace FeedCenter
             _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseUpdate, Properties.Resources.SplashUpdatingDatabase, UpdateDatabase));
 
             _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseMaintenance, Properties.Resources.SplashMaintainingDatabase, MaintainDatabase));
-
-            _progressSteps.Add(new ProgressStep(ProgressKey.Update, Properties.Resources.SplashCheckingForUpdate, CheckUpdate));
-        }
-
-        private static bool CheckUpdate()
-        {
-            // If the user does not want to check version at startup then we're done
-            if (!Settings.Default.CheckVersionAtStartup)
-                return false;
-
-            // Return if the check worked and an update is available
-            return UpdateCheck.CheckForUpdate() && UpdateCheck.UpdateAvailable;
         }
 
         private static bool CheckDatabase()
