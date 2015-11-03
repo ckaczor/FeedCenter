@@ -43,7 +43,7 @@ namespace FeedCenter
                     return true;
 
                 // Add quotes around the URL for safety
-                url = string.Format("\"{0}\"", url);
+                url = $"\"{url}\"";
 
                 // Start the browser
                 if (browser == null)

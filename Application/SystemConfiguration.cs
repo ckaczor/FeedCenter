@@ -1,9 +1,7 @@
-﻿using Common.Wpf.Extensions;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Windows;
 using FeedCenter.Properties;
 
 namespace FeedCenter
@@ -44,7 +42,7 @@ namespace FeedCenter
                     if (subKey != null)
                     {
                         // Write the assembly location and parameter
-                        subKey.SetValue(string.Empty, string.Format("\"{0}\" %1", assemblyLocation));
+                        subKey.SetValue(string.Empty, $"\"{assemblyLocation}\" %1");
 
                         // Close the subkey
                         subKey.Close();
@@ -56,21 +54,9 @@ namespace FeedCenter
             }
         }
 
-        public static bool UseDebugPath
-        {
-            get
-            {
-                return Environment.CommandLine.IndexOf("/debugPath", StringComparison.InvariantCultureIgnoreCase) != -1;
-            }
-        }
+        private static bool UseDebugPath => Environment.CommandLine.IndexOf("/debugPath", StringComparison.InvariantCultureIgnoreCase) != -1;
 
-        public static string DataDirectory
-        {
-            get
-            {
-                return UseDebugPath ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) : UserSettingsPath;
-            }
-        }
+        public static string DataDirectory => UseDebugPath ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) : UserSettingsPath;
 
         public static string UserSettingsPath
         {
@@ -83,7 +69,7 @@ namespace FeedCenter
                 // Get the path to the local application data directory
                 var path = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    Properties.Resources.ApplicationName);
+                    Resources.ApplicationName);
 
                 // Make sure it exists - create it if needed
                 if (!Directory.Exists(path))

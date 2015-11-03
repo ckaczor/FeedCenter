@@ -35,12 +35,12 @@ namespace FeedCenter.FeedParsers
 
         public abstract FeedReadResult ParseFeed(string feedText);
 
-        protected abstract FeedItem ParseFeedItem(XmlNamespaceManager namespaceManager, XmlNode node);
+        protected abstract FeedItem ParseFeedItem(XmlNode node);
 
-        protected void HandleFeedItem(XmlNamespaceManager namespaceManager, XmlNode node, ref int sequence)
+        protected void HandleFeedItem(XmlNode node, ref int sequence)
         {
             // Build a feed item from the node
-            FeedItem newFeedItem = ParseFeedItem(namespaceManager, node);
+            FeedItem newFeedItem = ParseFeedItem(node);
 
             if (newFeedItem == null)
                 return;
@@ -116,10 +116,10 @@ namespace FeedCenter.FeedParsers
                     return new AtomParser(feed);
             }
 
-            throw new ArgumentException(string.Format("Feed type {0} is not supported", feedType));
+            throw new ArgumentException($"Feed type {feedType} is not supported");
         }
 
-        public static FeedType DetectFeedType(string feedText)
+        private static FeedType DetectFeedType(string feedText)
         {
             try
             {

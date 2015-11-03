@@ -86,12 +86,14 @@ namespace FeedCenter
 
         void HandleObjectStateManagerObjectStateManagerChanged(object sender, CollectionChangeEventArgs e)
         {
-            if (e.Element is Category)
+            var element = e.Element as Category;
+
+            if (element != null)
             {
                 if (_allCategories == null)
                     return;
 
-                var category = e.Element as Category;
+                var category = element;
 
                 switch (e.Action)
                 {
@@ -113,7 +115,7 @@ namespace FeedCenter
                 if (_allFeeds == null)
                     return;
 
-                var feed = e.Element as Feed;
+                var feed = (Feed) e.Element;
 
                 switch (e.Action)
                 {

@@ -64,7 +64,7 @@ namespace FeedCenter.FeedParsers
                     switch (node.Name)
                     {
                         case "item":
-                            HandleFeedItem(namespaceManager, node, ref sequence);
+                            HandleFeedItem(node, ref sequence);
                             break;
                     }
                 }
@@ -79,7 +79,7 @@ namespace FeedCenter.FeedParsers
             }
         }
 
-        protected override FeedItem ParseFeedItem(XmlNamespaceManager namespaceManager, XmlNode node)
+        protected override FeedItem ParseFeedItem(XmlNode node)
         {
             // Create a new feed item
             FeedItem feedItem = FeedItem.Create();

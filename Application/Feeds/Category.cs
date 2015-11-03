@@ -9,14 +9,9 @@ namespace FeedCenter
             return new Category { ID = Guid.NewGuid() };
         }
 
-        public bool IsDefault
-        {
-            get { return Name == "< default >"; }
-        }
+        public bool IsDefault => Name == "< default >";
 
-        public int SortKey
-        {
-            get { return IsDefault ? 0 : 1; }
-        }
+        // ReSharper disable once UnusedMember.Global
+        public int SortKey => IsDefault ? 0 : 1;
     }
 }

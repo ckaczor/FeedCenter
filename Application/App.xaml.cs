@@ -12,7 +12,8 @@ namespace FeedCenter
 {
     public partial class App
     {
-        public static bool IsDebugBuild
+        // ReSharper disable ConvertPropertyToExpressionBody
+        private static bool IsDebugBuild
         {
             get
             {
@@ -23,6 +24,7 @@ namespace FeedCenter
 #endif
             }
         }
+        // ReSharper restore ConvertPropertyToExpressionBody
 
         [STAThread]
         public static void Main()

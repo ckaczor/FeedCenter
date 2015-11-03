@@ -36,7 +36,7 @@ namespace FeedCenter
 
             var setting = entities.Settings.FirstOrDefault(s => s.Name == name && s.Version == versionString);
 
-            return setting == null ? null : setting.Value;
+            return setting?.Value;
         }
 
         public static void SetSettingValue(object dataStore, string name, Version version, string value)
@@ -69,14 +69,11 @@ namespace FeedCenter
         {
             var entities = (FeedCenterEntities) dataStore;
 
-            if (entities == null)
-                return null;
-
             // Get a distinct list of version strings
-            var versions = entities.Settings.Select(s => s.Version).Distinct().ToList();
+            var versions = entities?.Settings.Select(s => s.Version).Distinct().ToList();
 
             // Create a version object for each string and return the list
-            return versions.Select(s => new Version(s)).ToList();
+            return versions?.Select(s => new Version(s)).ToList();
         }
 
         public static void DeleteSettingsForVersion(object dataStore, Version version)

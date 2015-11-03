@@ -838,7 +838,7 @@ namespace FeedCenter
         private void ResetDatabase()
         {
             // Get the ID of the current feed
-            var currentId = _currentFeed == null ? Guid.Empty : _currentFeed.ID;
+            var currentId = _currentFeed?.ID ?? Guid.Empty;
 
             // Create a new database object
             _database = new FeedCenterEntities();
@@ -977,7 +977,7 @@ namespace FeedCenter
             foreach (var feed in _database.Feeds.OrderBy(feed => feed.Name))
             {
                 // Build a string to display the feed name and the unread count
-                var display = string.Format("{0} ({1:d})", feed.Name, feed.Items.Count(item => !item.BeenRead));
+                var display = $"{feed.Name} ({feed.Items.Count(item => !item.BeenRead):d})";
 
                 // Create a menu item
                 var menuItem = new MenuItem

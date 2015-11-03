@@ -58,12 +58,6 @@ namespace FeedCenter
             return new Feed { ID = Guid.NewGuid(), CategoryID = database.DefaultCategory.ID };
         }
 
-        #region Event delegates
-
-        public delegate void ErrorEventHandler(WebException webException);
-
-        #endregion
-
         #region Reading
 
         public FeedReadResult Read(FeedCenterEntities database, bool forceRead = false)
@@ -317,6 +311,7 @@ namespace FeedCenter
 
         #endregion
 
+        // ReSharper disable once UnusedMember.Global
         public string LastReadResultDescription
         {
             get
@@ -325,7 +320,7 @@ namespace FeedCenter
                 var lastReadResult = LastReadResult;
 
                 // Build the name of the resource using the enum name and the value
-                var resourceName = string.Format("{0}_{1}", typeof(FeedReadResult).Name, lastReadResult);
+                var resourceName = $"{typeof (FeedReadResult).Name}_{lastReadResult}";
 
                 // Try to get the value from the resources
                 var resourceValue = Properties.Resources.ResourceManager.GetString(resourceName);

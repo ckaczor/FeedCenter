@@ -1,5 +1,4 @@
 ﻿using Common.Debug;
-using Common.Xml;
 using System.Xml;
 
 namespace FeedCenter.FeedParsers
@@ -17,9 +16,6 @@ namespace FeedCenter.FeedParsers
 
                 // Load the XML document from the text
                 document.LoadXml(feedText);
-
-                // Create the namespace manager
-                var namespaceManager = document.GetAllNamespaces();
 
                 // Get the root node
                 XmlNode rootNode = document.DocumentElement;
@@ -62,7 +58,7 @@ namespace FeedCenter.FeedParsers
                             break;
 
                         case "entry":
-                            HandleFeedItem(namespaceManager, node, ref sequence);
+                            HandleFeedItem(node, ref sequence);
                             break;
                     }
                 }
@@ -77,7 +73,7 @@ namespace FeedCenter.FeedParsers
             }
         }
 
-        protected override FeedItem ParseFeedItem(XmlNamespaceManager namespaceManager, XmlNode node)
+        protected override FeedItem ParseFeedItem(XmlNode node)
         {
             // Create a new feed item
             var feedItem = FeedItem.Create();

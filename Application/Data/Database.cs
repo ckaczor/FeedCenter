@@ -69,17 +69,14 @@ namespace FeedCenter.Data
 
         #endregion
 
-        public static bool DatabaseExists
-        {
-            get { return File.Exists(DatabasePath); }
-        }
+        public static bool DatabaseExists => File.Exists(DatabasePath);
 
         public static void CreateDatabase()
         {
             Tracer.WriteLine("Creating database engine");
 
             // Create the database engine
-            using (var engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
+            using (var engine = new SqlCeEngine($"Data Source={DatabasePath}"))
             {
                 Tracer.WriteLine("Creating database");
 
@@ -133,7 +130,7 @@ namespace FeedCenter.Data
                 Tracer.WriteLine("Creating database engine");
 
                 // Create the database engine
-                using (var engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
+                using (var engine = new SqlCeEngine($"Data Source={DatabasePath}"))
                 {
                     Tracer.WriteLine("Upgrading database");
 
@@ -145,7 +142,7 @@ namespace FeedCenter.Data
             Tracer.WriteLine("Getting database version");
 
             // Create a database connection
-            using (var connection = new SqlCeConnection(string.Format("Data Source={0}", DatabasePath)))
+            using (var connection = new SqlCeConnection($"Data Source={DatabasePath}"))
             {
                 // Open the connection
                 connection.Open();
@@ -190,7 +187,7 @@ namespace FeedCenter.Data
             Tracer.WriteLine("Creating database engine");
 
             // Create the database engine
-            using (var engine = new SqlCeEngine(string.Format("Data Source={0}", DatabasePath)))
+            using (var engine = new SqlCeEngine($"Data Source={DatabasePath}"))
             {
                 Tracer.WriteLine("Shrinking database");
 
@@ -202,7 +199,7 @@ namespace FeedCenter.Data
         private static void ExecuteScript(string scriptText)
         {
             // Create a database connection
-            using (var connection = new SqlCeConnection(string.Format("Data Source={0}", DatabasePath)))
+            using (var connection = new SqlCeConnection($"Data Source={DatabasePath}"))
             {
                 // Open the connection
                 connection.Open();

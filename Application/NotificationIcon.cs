@@ -73,7 +73,7 @@ namespace FeedCenter
             ShowBalloonTip(text, icon, Settings.Default.BalloonTipTimeout);
         }
 
-        public static void ShowBalloonTip(string text, ToolTipIcon icon, int timeout)
+        private static void ShowBalloonTip(string text, ToolTipIcon icon, int timeout)
         {
             _notificationIcon.ShowBalloonTip(timeout, Resources.ApplicationDisplayName, text, icon);
         }
