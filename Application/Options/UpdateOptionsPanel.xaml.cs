@@ -13,7 +13,7 @@ namespace FeedCenter.Options
         {
             base.LoadPanel(database);
 
-            checkVersionOnStartupCheckBox.IsChecked = Properties.Settings.Default.CheckVersionAtStartup;
+            CheckVersionOnStartupCheckBox.IsChecked = Properties.Settings.Default.CheckVersionAtStartup;
         }
 
         public override bool ValidatePanel()
@@ -23,14 +23,11 @@ namespace FeedCenter.Options
 
         public override void SavePanel()
         {
-            if (checkVersionOnStartupCheckBox.IsChecked.HasValue && Properties.Settings.Default.CheckVersionAtStartup != checkVersionOnStartupCheckBox.IsChecked.Value)
-                Properties.Settings.Default.CheckVersionAtStartup = checkVersionOnStartupCheckBox.IsChecked.Value;
+            if (CheckVersionOnStartupCheckBox.IsChecked.HasValue && Properties.Settings.Default.CheckVersionAtStartup != CheckVersionOnStartupCheckBox.IsChecked.Value)
+                Properties.Settings.Default.CheckVersionAtStartup = CheckVersionOnStartupCheckBox.IsChecked.Value;
         }
 
-        public override string CategoryName
-        {
-            get { return Properties.Resources.optionCategoryUpdate; }
-        }
+        public override string CategoryName => Properties.Resources.optionCategoryUpdate;
 
         private void HandleCheckVersionNowButtonClick(object sender, System.Windows.RoutedEventArgs e)
         {

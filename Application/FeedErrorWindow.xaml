@@ -7,7 +7,7 @@
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
         xmlns:my="clr-namespace:FeedCenter.Properties"
-        xmlns:LinkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
+        xmlns:linkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
         WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
@@ -16,7 +16,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <DataGrid AutoGenerateColumns="False"
-                  Name="feedDataGrid"
+                  Name="FeedDataGrid"
                   CanUserReorderColumns="False"
                   GridLinesVisibility="None"
                   SelectionMode="Single"
@@ -53,36 +53,36 @@
                 BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
             <StackPanel Orientation="Horizontal"
                         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-                <LinkControl:LinkControl Name="editFeedButton"
+                <linkControl:LinkControl Name="EditFeedButton"
                                          Margin="2"
                                          Click="HandleEditFeedButtonClick"
                                          Text="{x:Static my:Resources.EditLink}"
                                          ToolTip="{x:Static my:Resources.EditFeedButton}">
-                </LinkControl:LinkControl>
-                <LinkControl:LinkControl Name="deleteFeedButton"
+                </linkControl:LinkControl>
+                <linkControl:LinkControl Name="DeleteFeedButton"
                                          Margin="2"
                                          Click="HandleDeleteFeedButtonClick"
                                          Text="{x:Static my:Resources.DeleteLink}"
                                          ToolTip="{x:Static my:Resources.DeleteFeedButton}">
-                </LinkControl:LinkControl>
-                <LinkControl:LinkControl Name="refreshCurrent"
+                </linkControl:LinkControl>
+                <linkControl:LinkControl Name="RefreshCurrent"
                                          Margin="2"
                                          Click="HandleRefreshCurrentButtonClick"
                                          Text="{x:Static my:Resources.RefreshCurrent}"
                                          ToolTip="{x:Static my:Resources.RefreshCurrent}">
-                </LinkControl:LinkControl>
-                <LinkControl:LinkControl Name="openPage"
+                </linkControl:LinkControl>
+                <linkControl:LinkControl Name="OpenPage"
                                          Margin="6,2,2,2"
                                          Click="HandleOpenPageButtonClick"
                                          Text="{x:Static my:Resources.OpenPage}"
                                          ToolTip="{x:Static my:Resources.OpenPage}">
-                </LinkControl:LinkControl>
-                <LinkControl:LinkControl Name="openFeed"
+                </linkControl:LinkControl>
+                <linkControl:LinkControl Name="OpenFeed"
                                          Margin="2"
                                          Click="HandleOpenFeedButtonClick"
                                          Text="{x:Static my:Resources.OpenFeed}"
                                          ToolTip="{x:Static my:Resources.OpenFeed}">
-                </LinkControl:LinkControl>
+                </linkControl:LinkControl>
             </StackPanel>
         </Border>
         <Grid DockPanel.Dock="Right"
@@ -96,14 +96,12 @@
             <Button Content="{x:Static my:Resources.OkayButton}"
                     Height="23"
                     IsDefault="True"
-                    Name="okButton"
                     Width="75"
                     Grid.Column="1"
                     Click="HandleOkayButtonClick" />
             <Button Content="{x:Static my:Resources.CancelButton}"
                     Height="23"
                     IsCancel="True"
-                    Name="cancelButton"
                     Width="75"
                     Margin="6,0,0,0"
                     Grid.Column="2" />

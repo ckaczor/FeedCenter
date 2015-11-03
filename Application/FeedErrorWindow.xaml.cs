@@ -26,8 +26,8 @@ namespace FeedCenter
             _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
             // Bind to the list
-            feedDataGrid.ItemsSource = _collectionViewSource.View;
-            feedDataGrid.SelectedIndex = 0;
+            FeedDataGrid.ItemsSource = _collectionViewSource.View;
+            FeedDataGrid.SelectedIndex = 0;
 
             // Set the window owner
             Owner = owner;
@@ -55,10 +55,10 @@ namespace FeedCenter
 
         private void EditSelectedFeed()
         {
-            if (feedDataGrid.SelectedItem == null)
+            if (FeedDataGrid.SelectedItem == null)
                 return;
 
-            var feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) FeedDataGrid.SelectedItem;
 
             var feedWindow = new FeedWindow();
 
@@ -67,7 +67,7 @@ namespace FeedCenter
 
         private void DeleteSelectedFeed()
         {
-            var feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) FeedDataGrid.SelectedItem;
 
             _database.Feeds.Remove(feed);
 
@@ -76,22 +76,22 @@ namespace FeedCenter
 
         private void SetFeedButtonStates()
         {
-            editFeedButton.IsEnabled = (feedDataGrid.SelectedItem != null);
-            deleteFeedButton.IsEnabled = (feedDataGrid.SelectedItem != null);
-            refreshCurrent.IsEnabled = (feedDataGrid.SelectedItem != null);
-            openPage.IsEnabled = (feedDataGrid.SelectedItem != null);
-            openFeed.IsEnabled = (feedDataGrid.SelectedItem != null);
+            EditFeedButton.IsEnabled = (FeedDataGrid.SelectedItem != null);
+            DeleteFeedButton.IsEnabled = (FeedDataGrid.SelectedItem != null);
+            RefreshCurrent.IsEnabled = (FeedDataGrid.SelectedItem != null);
+            OpenPage.IsEnabled = (FeedDataGrid.SelectedItem != null);
+            OpenFeed.IsEnabled = (FeedDataGrid.SelectedItem != null);
         }
 
         private void HandleOpenPageButtonClick(object sender, RoutedEventArgs e)
         {
-            var feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) FeedDataGrid.SelectedItem;
             BrowserCommon.OpenLink(feed.Link);
         }
 
         private void HandleOpenFeedButtonClick(object sender, RoutedEventArgs e)
         {
-            var feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) FeedDataGrid.SelectedItem;
             BrowserCommon.OpenLink(feed.Source);
         }
 
@@ -109,7 +109,7 @@ namespace FeedCenter
         {
             Mouse.OverrideCursor = Cursors.Wait;
 
-            var feed = (Feed) feedDataGrid.SelectedItem;
+            var feed = (Feed) FeedDataGrid.SelectedItem;
             feed.Read(_database, true);
 
             _collectionViewSource.View.Refresh();

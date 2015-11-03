@@ -20,7 +20,7 @@ namespace FeedCenter.Options
             database.Categories.Load();
 
             // Bind the category combo box
-            categoryComboBox.ItemsSource = database.Categories.Local;
+            CategoryComboBox.ItemsSource = database.Categories.Local;
 
             // Set the data context
             DataContext = feed;
@@ -56,7 +56,7 @@ namespace FeedCenter.Options
                 var firstErrorElement = bindingExpressions.First(b => b.BindingExpression.HasError).FrameworkElement;
 
                 // Loop over each tab item
-                foreach (TabItem tabItem in optionsTabControl.Items)
+                foreach (TabItem tabItem in OptionsTabControl.Items)
                 {
                     // Cast the content as visual
                     var content = (Visual) tabItem.Content;

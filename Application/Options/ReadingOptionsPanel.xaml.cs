@@ -18,7 +18,7 @@ namespace FeedCenter.Options
 
             var settings = Properties.Settings.Default;
 
-            LoadBrowserComboBox(browserComboBox, settings.Browser);
+            LoadBrowserComboBox(BrowserComboBox, settings.Browser);
         }
 
         public override bool ValidatePanel()
@@ -30,7 +30,7 @@ namespace FeedCenter.Options
         {
             var settings = Properties.Settings.Default;
 
-            var browser = (string) ((ComboBoxItem) browserComboBox.SelectedItem).Tag;
+            var browser = (string) ((ComboBoxItem) BrowserComboBox.SelectedItem).Tag;
 
             settings.Browser = browser;
 
@@ -38,10 +38,7 @@ namespace FeedCenter.Options
             this.UpdateAllSources(expressions);
         }
 
-        public override string CategoryName
-        {
-            get { return Properties.Resources.optionCategoryReading; }
-        }
+        public override string CategoryName => Properties.Resources.optionCategoryReading;
 
         private static void LoadBrowserComboBox(ComboBox comboBox, string selected)
         {

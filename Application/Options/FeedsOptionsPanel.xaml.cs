@@ -31,8 +31,8 @@ namespace FeedCenter.Options
             collectionViewSource.SortDescriptions.Add(new SortDescription("SortKey", ListSortDirection.Ascending));
             collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
-            categoryListBox.ItemsSource = collectionViewSource.View;
-            categoryListBox.SelectedIndex = 0;
+            CategoryListBox.ItemsSource = collectionViewSource.View;
+            CategoryListBox.SelectedIndex = 0;
         }
 
         public override bool ValidatePanel()
@@ -43,10 +43,7 @@ namespace FeedCenter.Options
         public override void SavePanel()
         { }
 
-        public override string CategoryName
-        {
-            get { return Properties.Resources.optionCategoryFeeds; }
-        }
+        public override string CategoryName => Properties.Resources.optionCategoryFeeds;
 
         #endregion
 
@@ -54,16 +51,16 @@ namespace FeedCenter.Options
 
         private void SetFeedButtonStates()
         {
-            addFeedButton.IsEnabled = true;
-            editFeedButton.IsEnabled = (feedListBox.SelectedItem != null);
-            deleteFeedButton.IsEnabled = (feedListBox.SelectedItem != null);
+            AddFeedButton.IsEnabled = true;
+            EditFeedButton.IsEnabled = (FeedListBox.SelectedItem != null);
+            DeleteFeedButton.IsEnabled = (FeedListBox.SelectedItem != null);
         }
 
         private void AddFeed()
         {
             var feed = Feed.Create(Database);
 
-            var category = (Category) categoryListBox.SelectedItem;
+            var category = (Category) CategoryListBox.SelectedItem;
 
             feed.Category = category;
 
@@ -75,7 +72,7 @@ namespace FeedCenter.Options
             {
                 Database.Feeds.Add(feed);
 
-                feedListBox.SelectedItem = feed;
+                FeedListBox.SelectedItem = feed;
 
                 SetFeedButtonStates();
             }
@@ -83,10 +80,10 @@ namespace FeedCenter.Options
 
         private void EditSelectedFeed()
         {
-            if (feedListBox.SelectedItem == null)
+            if (FeedListBox.SelectedItem == null)
                 return;
 
-            var feed = (Feed) feedListBox.SelectedItem;
+            var feed = (Feed) FeedListBox.SelectedItem;
 
             var feedWindow = new FeedWindow();
 
@@ -95,7 +92,7 @@ namespace FeedCenter.Options
 
         private void DeleteSelectedFeed()
         {
-            var feed = (Feed) feedListBox.SelectedItem;
+            var feed = (Feed) FeedListBox.SelectedItem;
 
             Database.Feeds.Remove(feed);
 
@@ -291,9 +288,9 @@ namespace FeedCenter.Options
 
         private void SetCategoryButtonStates()
         {
-            addCategoryButton.IsEnabled = true;
-            editCategoryButton.IsEnabled = (categoryListBox.SelectedItem != null);
-            deleteCategoryButton.IsEnabled = (categoryListBox.SelectedItem != null);
+            AddCategoryButton.IsEnabled = true;
+            EditCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null);
+            DeleteCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null);
         }
 
         private void AddCategory()
@@ -308,7 +305,7 @@ namespace FeedCenter.Options
             {
                 Database.Categories.Add(category);
 
-                categoryListBox.SelectedItem = category;
+                CategoryListBox.SelectedItem = category;
 
                 SetCategoryButtonStates();
             }
@@ -316,10 +313,10 @@ namespace FeedCenter.Options
 
         private void EditSelectedCategory()
         {
-            if (categoryListBox.SelectedItem == null)
+            if (CategoryListBox.SelectedItem == null)
                 return;
 
-            var category = (Category) categoryListBox.SelectedItem;
+            var category = (Category) CategoryListBox.SelectedItem;
 
             var categoryWindow = new CategoryWindow();
 
@@ -328,7 +325,7 @@ namespace FeedCenter.Options
 
         private void DeleteSelectedCategory()
         {
-            var category = (Category) categoryListBox.SelectedItem;
+            var category = (Category) CategoryListBox.SelectedItem;
 
             Database.Categories.Remove(category);
 
@@ -366,20 +363,20 @@ namespace FeedCenter.Options
                 _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
                 _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
 
-                feedListBox.ItemsSource = _collectionViewSource.View;
+                FeedListBox.ItemsSource = _collectionViewSource.View;
             }
 
             _collectionViewSource.View.Refresh();
 
-            if (feedListBox.Items.Count > 0)
-                feedListBox.SelectedIndex = 0;
+            if (FeedListBox.Items.Count > 0)
+                FeedListBox.SelectedIndex = 0;
 
             SetFeedButtonStates();
         }
 
         private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
         {
-            var selectedCategory = (Category) categoryListBox.SelectedItem;
+            var selectedCategory = (Category) CategoryListBox.SelectedItem;
 
             var feed = (Feed) e.Item;
 
@@ -404,9 +401,9 @@ namespace FeedCenter.Options
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var selectedItems = feedListBox.SelectedItems.Cast<Feed>().ToList();
+                var selectedItems = FeedListBox.SelectedItems.Cast<Feed>().ToList();
 
-                DragDrop.DoDragDrop(feedListBox, selectedItems, DragDropEffects.Move);
+                DragDrop.DoDragDrop(FeedListBox, selectedItems, DragDropEffects.Move);
             }
         }
 

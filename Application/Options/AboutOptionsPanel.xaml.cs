@@ -14,12 +14,12 @@ namespace FeedCenter.Options
         {
             base.LoadPanel(database);
 
-            applicationNameLabel.Text = Properties.Resources.ApplicationDisplayName;
+            ApplicationNameLabel.Text = Properties.Resources.ApplicationDisplayName;
 
             string version = UpdateCheck.LocalVersion.ToString();
-            versionLabel.Text = string.Format(Properties.Resources.Version, version);
+            VersionLabel.Text = string.Format(Properties.Resources.Version, version);
 
-            companyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;
+            CompanyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;
         }
 
         public override bool ValidatePanel()
@@ -31,9 +31,6 @@ namespace FeedCenter.Options
         {
         }
 
-        public override string CategoryName
-        {
-            get { return Properties.Resources.optionCategoryAbout; }
-        }
+        public override string CategoryName => Properties.Resources.optionCategoryAbout;
     }
 }

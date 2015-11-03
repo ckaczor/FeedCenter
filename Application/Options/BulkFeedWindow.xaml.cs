@@ -18,7 +18,7 @@ namespace FeedCenter.Options
             InitializeComponent();
         }
 
-        public bool? Display(Window window, FeedCenterEntities database)
+        public void Display(Window window, FeedCenterEntities database)
         {
             _checkedListBoxItems = new List<CheckedListItem<Feed>>();
 
@@ -29,11 +29,11 @@ namespace FeedCenter.Options
             _collectionViewSource.SortDescriptions.Add(new SortDescription("Item.Name", ListSortDirection.Ascending));
             _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
 
-            filteredFeedsList.ItemsSource = _collectionViewSource.View;
+            FilteredFeedsList.ItemsSource = _collectionViewSource.View;
 
             Owner = window;
 
-            return ShowDialog();
+            ShowDialog();
         }
 
         void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
@@ -42,7 +42,7 @@ namespace FeedCenter.Options
 
             var feed = checkedListBoxItem.Item;
 
-            e.Accepted = feed.Link.Contains(feedLinkFilterText.Text);
+            e.Accepted = feed.Link.Contains(FeedLinkFilterText.Text);
         }
 
         private void HandleFilterTextChanged(object sender, TextChangedEventArgs e)
@@ -54,8 +54,8 @@ namespace FeedCenter.Options
         {
             foreach (var item in _checkedListBoxItems.Where(i => i.IsChecked))
             {
-                if (openComboBox.IsEnabled)
-                    item.Item.MultipleOpenAction = (MultipleOpenAction) ((ComboBoxItem) openComboBox.SelectedItem).Tag;
+                if (OpenComboBox.IsEnabled)
+                    item.Item.MultipleOpenAction = (MultipleOpenAction) ((ComboBoxItem) OpenComboBox.SelectedItem).Tag;
             }
 
             DialogResult = true;
@@ -94,8 +94,8 @@ namespace FeedCenter.Options
 
         private void HandleGridMouseRightButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            openLabel.IsEnabled = !openLabel.IsEnabled;
-            openComboBox.IsEnabled = !openComboBox.IsEnabled;
+            OpenLabel.IsEnabled = !OpenLabel.IsEnabled;
+            OpenComboBox.IsEnabled = !OpenComboBox.IsEnabled;
         }
     }
 }

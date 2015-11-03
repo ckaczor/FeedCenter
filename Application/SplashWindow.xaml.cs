@@ -52,16 +52,16 @@ namespace FeedCenter
             string version = UpdateCheck.LocalVersion.ToString();
 
             // Show the version
-            lblVersion.Content = string.Format(Properties.Resources.Version, version);
+            VersionLabel.Content = string.Format(Properties.Resources.Version, version);
 
             // Set the starting caption
-            lblStatus.Content = Properties.Resources.SplashStarting;
+            StatusLabel.Content = Properties.Resources.SplashStarting;
 
             // Build the progress steps
             LoadProgressSteps();
 
             // Set the progress bar to the number of steps
-            progressBar.Maximum = _progressSteps.Count;
+            ProgressBar.Maximum = _progressSteps.Count;
 
             // Create the worker with progress and cancel
             _backgroundWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
@@ -97,14 +97,14 @@ namespace FeedCenter
             }
 
             // Update the progress bar
-            progressBar.Value += e.ProgressPercentage;
+            ProgressBar.Value += e.ProgressPercentage;
 
             // Get the message
             var message = (string) e.UserState;
 
             // Update the status label if one was supplied
             if (!string.IsNullOrEmpty(message))
-                lblStatus.Content = message;
+                StatusLabel.Content = message;
         }
 
         private void HandleBackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
@@ -160,7 +160,7 @@ namespace FeedCenter
             }
 
             // Move the progress bar to the max just in case
-            progressBar.Value = progressBar.Maximum;
+            ProgressBar.Value = ProgressBar.Maximum;
 
             // Close the window
             Close();

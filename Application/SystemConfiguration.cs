@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
 using FeedCenter.Properties;
@@ -8,52 +7,6 @@ namespace FeedCenter
 {
     public static class SystemConfiguration
     {
-        public static void SetDefaultFeedReader()
-        {
-            // Get the location of the assembly
-            var assemblyLocation = Assembly.GetEntryAssembly().Location;
-
-            // Open the registry key (creating if needed)
-            using (var registryKey = Registry.CurrentUser.CreateSubKey("Software\\Classes\\feed", RegistryKeyPermissionCheck.ReadWriteSubTree))
-            {
-                if (registryKey == null)
-                    return;
-
-                // Write the handler settings
-                registryKey.SetValue(string.Empty, "URL:Feed Handler");
-                registryKey.SetValue("URL Protocol", string.Empty);
-
-                // Open the icon subkey (creating if needed)
-                using (var subKey = registryKey.CreateSubKey("DefaultIcon", RegistryKeyPermissionCheck.ReadWriteSubTree))
-                {
-                    if (subKey != null)
-                    {
-                        // Write the assembly location
-                        subKey.SetValue(string.Empty, assemblyLocation);
-
-                        // Close the subkey
-                        subKey.Close();
-                    }
-                }
-
-                // Open the subkey for the command (creating if needed)
-                using (var subKey = registryKey.CreateSubKey("shell\\open\\command", RegistryKeyPermissionCheck.ReadWriteSubTree))
-                {
-                    if (subKey != null)
-                    {
-                        // Write the assembly location and parameter
-                        subKey.SetValue(string.Empty, $"\"{assemblyLocation}\" %1");
-
-                        // Close the subkey
-                        subKey.Close();
-                    }
-                }
-
-                // Close the registry key
-                registryKey.Close();
-            }
-        }
-
         private static bool UseDebugPath => Environment.CommandLine.IndexOf("/debugPath", StringComparison.InvariantCultureIgnoreCase) != -1;
 
         public static string DataDirectory => UseDebugPath ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) : UserSettingsPath;

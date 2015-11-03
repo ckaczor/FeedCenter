@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace FeedCenter
@@ -51,19 +50,19 @@ namespace FeedCenter
             return title;
         }
 
-        public void ProcessActions(IEnumerable<FeedAction> feedActions)
-        {
-            foreach (FeedAction feedAction in feedActions)
-            {
-                switch (feedAction.Field)
-                {
-                    case 1:
+        //public void ProcessActions(IEnumerable<FeedAction> feedActions)
+        //{
+        //    foreach (FeedAction feedAction in feedActions)
+        //    {
+        //        switch (feedAction.Field)
+        //        {
+        //            case 1:
 
-                        Title = Regex.Replace(Title, feedAction.Search, feedAction.Replace);
-                        break;
-                }
-            }
-        }
+        //                Title = Regex.Replace(Title, feedAction.Search, feedAction.Replace);
+        //                break;
+        //        }
+        //    }
+        //}
 
         #endregion
     }

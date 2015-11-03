@@ -5,12 +5,11 @@
         Height="300"
         Width="500"
         xmlns:my="clr-namespace:FeedCenter.Properties"
-        xmlns:Options="clr-namespace:FeedCenter.Options"
-        xmlns:LinkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
+        xmlns:linkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
         xmlns:feedCenter="clr-namespace:FeedCenter"
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
-        FocusManager.FocusedElement="{Binding ElementName=feedLinkFilterText}">
+        FocusManager.FocusedElement="{Binding ElementName=FeedLinkFilterText}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -23,17 +22,18 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="{x:Static my:Resources.FeedLinkFilterLabel}"
-               Name="feedLinkFilterLabel"
                Margin="6"
                Padding="0"
                VerticalContentAlignment="Center"
-               Target="{Binding ElementName=feedLinkFilterText}" />
-        <TextBox Grid.Column="1"
-                 Name="feedLinkFilterText"
+               Target="{Binding ElementName=FeedLinkFilterText}" />
+        <TextBox Grid.Row="0"
+                 Grid.Column="1"
+                 Name="FeedLinkFilterText"
                  Margin="6"
                  TextChanged="HandleFilterTextChanged" />
         <Border Grid.Row="1"
                 Grid.ColumnSpan="2"
+                Grid.Column="0"
                 Margin="6"
                 BorderThickness="1"
                 BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
@@ -42,8 +42,8 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <ItemsControl Name="filteredFeedsList">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl Name="FilteredFeedsList">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <CheckBox Margin="2"
@@ -61,27 +61,28 @@
                         <TextBlock Margin="2"
                                    Text="{x:Static my:Resources.SelectLabel}">
                         </TextBlock>
-                        <LinkControl:LinkControl Margin="2"
+                        <linkControl:LinkControl Margin="2"
                                                  Click="HandleSelectAll"
                                                  Text="{x:Static my:Resources.SelectAllLabel}">
-                        </LinkControl:LinkControl>
-                        <LinkControl:LinkControl Margin="2"
+                        </linkControl:LinkControl>
+                        <linkControl:LinkControl Margin="2"
                                                  Click="HandleSelectNone"
                                                  Text="{x:Static my:Resources.SelectNoneLabel}">
-                        </LinkControl:LinkControl>
-                        <LinkControl:LinkControl Margin="2"
+                        </linkControl:LinkControl>
+                        <linkControl:LinkControl Margin="2"
                                                  Click="HandleSelectInvert"
                                                  Text="{x:Static my:Resources.SelectInvertLabel}">
-                        </LinkControl:LinkControl>
+                        </linkControl:LinkControl>
                     </StackPanel>
                 </Border>
             </Grid>
         </Border>
         <Grid Grid.Row="2"
+              Grid.Column="0"
               MouseRightButtonUp="HandleGridMouseRightButtonUp"
               ToolTip="{x:Static my:Resources.EnableHint}">
             <Label Content="{x:Static my:Resources.openLabel}"
-                   Name="openLabel"
+                   Name="OpenLabel"
                    Padding="4,0,0,0"
                    Margin="6,8,6,6"
                    ToolTip="{x:Static my:Resources.DisableHint}"
@@ -91,7 +92,7 @@
               Grid.Row="2"
               MouseRightButtonUp="HandleGridMouseRightButtonUp"
               ToolTip="{x:Static my:Resources.EnableHint}">
-            <ComboBox Name="openComboBox"
+            <ComboBox Name="OpenComboBox"
                       VerticalContentAlignment="Center"
                       SelectedIndex="0"
                       Margin="6"
@@ -108,7 +109,6 @@
                 HorizontalAlignment="Right"
                 IsDefault="True"
                 Margin="0,6,87,6"
-                Name="okButton"
                 VerticalAlignment="Bottom"
                 Width="75"
                 Grid.Column="1"
@@ -120,7 +120,6 @@
                 HorizontalAlignment="Right"
                 IsCancel="True"
                 Margin="0,6,6,6"
-                Name="cancelButton"
                 VerticalAlignment="Bottom"
                 Width="75"
                 Grid.Row="3" />

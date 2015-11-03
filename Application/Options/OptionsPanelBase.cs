@@ -5,7 +5,7 @@ namespace FeedCenter.Options
 {
     public class OptionsPanelBase : UserControl
     {
-        protected FeedCenterEntities Database { get; set; }
+        protected FeedCenterEntities Database { get; private set; }
 
         public virtual void LoadPanel(FeedCenterEntities database)
         {
@@ -22,9 +22,6 @@ namespace FeedCenter.Options
             throw new NotImplementedException();
         }
 
-        public virtual string CategoryName
-        {
-            get { return null; }
-        }
+        public virtual string CategoryName => null;
     }
 }

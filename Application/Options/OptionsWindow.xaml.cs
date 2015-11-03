@@ -50,26 +50,26 @@ namespace FeedCenter.Options
                 optionsPanel.LoadPanel(_database);
 
                 // Add the panel to the category ist
-                categoryListBox.Items.Add(new CategoryListItem(optionsPanel));
+                CategoryListBox.Items.Add(new CategoryListItem(optionsPanel));
 
                 // Set the panel into the right side
-                contentControl.Content = optionsPanel;
+                ContentControl.Content = optionsPanel;
             }
 
             // Select the first item
-            categoryListBox.SelectedItem = categoryListBox.Items[0];
+            CategoryListBox.SelectedItem = CategoryListBox.Items[0];
         }
 
         private void SelectCategory(OptionsPanelBase panel)
         {
             // Set the content
-            contentControl.Content = panel;
+            ContentControl.Content = panel;
         }
 
         private void HandleSelectedCategoryChanged(object sender, SelectionChangedEventArgs e)
         {
             // Select the right category
-            SelectCategory(((CategoryListItem) categoryListBox.SelectedItem).Panel);
+            SelectCategory(((CategoryListItem) CategoryListBox.SelectedItem).Panel);
         }
 
         #endregion
@@ -78,7 +78,7 @@ namespace FeedCenter.Options
 
         private class CategoryListItem
         {
-            public OptionsPanelBase Panel { get; private set; }
+            public OptionsPanelBase Panel { get; }
 
             public CategoryListItem(OptionsPanelBase panel)
             {

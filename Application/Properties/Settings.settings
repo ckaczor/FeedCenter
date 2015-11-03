@@ -53,9 +53,6 @@
     <Setting Name="OpenAllSleepInterval" Provider="Common.Settings.GenericSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">500</Value>
     </Setting>
-    <Setting Name="RegisterAsDefaultFeedReader" Provider="Common.Settings.GenericSettingsProvider" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="Browser" Provider="Common.Settings.GenericSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

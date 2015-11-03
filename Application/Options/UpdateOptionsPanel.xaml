@@ -1,20 +1,23 @@
-﻿<Options:OptionsPanelBase x:Class="FeedCenter.Options.UpdateOptionsPanel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:Options="clr-namespace:FeedCenter.Options" xmlns:Properties="clr-namespace:FeedCenter.Properties" mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+﻿<options:OptionsPanelBase x:Class="FeedCenter.Options.UpdateOptionsPanel"
+                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                          xmlns:options="clr-namespace:FeedCenter.Options"
+                          xmlns:properties="clr-namespace:FeedCenter.Properties"
+                          mc:Ignorable="d"
+                          d:DesignHeight="300"
+                          d:DesignWidth="300">
     <Grid>
-        <CheckBox Content="{x:Static Properties:Resources.checkVersionOnStartupCheckBox}"
-                  Name="checkVersionOnStartupCheckBox"
+        <CheckBox Content="{x:Static properties:Resources.checkVersionOnStartupCheckBox}"
+                  Name="CheckVersionOnStartupCheckBox"
                   VerticalAlignment="Top" />
-        <Button Content="{x:Static Properties:Resources.checkVersionNowButton}"
+        <Button Content="{x:Static properties:Resources.checkVersionNowButton}"
                 Height="23"
                 HorizontalAlignment="Left"
                 Margin="0,22,0,0"
-                Name="checkVersionNowButton"
                 VerticalAlignment="Top"
                 Width="75"
                 Click="HandleCheckVersionNowButtonClick" />
     </Grid>
-</Options:OptionsPanelBase>
+</options:OptionsPanelBase>

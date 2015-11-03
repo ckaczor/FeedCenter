@@ -1,8 +1,8 @@
-﻿<Options:OptionsPanelBase x:Class="FeedCenter.Options.ReadingOptionsPanel"
+﻿<options:OptionsPanelBase x:Class="FeedCenter.Options.ReadingOptionsPanel"
                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                          xmlns:Options="clr-namespace:FeedCenter.Options"
-                          xmlns:Properties="clr-namespace:FeedCenter.Properties"
+                          xmlns:options="clr-namespace:FeedCenter.Options"
+                          xmlns:properties="clr-namespace:FeedCenter.Properties"
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           mc:Ignorable="d"
@@ -17,18 +17,18 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Content="{x:Static Properties:Resources.browserLabel}"
-               Name="browserLabel"
-               Target="{Binding ElementName=browserComboBox}"
+        <Label Content="{x:Static properties:Resources.browserLabel}"
+               Target="{Binding ElementName=BrowserComboBox}"
                Grid.Column="0"
                Padding="0"
                VerticalContentAlignment="Center"
                Margin="0,0,5,0" />
-        <ComboBox Name="browserComboBox"
+        <ComboBox Name="BrowserComboBox"
+                  Grid.Row="0"
                   Grid.Column="1"
                   VerticalContentAlignment="Center">
-            <ComboBoxItem Content="{x:Static Properties:Resources.DefaultBrowserCaption}"
+            <ComboBoxItem Content="{x:Static properties:Resources.DefaultBrowserCaption}"
                           Tag="" />
         </ComboBox>
     </Grid>
-</Options:OptionsPanelBase>
+</options:OptionsPanelBase>

@@ -1,10 +1,10 @@
-﻿<Options:OptionsPanelBase x:Class="FeedCenter.Options.DisplayOptionsPanel"
+﻿<options:OptionsPanelBase x:Class="FeedCenter.Options.DisplayOptionsPanel"
                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                          xmlns:Options="clr-namespace:FeedCenter.Options"
-                          xmlns:Properties="clr-namespace:FeedCenter.Properties"
+                          xmlns:options="clr-namespace:FeedCenter.Options"
+                          xmlns:properties="clr-namespace:FeedCenter.Properties"
                           mc:Ignorable="d"
                           d:DesignHeight="300"
                           d:DesignWidth="300">
@@ -13,52 +13,55 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <CheckBox Content="{x:Static Properties:Resources.lockWindowCheckBox}"
+        <CheckBox Content="{x:Static properties:Resources.lockWindowCheckBox}"
                   Height="16"
                   HorizontalAlignment="Left"
-                  Name="lockWindowCheckBox"
+                  Name="LockWindowCheckBox"
                   VerticalAlignment="Top"
                   Width="300"
                   Grid.ColumnSpan="2" />
-        <CheckBox Content="{x:Static Properties:Resources.displayEmptyFeedsCheckBox}"
+        <CheckBox Content="{x:Static properties:Resources.displayEmptyFeedsCheckBox}"
                   Height="16"
                   HorizontalAlignment="Left"
                   Margin="0,22,0,0"
-                  Name="displayEmptyFeedsCheckBox"
+                  Name="DisplayEmptyFeedsCheckBox"
                   VerticalAlignment="Top"
                   Width="300"
-                  Grid.ColumnSpan="2" />
-        <Label Content="{x:Static Properties:Resources.toolbarLocationLabel}"
-               Name="toolbarLocationLabel"
+                  Grid.ColumnSpan="2"
+                  Grid.Column="0" />
+        <Label Grid.Column="0"
+               Content="{x:Static properties:Resources.toolbarLocationLabel}"
                VerticalAlignment="Top"
                Margin="0,50,0,0"
                Padding="0,5,5,5"
-               Target="{Binding ElementName=toolbarLocationComboBox}"
+               Target="{Binding ElementName=ToolbarLocationComboBox}"
                Width="97" />
         <ComboBox Margin="8,53,0,0"
-                  Name="toolbarLocationComboBox"
-                  VerticalAlignment="Top" Grid.Column="1">
-            <ComboBoxItem Content="{x:Static Properties:Resources.Top}"
+                  Name="ToolbarLocationComboBox"
+                  VerticalAlignment="Top"
+                  Grid.Column="1">
+            <ComboBoxItem Content="{x:Static properties:Resources.Top}"
                           Tag="{x:Static Dock.Top}" />
-            <ComboBoxItem Content="{x:Static Properties:Resources.Bottom}"
+            <ComboBoxItem Content="{x:Static properties:Resources.Bottom}"
                           Tag="{x:Static Dock.Bottom}" />
         </ComboBox>
-        <Label Content="{x:Static Properties:Resources.multipleLineDisplayLabel}"
-               Name="multipleLineDisplayLabel"
+        <Label Grid.Column="0"
+               Content="{x:Static properties:Resources.multipleLineDisplayLabel}"
                VerticalAlignment="Top"
                Margin="0,82,0,0"
                Padding="0,5,5,5"
-               Target="{Binding ElementName=multipleLineDisplayComboBox}"
+               Target="{Binding ElementName=MultipleLineDisplayComboBox}"
                Width="97" />
         <ComboBox Margin="8,86,0,0"
-                  Name="multipleLineDisplayComboBox"
-                  VerticalAlignment="Top" Grid.Column="1">
-            <ComboBoxItem Content="{x:Static Properties:Resources.multipleLineDisplayNormal}"
-                          Tag="{x:Static Options:MultipleLineDisplay.Normal}" />
-            <ComboBoxItem Content="{x:Static Properties:Resources.multipleLineDisplaySingleLine}"
-                          Tag="{x:Static Options:MultipleLineDisplay.SingleLine}" />
-            <ComboBoxItem Content="{x:Static Properties:Resources.multipleLineDisplayFirstLine}"
-                          Tag="{x:Static Options:MultipleLineDisplay.FirstLine}" />
+                  Name="MultipleLineDisplayComboBox"
+                  VerticalAlignment="Top"
+                  Grid.Column="1">
+            <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplayNormal}"
+                          Tag="{x:Static options:MultipleLineDisplay.Normal}" />
+            <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplaySingleLine}"
+                          Tag="{x:Static options:MultipleLineDisplay.SingleLine}" />
+            <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplayFirstLine}"
+                          Tag="{x:Static options:MultipleLineDisplay.FirstLine}" />
         </ComboBox>
     </Grid>
-</Options:OptionsPanelBase>
+</options:OptionsPanelBase>

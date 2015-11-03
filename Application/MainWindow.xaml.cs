@@ -81,8 +81,8 @@ namespace FeedCenter
             LoadWindowSettings();
 
             // Set the foreground color to something that can be seen
-            linkTextList.Foreground = (System.Drawing.SystemColors.Desktop.GetBrightness() < 0.5) ? Brushes.White : Brushes.Black;
-            headerLabel.Foreground = linkTextList.Foreground;
+            LinkTextList.Foreground = (System.Drawing.SystemColors.Desktop.GetBrightness() < 0.5) ? Brushes.White : Brushes.Black;
+            HeaderLabel.Foreground = LinkTextList.Foreground;
 
             // Create the background worker that does the actual reading
             _feedReadWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
@@ -112,7 +112,7 @@ namespace FeedCenter
 
             // Show the link if updates are available
             if (UpdateCheck.UpdateAvailable)
-                newVersionLink.Visibility = Visibility.Visible;
+                NewVersionLink.Visibility = Visibility.Visible;
 
             Tracer.WriteLine("MainForm creation finished");
         }
@@ -192,11 +192,11 @@ namespace FeedCenter
                 switch (Settings.Default.ToolbarLocation)
                 {
                     case Dock.Top:
-                        Grid.SetRow(navigationToolbarTray, mainGrid.GetRowIndex(topToolbarRow));
+                        Grid.SetRow(NavigationToolbarTray, MainGrid.GetRowIndex(TopToolbarRow));
 
                         break;
                     case Dock.Bottom:
-                        Grid.SetRow(navigationToolbarTray, mainGrid.GetRowIndex(bottomToolbarRow));
+                        Grid.SetRow(NavigationToolbarTray, MainGrid.GetRowIndex(BottomToolbarRow));
                         break;
                 }
             }
@@ -229,10 +229,10 @@ namespace FeedCenter
             switch (Settings.Default.ToolbarLocation)
             {
                 case Dock.Top:
-                    Grid.SetRow(navigationToolbarTray, mainGrid.GetRowIndex(topToolbarRow));
+                    Grid.SetRow(NavigationToolbarTray, MainGrid.GetRowIndex(TopToolbarRow));
                     break;
                 case Dock.Bottom:
-                    Grid.SetRow(navigationToolbarTray, mainGrid.GetRowIndex(bottomToolbarRow));
+                    Grid.SetRow(NavigationToolbarTray, MainGrid.GetRowIndex(BottomToolbarRow));
                     break;
             }
 
@@ -249,7 +249,7 @@ namespace FeedCenter
             Settings.Default.WindowSize = new Size(Width, Height);
 
             // Save the dock on the navigation tray
-            Settings.Default.ToolbarLocation = Grid.GetRow(navigationToolbarTray) == mainGrid.GetRowIndex(topToolbarRow) ? Dock.Top : Dock.Bottom;
+            Settings.Default.ToolbarLocation = Grid.GetRow(NavigationToolbarTray) == MainGrid.GetRowIndex(TopToolbarRow) ? Dock.Top : Dock.Bottom;
 
             // Save settings
             Settings.Default.Save();
@@ -261,7 +261,7 @@ namespace FeedCenter
             ResizeMode = Settings.Default.WindowLocked ? ResizeMode.NoResize : ResizeMode.CanResize;
 
             // Show or hide the border
-            windowBorder.BorderBrush = Settings.Default.WindowLocked ? SystemColors.ActiveBorderBrush : Brushes.Transparent;
+            WindowBorder.BorderBrush = Settings.Default.WindowLocked ? SystemColors.ActiveBorderBrush : Brushes.Transparent;
 
             // Update the borders
             UpdateBorder();
@@ -324,7 +324,7 @@ namespace FeedCenter
             StopTimer();
 
             // Move to the next feed if the scroll interval has expired and the mouse isn't hovering
-            if (linkTextList.IsMouseOver)
+            if (LinkTextList.IsMouseOver)
                 _lastFeedDisplay = DateTime.Now;
             else if (DateTime.Now - _lastFeedDisplay >= Settings.Default.FeedScrollInterval)
                 NextFeed();
@@ -347,14 +347,14 @@ namespace FeedCenter
             var feedCount = _database.Feeds.Count();
 
             // Set button states
-            previousToolbarButton.IsEnabled = (feedCount > 1);
-            nextToolbarButton.IsEnabled = (feedCount > 1);
-            refreshToolbarButton.IsEnabled = (feedCount > 0);
-            feedButton.IsEnabled = (feedCount > 0);
-            openAllToolbarButton.IsEnabled = (feedCount > 0);
-            markReadToolbarButton.IsEnabled = (feedCount > 0);
-            feedLabel.Visibility = (feedCount == 0 ? Visibility.Hidden : Visibility.Visible);
-            feedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);            
+            PreviousToolbarButton.IsEnabled = (feedCount > 1);
+            NextToolbarButton.IsEnabled = (feedCount > 1);
+            RefreshToolbarButton.IsEnabled = (feedCount > 0);
+            FeedButton.IsEnabled = (feedCount > 0);
+            OpenAllToolbarButton.IsEnabled = (feedCount > 0);
+            MarkReadToolbarButton.IsEnabled = (feedCount > 0);
+            FeedLabel.Visibility = (feedCount == 0 ? Visibility.Hidden : Visibility.Visible);
+            FeedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);            
         }
 
         private void InitializeFeed()
@@ -365,7 +365,7 @@ namespace FeedCenter
             var feedCount = _database.Feeds.Count();
 
             // Clear the link list
-            linkTextList.Items.Clear();
+            LinkTextList.Items.Clear();
 
             // Reset the feed index
             _feedIndex = -1;
@@ -518,10 +518,10 @@ namespace FeedCenter
             switch (multipleOpenAction)
             {
                 case MultipleOpenAction.IndividualPages:
-                    openAllToolbarButton.ToolTip = Properties.Resources.openAllMultipleToolbarButton;
+                    OpenAllToolbarButton.ToolTip = Properties.Resources.openAllMultipleToolbarButton;
                     break;
                 case MultipleOpenAction.SinglePage:
-                    openAllToolbarButton.ToolTip = Properties.Resources.openAllSingleToolbarButton;
+                    OpenAllToolbarButton.ToolTip = Properties.Resources.openAllSingleToolbarButton;
                     break;
             }
         }
@@ -531,19 +531,19 @@ namespace FeedCenter
             // Just clear the display if we have no feed
             if (_currentFeed == null)
             {
-                feedLabel.Text = string.Empty;
-                feedButton.Visibility = Visibility.Hidden;
-                linkTextList.Items.Clear();
+                FeedLabel.Text = string.Empty;
+                FeedButton.Visibility = Visibility.Hidden;
+                LinkTextList.Items.Clear();
 
                 return;
             }
 
             // Set the header to the feed title
-            feedLabel.Text = (_currentFeed.Name.Length > 0 ? _currentFeed.Name : _currentFeed.Title);
-            feedButton.Visibility = _database.Feeds.Count() > 1 ? Visibility.Visible : Visibility.Hidden;
+            FeedLabel.Text = (_currentFeed.Name.Length > 0 ? _currentFeed.Name : _currentFeed.Title);
+            FeedButton.Visibility = _database.Feeds.Count() > 1 ? Visibility.Visible : Visibility.Hidden;
 
             // Clear the current list
-            linkTextList.Items.Clear();
+            LinkTextList.Items.Clear();
 
             // Sort the items by sequence
             var sortedItems = _currentFeed.Items.Where(item => !item.BeenRead).OrderBy(item => item.Sequence);
@@ -552,7 +552,7 @@ namespace FeedCenter
             foreach (var feedItem in sortedItems)
             {
                 // Add the list item
-                linkTextList.Items.Add(feedItem);
+                LinkTextList.Items.Add(feedItem);
             }
 
             UpdateOpenAllButton();
@@ -561,14 +561,14 @@ namespace FeedCenter
         private void MarkAllItemsAsRead()
         {
             // Loop over all items and mark them as read
-            foreach (FeedItem feedItem in linkTextList.Items)
+            foreach (FeedItem feedItem in LinkTextList.Items)
                 feedItem.BeenRead = true;
 
             // Save the changes
             _database.SaveChanges();
 
             // Clear the list
-            linkTextList.Items.Clear();
+            LinkTextList.Items.Clear();
         }
 
         #endregion
@@ -586,13 +586,13 @@ namespace FeedCenter
             // Reset the progress bar if we need it
             if (value)
             {
-                feedReadProgress.Value = 0;
-                feedReadProgress.Maximum = feedCount + 2;
-                feedReadProgress.Visibility = Visibility.Visible;
+                FeedReadProgress.Value = 0;
+                FeedReadProgress.Maximum = feedCount + 2;
+                FeedReadProgress.Visibility = Visibility.Visible;
             }
             else
             {
-                feedReadProgress.Visibility = Visibility.Collapsed;
+                FeedReadProgress.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -639,7 +639,7 @@ namespace FeedCenter
         private void HandleFeedReadWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             // Set progress
-            feedReadProgress.Value = e.ProgressPercentage;
+            FeedReadProgress.Value = e.ProgressPercentage;
         }
 
         private void HandleFeedReadWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -661,7 +661,7 @@ namespace FeedCenter
 
             // Check for update
             if (UpdateCheck.UpdateAvailable)
-                newVersionLink.Visibility = Visibility.Visible;
+                NewVersionLink.Visibility = Visibility.Visible;
 
             UpdateErrorLink();
         }
@@ -671,10 +671,10 @@ namespace FeedCenter
             var feedErrorCount = _database.Feeds.Count(f => f.LastReadResult != FeedReadResult.Success);
 
             // Set the visibility of the error link
-            feedErrorsLink.Visibility = feedErrorCount == 0 ? Visibility.Collapsed : Visibility.Visible;
+            FeedErrorsLink.Visibility = feedErrorCount == 0 ? Visibility.Collapsed : Visibility.Visible;
 
             // Set the text to match the number of errors
-            feedErrorsLink.Text = feedErrorCount == 1
+            FeedErrorsLink.Text = feedErrorCount == 1
                                       ? Properties.Resources.FeedErrorLink
                                       : string.Format(Properties.Resources.FeedErrorsLink, feedErrorCount);
         }
@@ -923,7 +923,7 @@ namespace FeedCenter
             }
         }
 
-        private void HandleLinkTextListListItemMouseUp(object sender, MouseButtonEventArgs e)
+        private void HandleItemMouseUp(object sender, MouseButtonEventArgs e)
         {
             // Only handle the middle button
             if (e.ChangedButton != MouseButton.Middle)
@@ -937,14 +937,14 @@ namespace FeedCenter
             feedItem.New = false;
 
             // Remove the item from the list
-            linkTextList.Items.Remove(feedItem);
+            LinkTextList.Items.Remove(feedItem);
 
             // Save the changes
             _database.SaveChanges();
 
         }
 
-        private void HandleLinkTextListListItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void HandleItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // Get the feed item
             var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
@@ -957,7 +957,7 @@ namespace FeedCenter
                 feedItem.New = false;
 
                 // Remove the item from the list
-                linkTextList.Items.Remove(feedItem);
+                LinkTextList.Items.Remove(feedItem);
 
                 // Save the changes
                 _database.SaveChanges();
@@ -1067,7 +1067,7 @@ namespace FeedCenter
             if (rectangle.Bottom != screen.WorkingArea.Bottom)
                 borderThickness.Bottom = 1;
 
-            windowBorder.BorderThickness = borderThickness;
+            WindowBorder.BorderThickness = borderThickness;
         }
 
         private DelayedMethod _windowStateDelay;
@@ -1125,7 +1125,7 @@ namespace FeedCenter
         private void OpenAllFeedItemsIndividually()
         {
             // Create a new list of feed items
-            var feedItems = (from FeedItem feedItem in linkTextList.Items select feedItem).ToList();
+            var feedItems = (from FeedItem feedItem in LinkTextList.Items select feedItem).ToList();
 
             // Get the browser 
             var browser = BrowserCommon.FindBrowser(Settings.Default.Browser);
@@ -1146,7 +1146,7 @@ namespace FeedCenter
                     feedItem.BeenRead = true;
 
                     // Remove the item
-                    linkTextList.Items.Remove(feedItem);
+                    LinkTextList.Items.Remove(feedItem);
                 }
 
                 // Wait a little bit
@@ -1209,9 +1209,9 @@ namespace FeedCenter
         {
             var menuItem = (MenuItem) e.Source;
 
-            if (Equals(menuItem, menuRefresh))
+            if (Equals(menuItem, MenuRefresh))
                 ReadCurrentFeed(true);
-            else if (Equals(menuItem, menuRefreshAll))
+            else if (Equals(menuItem, MenuRefreshAll))
                 ReadFeeds(true);
         }
 
@@ -1224,9 +1224,9 @@ namespace FeedCenter
         {
             var menuItem = (MenuItem) e.Source;
 
-            if (Equals(menuItem, menuOpenAllSinglePage))
+            if (Equals(menuItem, MenuOpenAllSinglePage))
                 OpenAllFeedItemsOnSinglePage();
-            else if (Equals(menuItem, menuOpenAllMultiplePages))
+            else if (Equals(menuItem, MenuOpenAllMultiplePages))
                 OpenAllFeedItemsIndividually();
         }
 
