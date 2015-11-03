@@ -87,7 +87,8 @@ namespace FeedCenter
                 Current.SetStartWithWindows(Settings.Default.StartWithWindows);
 
                 // Set whether we should be the default feed reader
-                SystemConfiguration.SetDefaultFeedReader(Settings.Default.RegisterAsDefaultFeedReader);
+                if (Settings.Default.RegisterAsDefaultFeedReader)
+                    SystemConfiguration.SetDefaultFeedReader();
 
                 // Initialize the window
                 mainWindow.Initialize();

@@ -36,7 +36,9 @@ namespace FeedCenter.Options
                 settings.RegisterAsDefaultFeedReader = registerAsDefaultFeedReaderCheckBox.IsChecked.Value;
 
             Application.Current.SetStartWithWindows(settings.StartWithWindows);
-            SystemConfiguration.SetDefaultFeedReader(settings.RegisterAsDefaultFeedReader);
+
+            if (settings.RegisterAsDefaultFeedReader)
+                SystemConfiguration.SetDefaultFeedReader();
         }
 
         public override string CategoryName

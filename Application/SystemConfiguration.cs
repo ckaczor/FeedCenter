@@ -4,12 +4,13 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using FeedCenter.Properties;
 
 namespace FeedCenter
 {
     public static class SystemConfiguration
     {
-        public static void SetDefaultFeedReader(bool value)
+        public static void SetDefaultFeedReader()
         {
             // Get the location of the assembly
             var assemblyLocation = Assembly.GetEntryAssembly().Location;

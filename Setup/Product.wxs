@@ -1,173 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-	 xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
-	 xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-	<?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
-	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
-	<?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
+  <?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
+  <?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
+  <?define FileDescription="$(fileVersion.FileDescription($(var.FeedCenter.TargetPath)))" ?>
+  
+  <Product Id="*"
+           Name="$(var.ProductName)"
+           Language="1033"
+           Version="$(var.ProductVersion)"
+           Manufacturer="$(var.CompanyName)"
+           UpgradeCode="47f30e4a-a861-47ac-b82d-35e4b886992a">
+    <Package InstallerVersion="405"
+             Compressed="yes"
+             InstallScope="perUser" />
 
-	<Product Id="*"
-			 Name="$(var.ProductName)"
-			 Language="1033"
-			 Version="$(var.ProductVersion)"
-			 Manufacturer="$(var.CompanyName)"
-			 UpgradeCode="47f30e4a-a861-47ac-b82d-35e4b886992a">
-		<Package InstallerVersion="405"
-				 Compressed="yes"
-				 InstallScope="perUser" />
+    <util:CloseApplication Id="CloseApplication"
+                           Target="FeedCenter.exe"
+                           CloseMessage="yes"
+                           Timeout="5" />
 
-		<util:CloseApplication Id="CloseApplication"
-							   Target="FeedCenter.exe"
-							   CloseMessage="yes"
-							   Timeout="5" />
+    <MajorUpgrade Schedule="afterInstallValidate"
+                  AllowDowngrades="no"
+                  AllowSameVersionUpgrades="no"
+                  DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-		<MajorUpgrade Schedule="afterInstallValidate"
-					  AllowDowngrades="no"
-					  AllowSameVersionUpgrades="no"
-					  DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate />
 
-		<MediaTemplate />
+    <Feature Id="ProductFeature"
+             Title="$(var.ProductName)"
+             Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Product>
 
-		<Feature Id="ProductFeature"
-				 Title="$(var.ProductName)"
-				 Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
+  <Fragment>
+    <PropertyRef Id="NETFRAMEWORK45"/>
 
-	<Fragment>
-		<PropertyRef Id="NETFRAMEWORK45"/>
+    <Condition Message="This application requires version 4.5 of the .NET Framework.  Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK45]]>
+    </Condition>
 
-		<Condition Message="This application requires version 4.5 of the .NET Framework.  Please install the .NET Framework then run this installer again.">
-			<![CDATA[Installed OR NETFRAMEWORK45]]>
-		</Condition>
+    <Directory Id="TARGETDIR"
+               Name="SourceDir">
+      <Directory Id="LocalAppDataFolder">
+        <Directory Id="INSTALLFOLDER"
+                   Name="$(var.ProductName)">
+          <Directory Id="SqlServerCe_32"
+                     Name="x86" />
+          <Directory Id="SqlServerCe_64"
+                     Name="amd64" />
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder"
+                   Name="$(var.ProductName)"/>
+      </Directory>
+    </Directory>
+  </Fragment>
 
-		<Directory Id="TARGETDIR"
-				   Name="SourceDir">
-			<Directory Id="LocalAppDataFolder">
-				<Directory Id="INSTALLFOLDER"
-						   Name="$(var.ProductName)">
-					<Directory Id="SqlServerCe_32"
-							   Name="x86" />
-					<Directory Id="SqlServerCe_64"
-							   Name="amd64" />
-				</Directory>
-			</Directory>
-			<Directory Id="ProgramMenuFolder">
-				<Directory Id="ApplicationProgramsFolder"
-						   Name="$(var.ProductName)"/>
-			</Directory>
-		</Directory>
-	</Fragment>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents">
+      <Component Id="SqlServerCe_32"
+                 Guid="{800607E9-65ED-489F-83A2-C73AA36A9D1D}"
+                 Directory="SqlServerCe_32">
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents">
-			<Component Id="SqlServerCe_32"
-					   Guid="{800607E9-65ED-489F-83A2-C73AA36A9D1D}"
-					   Directory="SqlServerCe_32">
+        <RegistryValue Root='HKCU'
+                       Key='Software\Feed Center\Setup'
+                       Type='integer'
+                       Name='SqlServerCe_32'
+                       Value='1'
+                       KeyPath='yes' />
 
-				<RegistryValue Root='HKCU'
-							   Key='Software\Feed Center\Setup'
-							   Type='integer'
-							   Name='SqlServerCe_32'
-							   Value='1'
-							   KeyPath='yes' />
+        <File Id="sqlceca40_32"
+              Source="$(var.FeedCenter.TargetDir)\x86\sqlceca40.dll" />
+        <File Id="sqlcecompact40_32"
+              Source="$(var.FeedCenter.TargetDir)\x86\sqlcecompact40.dll" />
+        <File Id="sqlceer40EN_32"
+              Source="$(var.FeedCenter.TargetDir)\x86\sqlceer40EN.dll" />
+        <File Id="sqlceme40_32"
+              Source="$(var.FeedCenter.TargetDir)\x86\sqlceme40.dll" />
+        <File Id="sqlceqp40_32"
+              Source="$(var.FeedCenter.TargetDir)\x86\sqlceqp40.dll" />
+        <File Id="sqlcese40_32"
+              Source="$(var.FeedCenter.TargetDir)\x86\sqlcese40.dll" />
 
-				<File Id="sqlceca40_32"
-					  Source="$(var.FeedCenter.TargetDir)\x86\sqlceca40.dll" />
-				<File Id="sqlcecompact40_32"
-					  Source="$(var.FeedCenter.TargetDir)\x86\sqlcecompact40.dll" />
-				<File Id="sqlceer40EN_32"
-					  Source="$(var.FeedCenter.TargetDir)\x86\sqlceer40EN.dll" />
-				<File Id="sqlceme40_32"
-					  Source="$(var.FeedCenter.TargetDir)\x86\sqlceme40.dll" />
-				<File Id="sqlceqp40_32"
-					  Source="$(var.FeedCenter.TargetDir)\x86\sqlceqp40.dll" />
-				<File Id="sqlcese40_32"
-					  Source="$(var.FeedCenter.TargetDir)\x86\sqlcese40.dll" />
+        <RemoveFolder Id='SqlServerCe_32'
+                      On='uninstall' />
+      </Component>
+      <Component Id="SqlServerCe_64"
+                 Guid="{67DB1CF4-23F2-4252-896C-714438959C9A}"
+                 Directory="SqlServerCe_64">
 
-				<RemoveFolder Id='SqlServerCe_32'
-							  On='uninstall' />
-			</Component>
-			<Component Id="SqlServerCe_64"
-					   Guid="{67DB1CF4-23F2-4252-896C-714438959C9A}"
-					   Directory="SqlServerCe_64">
+        <RegistryValue Root='HKCU'
+                       Key='Software\Feed Center\Setup'
+                       Type='integer'
+                       Name='SqlServerCe_64'
+                       Value='1'
+                       KeyPath='yes' />
 
-				<RegistryValue Root='HKCU'
-							   Key='Software\Feed Center\Setup'
-							   Type='integer'
-							   Name='SqlServerCe_64'
-							   Value='1'
-							   KeyPath='yes' />
+        <File Id="sqlceca40_64"
+              Source="$(var.FeedCenter.TargetDir)\amd64\sqlceca40.dll" />
+        <File Id="sqlcecompact40_64"
+              Source="$(var.FeedCenter.TargetDir)\amd64\sqlcecompact40.dll" />
+        <File Id="sqlceer40EN_64"
+              Source="$(var.FeedCenter.TargetDir)\amd64\sqlceer40EN.dll" />
+        <File Id="sqlceme40_64"
+              Source="$(var.FeedCenter.TargetDir)\amd64\sqlceme40.dll" />
+        <File Id="sqlceqp40_64"
+              Source="$(var.FeedCenter.TargetDir)\amd64\sqlceqp40.dll" />
+        <File Id="sqlcese40_64"
+              Source="$(var.FeedCenter.TargetDir)\amd64\sqlcese40.dll" />
 
-				<File Id="sqlceca40_64"
-					  Source="$(var.FeedCenter.TargetDir)\amd64\sqlceca40.dll" />
-				<File Id="sqlcecompact40_64"
-					  Source="$(var.FeedCenter.TargetDir)\amd64\sqlcecompact40.dll" />
-				<File Id="sqlceer40EN_64"
-					  Source="$(var.FeedCenter.TargetDir)\amd64\sqlceer40EN.dll" />
-				<File Id="sqlceme40_64"
-					  Source="$(var.FeedCenter.TargetDir)\amd64\sqlceme40.dll" />
-				<File Id="sqlceqp40_64"
-					  Source="$(var.FeedCenter.TargetDir)\amd64\sqlceqp40.dll" />
-				<File Id="sqlcese40_64"
-					  Source="$(var.FeedCenter.TargetDir)\amd64\sqlcese40.dll" />
+        <RemoveFolder Id='SqlServerCe_64'
+                      On='uninstall' />
+      </Component>
+      <Component Id="FeedCenter"
+                 Guid="{9B2B9C65-8E68-4F82-9AC5-16EBCAC34B9E}"
+                 Directory="INSTALLFOLDER">
 
-				<RemoveFolder Id='SqlServerCe_64'
-							  On='uninstall' />
-			</Component>
-			<Component Id="FeedCenter"
-					   Guid="{9B2B9C65-8E68-4F82-9AC5-16EBCAC34B9E}"
-					   Directory="INSTALLFOLDER">
+        <RegistryValue Root='HKCU'
+                       Key='Software\Feed Center\Setup'
+                       Type='integer'
+                       Name='FeedCenter'
+                       Value='1'
+                       KeyPath='yes' />
+        
+        <!-- Capabilities keys for Vista/7 "Set Program Access and Defaults" -->
+        <RegistryValue Root="HKCU"
+                       Key="SOFTWARE\Feed Center\Capabilities"
+                       Name="ApplicationDescription"
+                       Value="$(var.FileDescription)"
+                       Type="string" />
+        <RegistryValue Root="HKCU"
+                       Key="SOFTWARE\Feed Center\Capabilities"
+                       Name="ApplicationName"
+                       Value="$(var.ProductName)"
+                       Type="string" />
+        <RegistryValue Root="HKCU"
+                       Key="SOFTWARE\Feed Center\Capabilities\URLAssociations"
+                       Name="feed"
+                       Value="FeedCenter.URL.feed"
+                       Type="string" />
+        <RegistryValue Root="HKCU"
+                       Key="SOFTWARE\Feed Center\Capabilities\URLAssociations"
+                       Name="feeds"
+                       Value="FeedCenter.URL.feed"
+                       Type="string" />
 
-				<RegistryValue Root='HKCU'
-							   Key='Software\Feed Center\Setup'
-							   Type='integer'
-							   Name='FeedCenter'
-							   Value='1'
-							   KeyPath='yes' />
+        <RegistryValue Root="HKCU"
+                       Key="SOFTWARE\RegisteredApplications"
+                       Name="Feed Center"
+                       Value="SOFTWARE\Feed Center\Capabilities"
+                       Type="string" />
 
-				<File Source="$(var.Common.TargetPath)" />
-				<File Source="$(var.Common.Native.TargetPath)" />
-				<File Source="$(var.Common.Wpf.TargetPath)" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\Classes\FeedCenter.URL.feed"
+                       Value="URL:Feed Center Add RSS Feed"
+                       Type="string" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\Classes\FeedCenter.URL.feed\DefaultIcon"
+                       Value="[INSTALLFOLDER]FeedCenter.exe"
+                       Type="string" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\Classes\FeedCenter.URL.feed\shell\open\command"
+                       Value="&quot;[INSTALLFOLDER]FeedCenter.exe&quot; %1"
+                       Type="string" />
 
-				<File Source="$(var.FeedCenter.TargetDir)\Common.Wpf.MarkupExtensions.dll" />
+        <File Source="$(var.Common.TargetPath)" />
+        <File Source="$(var.Common.Native.TargetPath)" />
+        <File Source="$(var.Common.Wpf.TargetPath)" />
 
-				<File Source="$(var.FeedCenter.TargetDir)\EntityFramework.dll" />
-				<File Source="$(var.FeedCenter.TargetDir)\EntityFramework.SqlServer.dll" />
-				<File Source="$(var.FeedCenter.TargetDir)\EntityFramework.SqlServerCompact.dll" />
+        <File Source="$(var.FeedCenter.TargetDir)\Common.Wpf.MarkupExtensions.dll" />
 
-				<File Source="$(var.FeedCenter.TargetDir)\System.Data.SqlServerCe.dll" />
-				<File Source="$(var.FeedCenter.TargetDir)\System.Data.SqlServerCe.Entity.dll" />
+        <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.dll" />
+        <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.SqlServer.dll" />
+        <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.SqlServerCompact.dll" />
 
-				<File Source="$(var.FeedCenter.TargetPath).config" />
-				<File Id="FeedCenter.exe"
-					  Source="$(var.FeedCenter.TargetPath)" />
+        <File Source="$(var.FeedCenter.TargetDir)\System.Data.SqlServerCe.dll" />
+        <File Source="$(var.FeedCenter.TargetDir)\System.Data.SqlServerCe.Entity.dll" />
 
-				<RemoveFolder Id='INSTALLFOLDER'
-							  On='uninstall' />
-			</Component>
-			<Component Id="ApplicationShortcut"
-					   Guid="{63CF0995-E117-4BB9-9077-76F570FDFAA9}"
-					   Directory="ApplicationProgramsFolder">
+        <File Source="$(var.FeedCenter.TargetPath).config" />
+        <File Id="FeedCenter.exe"
+              Source="$(var.FeedCenter.TargetPath)" />
 
-				<Shortcut Id="StartMenuShortcut"
-						  Directory="ApplicationProgramsFolder"
-						  Advertise="no"
-						  Name="$(var.ProductName)"
-						  Target="[INSTALLFOLDER]\$(var.FeedCenter.TargetName)"
-						  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id='INSTALLFOLDER'
+                      On='uninstall' />
+      </Component>
+      <Component Id="ApplicationShortcut"
+                 Guid="{63CF0995-E117-4BB9-9077-76F570FDFAA9}"
+                 Directory="ApplicationProgramsFolder">
 
-				<RemoveFolder Id="ApplicationProgramsFolder"
-							  On="uninstall"/>
+        <Shortcut Id="StartMenuShortcut"
+                  Directory="ApplicationProgramsFolder"
+                  Advertise="no"
+                  Name="$(var.ProductName)"
+                  Target="[INSTALLFOLDER]\$(var.FeedCenter.TargetName)"
+                  WorkingDirectory="INSTALLFOLDER" />
 
-				<RegistryValue Root="HKCU"
-							   Key="Software\Feed Center\Setup"
-							   Name="Shortcut"
-							   Type="integer"
-							   Value="1"
-							   KeyPath="yes"/>
-			</Component>
-		</ComponentGroup>
-	</Fragment>
+        <RemoveFolder Id="ApplicationProgramsFolder"
+                      On="uninstall"/>
+
+        <RegistryValue Root="HKCU"
+                       Key="Software\Feed Center\Setup"
+                       Name="Shortcut"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>
