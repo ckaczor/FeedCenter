@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FeedCenter
 {
@@ -91,6 +92,11 @@ namespace FeedCenter
             Tracer.WriteLine("Done reading feed: {0}", result);
 
             return result;
+        }
+
+        public async Task<FeedReadResult> ReadAsync(FeedCenterEntities database, bool forceRead = false)
+        {
+            return await Task.Run(() => Read(database, forceRead));
         }
 
         private Tuple<FeedReadResult, string> RetrieveFeed()
@@ -320,7 +326,7 @@ namespace FeedCenter
                 var lastReadResult = LastReadResult;
 
                 // Build the name of the resource using the enum name and the value
-                var resourceName = $"{typeof (FeedReadResult).Name}_{lastReadResult}";
+                var resourceName = $"{typeof(FeedReadResult).Name}_{lastReadResult}";
 
                 // Try to get the value from the resources
                 var resourceValue = Properties.Resources.ResourceManager.GetString(resourceName);

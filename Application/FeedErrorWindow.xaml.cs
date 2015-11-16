@@ -105,18 +105,27 @@ namespace FeedCenter
             Close();
         }
 
-        private void HandleRefreshCurrentButtonClick(object sender, RoutedEventArgs e)
+        private async void HandleRefreshCurrentButtonClick(object sender, RoutedEventArgs e)
         {
+            IsEnabled = false;
             Mouse.OverrideCursor = Cursors.Wait;
 
             var feed = (Feed) FeedDataGrid.SelectedItem;
-            feed.Read(_database, true);
+            await feed.ReadAsync(_database, true);
+
+            var selectedIndex = FeedDataGrid.SelectedIndex;
 
             _collectionViewSource.View.Refresh();
+
+            if (selectedIndex >= FeedDataGrid.Items.Count)
+                FeedDataGrid.SelectedIndex = FeedDataGrid.Items.Count - 1;
+            else
+                FeedDataGrid.SelectedIndex = selectedIndex;
 
             SetFeedButtonStates();
 
             Mouse.OverrideCursor = null;
+            IsEnabled = true;
         }
     }
 }
