@@ -175,6 +175,8 @@
 
         <File Source="$(var.FeedCenter.TargetDir)\Common.Wpf.MarkupExtensions.dll" />
 
+        <File Source="$(var.FeedCenter.TargetDir)\HtmlAgilityPack.dll" />
+        
         <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.dll" />
         <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.SqlServer.dll" />
         <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.SqlServerCompact.dll" />

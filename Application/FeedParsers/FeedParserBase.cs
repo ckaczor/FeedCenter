@@ -119,7 +119,7 @@ namespace FeedCenter.FeedParsers
             throw new ArgumentException($"Feed type {feedType} is not supported");
         }
 
-        private static FeedType DetectFeedType(string feedText)
+        public static FeedType DetectFeedType(string feedText)
         {
             try
             {
@@ -150,7 +150,9 @@ namespace FeedCenter.FeedParsers
             }
             catch (Exception exception)
             {
-                throw new InvalidFeedFormatException(exception);
+                Tracer.WriteException(exception);                
+                
+                return FeedType.Unknown;
             }
         }
 

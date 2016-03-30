@@ -99,6 +99,18 @@ namespace FeedCenter
             return await Task.Run(() => Read(database, forceRead));
         }
 
+        public Tuple<FeedType, string> DetectFeedType()
+        {
+            var retrieveResult = RetrieveFeed();
+
+            if (retrieveResult.Item1 != FeedReadResult.Success)
+            {
+                return new Tuple<FeedType, string>(FeedType.Unknown, string.Empty);
+            }
+
+            return new Tuple<FeedType, string>(FeedParserBase.DetectFeedType(retrieveResult.Item2), retrieveResult.Item2);
+        }
+
         private Tuple<FeedReadResult, string> RetrieveFeed()
         {
             try

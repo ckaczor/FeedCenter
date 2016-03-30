@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Web.UI;
 using System.Windows;
@@ -17,11 +18,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Common.Internet;
 
 namespace FeedCenter
 {
     public partial class MainWindow
     {
+        private readonly string[] _chromeExtensions = { "chrome-extension://ehojfdcmnajoklleckniaifaijfnkpbi/subscribe.html?", "chrome-extension://nlbjncdgjeocebhnmkbbbdekmmmcbfjd/subscribe.html?" };
+
         #region Member variables
 
         private int _feedIndex;
@@ -354,7 +358,7 @@ namespace FeedCenter
             OpenAllToolbarButton.IsEnabled = (feedCount > 0);
             MarkReadToolbarButton.IsEnabled = (feedCount > 0);
             FeedLabel.Visibility = (feedCount == 0 ? Visibility.Hidden : Visibility.Visible);
-            FeedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);            
+            FeedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);
         }
 
         private void InitializeFeed()
@@ -788,6 +792,37 @@ namespace FeedCenter
             feed.Source = feedUrl;
             feed.Category = _database.DefaultCategory;
 
+            // Try to detect the feed type
+            var feedTypeResult = feed.DetectFeedType();
+
+            // If we can't figure it out it could be an HTML page
+            if (feedTypeResult.Item1 == FeedType.Unknown)
+            {
+                // Only check if the feed was able to be read - otherwise fall through and show the dialog
+                if (feedTypeResult.Item2.Length > 0)
+                {
+                    // Create and load an HTML document with the text
+                    var htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                    htmlDocument.LoadHtml(feedTypeResult.Item2);
+
+                    // Look for all RSS or atom links in the document
+                    var rssLinks = htmlDocument.DocumentNode.Descendants("link")
+                        .Where(n => n.Attributes["type"] != null && (n.Attributes["type"].Value == "application/rss+xml" || n.Attributes["type"].Value == "application/atom+xml"))
+                        .Select(n => UrlHelper.GetAbsoluteUrlString(feed.Source, n.Attributes["href"].Value))
+                        .ToArray();
+
+                    // If there was only one link found then switch to feed to it
+                    if (rssLinks.Length == 1)
+                    {
+                        feed.Source = rssLinks[0];
+                    }
+                    else
+                    {
+                        // TODO - show dialog to choose feed
+                    }
+                }
+            }
+
             // Read the feed for the first time
             var feedReadResult = feed.Read(_database);
 
@@ -899,6 +934,16 @@ namespace FeedCenter
             // Get the data as a string
             var data = (string) e.Data.GetData(DataFormats.Text);
 
+            // Check to see if the data starts with any known Chrome extension
+            var chromeExtension = _chromeExtensions.FirstOrDefault(c => data.StartsWith(c));
+
+            // Remove the Chrome extension URL and decode the URL
+            if (chromeExtension != null)
+            {
+                data = data.Substring(chromeExtension.Length);
+                data = WebUtility.UrlDecode(data);
+            }
+
             // Handle the new feed but allow the drag/drop to complete
             Dispatcher.BeginInvoke(new NewFeedDelegate(HandleNewFeed), data);
         }
@@ -981,13 +1026,13 @@ namespace FeedCenter
 
                 // Create a menu item
                 var menuItem = new MenuItem
-                                        {
-                                            Header = display,
-                                            Tag = feed,
+                {
+                    Header = display,
+                    Tag = feed,
 
-                                            // Set the current item to bold
-                                            FontWeight = feed == _currentFeed ? FontWeights.Bold : FontWeights.Normal
-                                        };
+                    // Set the current item to bold
+                    FontWeight = feed == _currentFeed ? FontWeights.Bold : FontWeights.Normal
+                };
 
 
                 // Handle the click
@@ -1046,12 +1091,12 @@ namespace FeedCenter
             var screen = System.Windows.Forms.Screen.FromHandle(windowInteropHelper.Handle);
 
             var rectangle = new System.Drawing.Rectangle
-                                                     {
-                                                         X = (int) Left,
-                                                         Y = (int) Top,
-                                                         Width = (int) Width,
-                                                         Height = (int) Height
-                                                     };
+            {
+                X = (int) Left,
+                Y = (int) Top,
+                Width = (int) Width,
+                Height = (int) Height
+            };
 
             var borderThickness = new Thickness();
 
