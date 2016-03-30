@@ -1,0 +1,65 @@
+﻿<Window x:Class="FeedCenter.FeedChooserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:windows="clr-namespace:Common.Wpf.Windows;assembly=Common.Wpf"
+        xmlns:my="clr-namespace:FeedCenter.Properties"
+        mc:Ignorable="d"
+        Title="{x:Static my:Resources.FeedChooserWindow}"
+        Height="247.297"
+        Width="419.594"
+        WindowStartupLocation="CenterOwner"
+        Icon="/FeedCenter;component/Resources/Application.ico"
+        FocusManager.FocusedElement="{Binding ElementName=FeedDataGrid}"
+        windows:ControlBox.HasMaximizeButton="False"
+        windows:ControlBox.HasMinimizeButton="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DataGrid AutoGenerateColumns="False"
+                  x:Name="FeedDataGrid"
+                  CanUserReorderColumns="False"
+                  GridLinesVisibility="None"
+                  SelectionMode="Single"
+                  IsReadOnly="True"
+                  CanUserResizeRows="False"
+                  HeadersVisibility="Column"
+                  Margin="6"
+                  Background="{x:Null}"
+                  CanUserSortColumns="True"
+                  MouseDoubleClick="HandleMouseDoubleClick">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="BorderThickness"
+                            Value="0" />
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static my:Resources.FeedNameColumnHeader}"
+                                    Binding="{Binding Item2}"
+                                    Width="*"
+                                    SortDirection="Ascending" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="{x:Static my:Resources.OkayButton}"
+                Height="23"
+                IsDefault="True"
+                Width="75"
+                Click="HandleOkayButtonClick"
+                Margin="0,0,90,10"
+                Grid.Row="1"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right" />
+        <Button Content="{x:Static my:Resources.CancelButton}"
+                Height="23"
+                IsCancel="True"
+                Width="75"
+                Margin="0,0,10,10"
+                Grid.Row="1"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right" />
+    </Grid>
+</Window>

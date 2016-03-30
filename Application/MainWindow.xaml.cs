@@ -808,17 +808,23 @@ namespace FeedCenter
                     // Look for all RSS or atom links in the document
                     var rssLinks = htmlDocument.DocumentNode.Descendants("link")
                         .Where(n => n.Attributes["type"] != null && (n.Attributes["type"].Value == "application/rss+xml" || n.Attributes["type"].Value == "application/atom+xml"))
-                        .Select(n => UrlHelper.GetAbsoluteUrlString(feed.Source, n.Attributes["href"].Value))
-                        .ToArray();
+                        .Select(n => new Tuple<string, string>(UrlHelper.GetAbsoluteUrlString(feed.Source, n.Attributes["href"].Value), WebUtility.HtmlDecode(n.Attributes["title"]?.Value ?? string.Empty)))
+                        .ToList();
 
                     // If there was only one link found then switch to feed to it
-                    if (rssLinks.Length == 1)
+                    if (rssLinks.Count == 1)
                     {
-                        feed.Source = rssLinks[0];
+                        feed.Source = rssLinks[0].Item1;
                     }
                     else
                     {
-                        // TODO - show dialog to choose feed
+                        var feedChooserWindow = new FeedChooserWindow();
+                        var feedLink = feedChooserWindow.Display(this, rssLinks);
+
+                        if (string.IsNullOrEmpty(feedLink))
+                            return;
+
+                        feed.Source = feedLink;
                     }
                 }
             }

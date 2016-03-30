@@ -514,4 +514,7 @@
   <data name="DatabaseUpdate_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scripts\DatabaseUpdate_6.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="FeedChooserWindow" xml:space="preserve">
+    <value>Choose Feed to Add</value>
+  </data>
 </root>
