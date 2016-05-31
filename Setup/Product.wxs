@@ -173,7 +173,7 @@
         <File Source="$(var.Common.Native.TargetPath)" />
         <File Source="$(var.Common.Wpf.TargetPath)" />
 
-        <File Source="$(var.FeedCenter.TargetDir)\Common.Wpf.MarkupExtensions.dll" />
+        <File Source="$(var.FeedCenter.TargetDir)\NameBasedGrid.dll" />
 
         <File Source="$(var.FeedCenter.TargetDir)\HtmlAgilityPack.dll" />
         
