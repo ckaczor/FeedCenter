@@ -136,14 +136,14 @@ namespace FeedCenter
 
         private void InitializeDisplay()
         {
-            UpdateToolbarButtonState();
-
             // Get the last category (defaulting to none)
             _currentCategory = _database.Categories.FirstOrDefault(category => category.ID.ToString() == Settings.Default.LastCategoryID);
             DisplayCategory();
 
             // Get the current feed list to match the category
             _feedList = _currentCategory?.Feeds.ToList() ?? _database.Feeds.ToList();
+
+            UpdateToolbarButtonState();
 
             // Clear the link list
             LinkTextList.Items.Clear();
