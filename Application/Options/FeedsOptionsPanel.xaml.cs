@@ -290,8 +290,8 @@ namespace FeedCenter.Options
         private void SetCategoryButtonStates()
         {
             AddCategoryButton.IsEnabled = true;
-            EditCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null);
-            DeleteCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null);
+            EditCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null && CategoryListBox.SelectedItem != Database.DefaultCategory);
+            DeleteCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null && CategoryListBox.SelectedItem != Database.DefaultCategory);
         }
 
         private void AddCategory()
@@ -326,7 +326,18 @@ namespace FeedCenter.Options
 
         private void DeleteSelectedCategory()
         {
+            var defaultCategory = Database.DefaultCategory;
+
             var category = (Category) CategoryListBox.SelectedItem;
+
+            category.Feeds.ToList().ForEach(feed => feed.Category = defaultCategory);
+
+            var index = CategoryListBox.SelectedIndex;
+
+            if (index == CategoryListBox.Items.Count - 1)
+                CategoryListBox.SelectedIndex = index - 1;
+            else
+                CategoryListBox.SelectedIndex = index + 1;
 
             Database.Categories.Remove(category);
 
@@ -373,6 +384,7 @@ namespace FeedCenter.Options
                 FeedListBox.SelectedIndex = 0;
 
             SetFeedButtonStates();
+            SetCategoryButtonStates();
         }
 
         private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
