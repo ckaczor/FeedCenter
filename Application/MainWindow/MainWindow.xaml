@@ -5,10 +5,10 @@
                         xmlns:windows="clr-namespace:Common.Wpf.Windows;assembly=Common.Wpf"
                         xmlns:toolbar="clr-namespace:Common.Wpf.Toolbar;assembly=Common.Wpf"
                         xmlns:splitButton="clr-namespace:Common.Wpf.Toolbar.SplitButton;assembly=Common.Wpf"
-                        xmlns:markup="clr-namespace:Common.Wpf.MarkupExtensions;assembly=Common.Wpf.MarkupExtensions"
                         xmlns:linkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
                         xmlns:htmlTextBlock="clr-namespace:Common.Wpf.HtmlTextBlock;assembly=Common.Wpf"
                         xmlns:system="clr-namespace:System;assembly=mscorlib"
+                        xmlns:nameBasedGrid="clr-namespace:NameBasedGrid;assembly=NameBasedGrid"
                         Title="MainWindow"
                         Height="360"
                         Width="252"
@@ -37,29 +37,31 @@
             Name="WindowBorder"
             Padding="0"
             Background="{x:Static SystemColors.DesktopBrush}">
-        <Grid Name="MainGrid">
-            <Grid.RowDefinitions>
+        <nameBasedGrid:NameBasedGrid Name="MainGrid">
+            <nameBasedGrid:NameBasedGrid.RowDefinitions>
                 <!-- ReSharper disable UnusedMember.Global -->
-                <RowDefinition Height="Auto"
-                               Name="HeaderRow" />
-                <RowDefinition Height="Auto"
-                               Name="NewVersionRow" />
-                <RowDefinition Height="Auto"
-                               Name="FeedRow" />
-                <RowDefinition Height="Auto"
-                               Name="TopToolbarRow" />
-                <RowDefinition Height="*"
-                               Name="FeedListRow" />
-                <RowDefinition Height="Auto"
-                               Name="ProgressRow" />
-                <RowDefinition Height="Auto"
-                               Name="BottomToolbarRow" />
-                <RowDefinition Height="Auto"
-                               Name="FeedErrorsRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="HeaderRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="NewVersionRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="CategoryRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="FeedRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="TopToolbarRow" />
+                <nameBasedGrid:ColumnOrRow Size="*"
+                                           Name="FeedListRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="ProgressRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="BottomToolbarRow" />
+                <nameBasedGrid:ColumnOrRow Size="Auto"
+                                           Name="FeedErrorsRow" />
                 <!-- ReSharper restore UnusedMember.Global -->
-            </Grid.RowDefinitions>
+            </nameBasedGrid:NameBasedGrid.RowDefinitions>
             <Grid Height="21"
-                  Grid.Row="{markup:GridRow RowName=HeaderRow}">
+                  nameBasedGrid:NameBasedGrid.Row="HeaderRow">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="21" />
@@ -82,7 +84,7 @@
             </Grid>
             <linkControl:LinkControl Name="NewVersionLink"
                                      Height="21"
-                                     Grid.Row="{markup:GridRow NewVersionRow}"
+                                     nameBasedGrid:NameBasedGrid.Row="NewVersionRow"
                                      Text="{x:Static properties:Resources.NewVersionLink}"
                                      Background="AntiqueWhite"
                                      VerticalContentAlignment="Center"
@@ -90,8 +92,34 @@
                                      Visibility="Collapsed"
                                      Click="HandleNewVersionLinkClick">
             </linkControl:LinkControl>
+            <Grid Name="CategoryGrid"
+                  Height="21"
+                  nameBasedGrid:NameBasedGrid.Row="CategoryRow"
+                  Visibility="Visible">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="21" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="*Category Name"
+                           Name="CategoryLabel"
+                           Padding="3,0"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Width="Auto"
+                           TextTrimming="CharacterEllipsis"
+                           Grid.Column="0" />
+                <Button Width="13"
+                        Height="13"
+                        Click="HandleCategoryButtonClick"
+                        FontFamily="Marlett"
+                        Content="u"
+                        FontSize="8"
+                        Grid.Column="1" />
+            </Grid>
             <Grid Height="21"
-                  Grid.Row="{markup:GridRow RowName=FeedRow}">
+                  nameBasedGrid:NameBasedGrid.Row="FeedRow">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="21" />
@@ -122,7 +150,7 @@
                      Background="{x:Static SystemColors.DesktopBrush}"
                      MouseUp="HandleLinkTextListMouseUp"
                      Foreground="White"
-                     Grid.Row="{markup:GridRow RowName=FeedListRow}"
+                     nameBasedGrid:NameBasedGrid.Row="FeedListRow"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBoxItem Content="Test item" />
                 <ListBox.ItemTemplate>
@@ -185,11 +213,11 @@
             <ProgressBar Name="FeedReadProgress"
                          Height="15"
                          Visibility="Collapsed"
-                         Grid.Row="{markup:GridRow RowName=ProgressRow}" />
+                         nameBasedGrid:NameBasedGrid.Row="ProgressRow" />
             <ToolBarTray Name="NavigationToolbarTray"
                          Background="Transparent"
                          Orientation="Horizontal"
-                         Grid.Row="{markup:GridRow RowName=BottomToolbarRow}">
+                         nameBasedGrid:NameBasedGrid.Row="TopToolbarRow">
                 <ToolBar ToolBarTray.IsLocked="True"
                          Background="Transparent"
                          ToolBar.OverflowMode="Never">
@@ -198,15 +226,15 @@
                                          Name="PreviousToolbarButton"
                                          Click="HandlePreviousToolbarButtonClick"
                                          ToolTip="{x:Static properties:Resources.previousToolbarButton}"
-                                         ImageSource="Resources/Left.ico" />
+                                         ImageSource="../Resources/Left.ico" />
                     <toolbar:ImageButton Height="20"
                                          Width="20"
                                          Name="NextToolbarButton"
                                          Click="HandleNextToolbarButtonClick"
                                          ToolTip="{x:Static properties:Resources.nextToolbarButton}"
-                                         ImageSource="Resources/Right.ico" />
+                                         ImageSource="../Resources/Right.ico" />
                     <splitButton:SplitButton Name="RefreshToolbarButton"
-                                             Image="Resources/Rss-Download.ico"
+                                             Image="../Resources/Rss-Download.ico"
                                              ToolTip="{x:Static properties:Resources.refreshAllToolbarButton}"
                                              Height="20"
                                              MinWidth="35"
@@ -222,7 +250,7 @@
                         </splitButton:SplitButton.DropDownContextMenu>
                     </splitButton:SplitButton>
                     <splitButton:SplitButton Name="OpenAllToolbarButton"
-                                             Image="Resources/News.ico"
+                                             Image="../Resources/News.ico"
                                              ToolTip="{x:Static properties:Resources.openAllMultipleToolbarButton}"
                                              Height="20"
                                              MinWidth="35"
@@ -243,13 +271,13 @@
                                          Name="MarkReadToolbarButton"
                                          Click="HandleMarkReadToolbarButtonClick"
                                          ToolTip="{x:Static properties:Resources.markReadToolbarButton}"
-                                         ImageSource="Resources/Comments-edit.ico" />
+                                         ImageSource="../Resources/Comments-edit.ico" />
                     <splitButton:SplitButton Height="20"
                                              MinWidth="35"
                                              Margin="5,0,0,0"
                                              Click="HandleOptionsToolbarButtonClick"
                                              ToolTip="{x:Static properties:Resources.optionsToolbarButton}"
-                                             Image="Resources/Compile.ico">
+                                             Image="../Resources/Compile.ico">
                         <splitButton:SplitButton.DropDownContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="{x:Static properties:Resources.lockWindowCheckBox}"
@@ -269,7 +297,7 @@
             </ToolBarTray>
             <linkControl:LinkControl Name="FeedErrorsLink"
                                      Height="21"
-                                     Grid.Row="{markup:GridRow FeedErrorsRow}"
+                                     nameBasedGrid:NameBasedGrid.Row="FeedErrorsRow"
                                      Text="{x:Static properties:Resources.FeedErrorsLink}"
                                      ToolTip="{x:Static properties:Resources.showErrorsToolbarButton}"
                                      Background="AntiqueWhite"
@@ -278,6 +306,6 @@
                                      Visibility="Collapsed"
                                      Click="HandleShowErrorsButtonClick">
             </linkControl:LinkControl>
-        </Grid>
+        </nameBasedGrid:NameBasedGrid>
     </Border>
 </windows:SnappingWindow>

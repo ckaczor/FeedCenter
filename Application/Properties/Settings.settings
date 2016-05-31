@@ -68,5 +68,8 @@
     <Setting Name="VersionLocation" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://server/FeedCenter/</Value>
     </Setting>
+    <Setting Name="LastCategoryID" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

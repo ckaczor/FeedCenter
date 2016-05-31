@@ -277,5 +277,17 @@ namespace FeedCenter.Properties {
                 return ((string)(this["VersionLocation"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastCategoryID {
+            get {
+                return ((string)(this["LastCategoryID"]));
+            }
+            set {
+                this["LastCategoryID"] = value;
+            }
+        }
     }
 }

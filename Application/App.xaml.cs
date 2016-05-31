@@ -85,8 +85,9 @@ namespace FeedCenter
                 var splashWindow = new SplashWindow();
                 splashWindow.ShowDialog();
 
-                // Set whether we should auto-start
-                Current.SetStartWithWindows(Settings.Default.StartWithWindows);
+                // Set whether we should auto-start (if not debugging)
+                if (!IsDebugBuild)
+                    Current.SetStartWithWindows(Settings.Default.StartWithWindows);
 
                 // Initialize the window
                 mainWindow.Initialize();

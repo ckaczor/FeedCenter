@@ -97,6 +97,15 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt; all &gt;.
+        /// </summary>
+        public static string AllCategory {
+            get {
+                return ResourceManager.GetString("AllCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Application {
@@ -193,6 +202,15 @@ namespace FeedCenter.Properties {
         public static string CategoriesHeader {
             get {
                 return ResourceManager.GetString("CategoriesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category: {0}.
+        /// </summary>
+        public static string CategoryFilterHeader {
+            get {
+                return ResourceManager.GetString("CategoryFilterHeader", resourceCulture);
             }
         }
         

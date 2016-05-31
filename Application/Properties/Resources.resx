@@ -517,4 +517,10 @@
   <data name="FeedChooserWindow" xml:space="preserve">
     <value>Choose Feed to Add</value>
   </data>
+  <data name="AllCategory" xml:space="preserve">
+    <value>&lt; all &gt;</value>
+  </data>
+  <data name="CategoryFilterHeader" xml:space="preserve">
+    <value>Category: {0}</value>
+  </data>
 </root>

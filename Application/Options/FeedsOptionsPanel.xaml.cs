@@ -394,7 +394,9 @@ namespace FeedCenter.Options
 
             _collectionViewSource.View.Refresh();
 
-            //textBlock.TextDecorations = null;
+            var dataGridRow = (DataGridRow) sender;
+
+            dataGridRow.FontWeight = FontWeights.Normal;
         }
 
         private void HandleListBoxItemPreviewMouseMove(object sender, MouseEventArgs e)

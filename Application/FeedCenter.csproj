@@ -144,9 +144,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Wpf.MarkupExtensions">
-      <HintPath>..\..\Common.Wpf.MarkupExtensions\bin\Release\Common.Wpf.MarkupExtensions.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
@@ -160,6 +157,10 @@
     <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="NameBasedGrid, Version=0.10.1.0, Culture=neutral, PublicKeyToken=a434c4ad23d0fd33, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Public\namebasedgrid\bin\Debug\NameBasedGrid.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -190,7 +191,18 @@
     <Compile Include="FeedChooserWindow.xaml.cs">
       <DependentUpon>FeedChooserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindow\CategoryList.cs" />
+    <Compile Include="MainWindow\CommandLine.cs" />
+    <Compile Include="MainWindow\DragDrop.cs" />
+    <Compile Include="MainWindow\FeedCreation.cs" />
+    <Compile Include="MainWindow\FeedList.cs" />
+    <Compile Include="MainWindow\FeedReading.cs" />
+    <Compile Include="MainWindow\Header.cs" />
+    <Compile Include="MainWindow\Timer.cs" />
+    <Compile Include="MainWindow\Toolbar.cs" />
+    <Compile Include="MainWindow\WindowHandler.cs" />
     <Compile Include="SystemConfiguration.cs" />
+    <Compile Include="MainWindow\UpdateHandler.cs" />
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -277,7 +289,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="MainWindow\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -293,7 +305,7 @@
     <Compile Include="Feeds\Feed.cs" />
     <Compile Include="Feeds\FeedAction.cs" />
     <Compile Include="Feeds\FeedItem.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="MainWindow\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
