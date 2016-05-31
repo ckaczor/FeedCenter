@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using FeedCenter.Properties;
 
 namespace FeedCenter
 {
@@ -78,7 +79,7 @@ namespace FeedCenter
             _currentCategory = category;
 
             // Get the current feed list to match the category
-            _feedList = _currentCategory?.Feeds.ToList() ?? _database.Feeds.ToList();
+            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.ID == _currentCategory.ID);
 
             // Reset the feed index
             _feedIndex = -1;
@@ -92,6 +93,8 @@ namespace FeedCenter
             // Update the display
             DisplayCategory();
             DisplayFeed();
+
+            Settings.Default.LastCategoryID = _currentCategory?.ID.ToString() ?? string.Empty;
         }
     }
 }

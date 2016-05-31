@@ -4,7 +4,6 @@ using Common.IO;
 using Common.Update;
 using FeedCenter.Properties;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -19,7 +18,7 @@ namespace FeedCenter
         private int _feedIndex;
 
         private Category _currentCategory;
-        private ICollection<Feed> _feedList;
+        private IQueryable<Feed> _feedList;
         private Feed _currentFeed;
 
         public MainWindow()
@@ -120,7 +119,7 @@ namespace FeedCenter
         private void UpdateToolbarButtonState()
         {
             // Cache the feed count to save (a little) time
-            var feedCount = _feedList?.Count ?? 0;
+            var feedCount = _feedList?.Count() ?? 0;
 
             // Set button states
             PreviousToolbarButton.IsEnabled = (feedCount > 1);
@@ -141,7 +140,7 @@ namespace FeedCenter
             DisplayCategory();
 
             // Get the current feed list to match the category
-            _feedList = _currentCategory?.Feeds.ToList() ?? _database.Feeds.ToList();
+            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.ID == _currentCategory.ID);
 
             UpdateToolbarButtonState();
 
@@ -155,7 +154,7 @@ namespace FeedCenter
             StartTimer();
 
             // Don't go further if we have no feeds
-            if (_feedList.Count == 0)
+            if (!_feedList.Any())
                 return;
 
             // Get the first feed
@@ -363,6 +362,8 @@ namespace FeedCenter
 
             // Create a new database object
             _database = new FeedCenterEntities();
+
+            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.ID == _currentCategory.ID);
 
             UpdateToolbarButtonState();
 
