@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 
 namespace FeedCenter.Options
@@ -432,6 +433,19 @@ namespace FeedCenter.Options
         {
             var bulkFeedWindow = new BulkFeedWindow();
             bulkFeedWindow.Display(Window.GetWindow(this), Database);
+        }
+
+        private void HandleFeedListPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Get the object that was clicked on
+            var originalSource = (DependencyObject) e.OriginalSource;
+
+            // Look for a row that contains the object
+            var dataGridRow = (DataGridRow) FeedListBox.ContainerFromElement(originalSource);
+
+            // If the selection already contains this row then ignore it
+            if (dataGridRow != null && FeedListBox.SelectedItems.Contains(dataGridRow.Item))
+                e.Handled = true;
         }
     }
 }

@@ -28,7 +28,8 @@
                   CanUserResizeRows="False"
                   IsReadOnly="True"
                   HeadersVisibility="Column"
-                  Background="{x:Null}">
+                  Background="{x:Null}"
+                  PreviewMouseLeftButtonDown="HandleFeedListPreviewMouseLeftButtonDown">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}"
                                     Header="{x:Static properties:Resources.FeedNameColumnHeader}"
