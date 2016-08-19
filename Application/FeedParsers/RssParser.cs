@@ -30,7 +30,8 @@ namespace FeedCenter.FeedParsers
                     return FeedReadResult.UnknownError;
 
                 // Get the channel node
-                XmlNode channelNode = rootNode.SelectSingleNode("default:channel", namespaceManager);
+                var channelNode = rootNode.SelectSingleNode("default:channel", namespaceManager) ??
+                                  rootNode.SelectSingleNode("channel", namespaceManager);
 
                 if (channelNode == null)
                     return FeedReadResult.InvalidXml;
