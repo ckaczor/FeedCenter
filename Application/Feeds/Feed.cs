@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Common.Update;
 
 namespace FeedCenter
 {
@@ -115,6 +116,9 @@ namespace FeedCenter
         {
             try
             {
+                // Add extra security protocols
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
                 // Create the web request
                 var oRequest = WebRequest.Create(new Uri(Source));
 
@@ -138,7 +142,7 @@ namespace FeedCenter
                         webRequest.Credentials = new NetworkCredential(Username, Password, Domain);
 
                     // Set a user agent string
-                    webRequest.UserAgent = "FeedCenter 1.0 ALPHA";
+                    webRequest.UserAgent = "FeedCenter " + UpdateCheck.LocalVersion;
                 }
 
                 // Set the default encoding
