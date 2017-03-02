@@ -32,7 +32,8 @@ namespace FeedCenter
                     // Look for all RSS or atom links in the document
                     var rssLinks = htmlDocument.DocumentNode.Descendants("link")
                         .Where(n => n.Attributes["type"] != null && (n.Attributes["type"].Value == "application/rss+xml" || n.Attributes["type"].Value == "application/atom+xml"))
-                        .Select(n => new Tuple<string, string>(UrlHelper.GetAbsoluteUrlString(feed.Source, n.Attributes["href"].Value), WebUtility.HtmlDecode(n.Attributes["title"]?.Value ?? string.Empty)))
+                        .Select(n => new Tuple<string, string>(UrlHelper.GetAbsoluteUrlString(feed.Source, n.Attributes["href"].Value), WebUtility.HtmlDecode(n.Attributes["title"]?.Value ?? feedUrl)))
+                        .Distinct()
                         .ToList();
 
                     // If there was only one link found then switch to feed to it
