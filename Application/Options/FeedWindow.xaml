@@ -145,7 +145,7 @@
                            Margin="6"
                            Padding="20,0,0,0" />
                     <TextBox Name="AuthenticationUserNameTextBox"
-                             Text="{Binding Path=UserName, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
+                             Text="{Binding Path=Username, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
                              Grid.Column="1"
                              IsEnabled="{Binding ElementName=RequiresAuthenticationCheckBox, Path=IsChecked}"
                              Grid.Row="1"
@@ -158,12 +158,11 @@
                            Grid.Column="0"
                            Margin="6"
                            Padding="20,0,0,0" />
-                    <TextBox Name="AuthenticationPasswordTextBox"
-                             Text="{Binding Path=Password, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
-                             Grid.Column="1"
-                             IsEnabled="{Binding ElementName=RequiresAuthenticationCheckBox, Path=IsChecked}"
-                             Grid.Row="2"
-                             Margin="6" />
+                    <PasswordBox Name="AuthenticationPasswordTextBox"
+                                 Grid.Column="1"
+                                 IsEnabled="{Binding ElementName=RequiresAuthenticationCheckBox, Path=IsChecked}"
+                                 Grid.Row="2"
+                                 Margin="6" />
                 </Grid>
             </TabItem>
         </TabControl>

@@ -37,6 +37,8 @@ namespace FeedCenter.Options
 
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
+            var feed = (Feed) DataContext;
+
             // Get a list of all framework elements and explicit binding expressions
             var bindingExpressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
 
@@ -75,6 +77,9 @@ namespace FeedCenter.Options
 
                 return;
             }
+
+            if (RequiresAuthenticationCheckBox.IsChecked.GetValueOrDefault(false))
+                feed.Password = AuthenticationPasswordTextBox.Password;
 
             // Dialog is good
             DialogResult = true;
