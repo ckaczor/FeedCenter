@@ -346,11 +346,11 @@
   <data name="registerAsDefaultFeedReaderCheckBox" xml:space="preserve">
     <value>_Register as default feed reader</value>
   </data>
-  <data name="browserLabel" xml:space="preserve">
-    <value>_Browser:</value>
+  <data name="defaultBrowserLabel" xml:space="preserve">
+    <value>Default _browser:</value>
   </data>
   <data name="DefaultBrowserCaption" xml:space="preserve">
-    <value>Default</value>
+    <value>&lt; Windows Default &gt;</value>
   </data>
   <data name="feedCategoryLabel" xml:space="preserve">
     <value>_Category:</value>
@@ -522,5 +522,11 @@
   </data>
   <data name="CategoryFilterHeader" xml:space="preserve">
     <value>Category: {0}</value>
+  </data>
+  <data name="DefaultUserAgentCaption" xml:space="preserve">
+    <value>Feed Center</value>
+  </data>
+  <data name="defaultUserAgentLabel" xml:space="preserve">
+    <value>Default _user agent:</value>
   </data>
 </root>

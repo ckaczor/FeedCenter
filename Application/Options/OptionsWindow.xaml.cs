@@ -36,7 +36,6 @@ namespace FeedCenter.Options
             _optionPanels.Add(new GeneralOptionsPanel());
             _optionPanels.Add(new DisplayOptionsPanel());
             _optionPanels.Add(new FeedsOptionsPanel());
-            _optionPanels.Add(new ReadingOptionsPanel());
             _optionPanels.Add(new UpdateOptionsPanel());
             _optionPanels.Add(new AboutOptionsPanel());
         }

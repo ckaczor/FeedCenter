@@ -142,7 +142,10 @@ namespace FeedCenter
                         webRequest.Credentials = new NetworkCredential(Username, Password, Domain);
 
                     // Set a user agent string
-                    webRequest.UserAgent = "FeedCenter " + UpdateCheck.LocalVersion;
+                    if (string.IsNullOrWhiteSpace(Properties.Settings.Default.DefaultUserAgent))
+                        webRequest.UserAgent = "FeedCenter/" + UpdateCheck.LocalVersion;
+                    else
+                        webRequest.UserAgent = Properties.Settings.Default.DefaultUserAgent;
                 }
 
                 // Set the default encoding

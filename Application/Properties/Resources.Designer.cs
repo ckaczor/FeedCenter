@@ -170,15 +170,6 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Browser:.
-        /// </summary>
-        public static string browserLabel {
-            get {
-                return ResourceManager.GetString("browserLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit Multiple Feeds.
         /// </summary>
         public static string BulkFeedWindow {
@@ -470,11 +461,38 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default.
+        ///   Looks up a localized string similar to &lt; Windows Default &gt;.
         /// </summary>
         public static string DefaultBrowserCaption {
             get {
                 return ResourceManager.GetString("DefaultBrowserCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default _browser:.
+        /// </summary>
+        public static string defaultBrowserLabel {
+            get {
+                return ResourceManager.GetString("defaultBrowserLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feed Center.
+        /// </summary>
+        public static string DefaultUserAgentCaption {
+            get {
+                return ResourceManager.GetString("DefaultUserAgentCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default _user agent:.
+        /// </summary>
+        public static string defaultUserAgentLabel {
+            get {
+                return ResourceManager.GetString("defaultUserAgentLabel", resourceCulture);
             }
         }
         
