@@ -1,4 +1,5 @@
-﻿using Common.Debug;
+﻿using System;
+using Common.Debug;
 using System.Xml;
 
 namespace FeedCenter.FeedParsers
@@ -113,8 +114,9 @@ namespace FeedCenter.FeedParsers
 
                             if (link.StartsWith("/"))
                             {
-                                link = Feed.Link + link;
-                                link = link.Replace("//", "/");
+                                var uri = new Uri(Feed.Link);
+
+                                link = uri.Scheme + "://" + uri.Host + link;
                             }
 
                             feedItem.Link = link;
