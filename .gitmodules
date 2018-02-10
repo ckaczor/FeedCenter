@@ -1,0 +1,6 @@
+[submodule "Common.Wpf"]
+	path = Common.Wpf
+	url = https://github.com/ckaczor/Common.Wpf.git
+[submodule "Common"]
+	path = Common
+	url = https://github.com/ckaczor/Common.git
