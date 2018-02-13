@@ -160,8 +160,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NameBasedGrid, Version=0.10.1.0, Culture=neutral, PublicKeyToken=a434c4ad23d0fd33, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Public\namebasedgrid\bin\Debug\NameBasedGrid.dll</HintPath>
+      <HintPath>..\packages\NameBasedGrid.0.10.1\lib\net40\NameBasedGrid.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
