@@ -29,6 +29,10 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixFileVersionExtension">
+      <HintPath>..\packages\WixFileVersionExtension.1.0.0.3\lib\WixFileVersionExtension.dll</HintPath>
+      <Name>WixFileVersionExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixUtilExtension">
       <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
       <Name>WixUtilExtension</Name>
@@ -36,10 +40,6 @@
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
-    </WixExtension>
-    <WixExtension Include="WixFileVersionExtension">
-      <HintPath>..\..\WixFileVersionExtension\bin\Release\WixFileVersionExtension.dll</HintPath>
-      <Name>WixFileVersionExtension</Name>
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +75,9 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
