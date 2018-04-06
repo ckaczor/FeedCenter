@@ -62,11 +62,8 @@
     <Setting Name="MultipleLineDisplay" Provider="Common.Settings.GenericSettingsProvider" Type="FeedCenter.Options.MultipleLineDisplay" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
-    <Setting Name="VersionFile" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">FeedCenterSetup.xml</Value>
-    </Setting>
     <Setting Name="VersionLocation" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://server/FeedCenter/</Value>
+      <Value Profile="(Default)">https://api.github.com/repos/ckaczor/FeedCenter/releases/latest</Value>
     </Setting>
     <Setting Name="LastCategoryID" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

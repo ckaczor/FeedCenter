@@ -9,8 +9,8 @@ namespace FeedCenter
         private static void InitializeUpdate()
         {
             UpdateCheck.ApplicationName = Properties.Resources.ApplicationDisplayName;
+            UpdateCheck.UpdateServerType = ServerType.GitHub;
             UpdateCheck.UpdateServer = Settings.Default.VersionLocation;
-            UpdateCheck.UpdateFile = Settings.Default.VersionFile;
             UpdateCheck.ApplicationShutdown = ApplicationShutdown;
             UpdateCheck.ApplicationCurrentMessage = ApplicationCurrentMessage;
             UpdateCheck.ApplicationUpdateMessage = ApplicationUpdateMessage;
