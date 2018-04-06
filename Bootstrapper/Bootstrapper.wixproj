@@ -61,9 +61,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PostBuildEvent>rem D:\Code\Personal\CreateInstallDescriptor\bin\Debug\CreateInstallDescriptor.exe !(TargetPath) $(TargetDir)\$(TargetName).xml
-rem copy $(TargetDir)\$(TargetName).xml \\server\d\FeedCenter
-rem copy $(TargetDir)\$(TargetName).exe \\server\d\FeedCenter</PostBuildEvent>
+    <PostBuildEvent />
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
