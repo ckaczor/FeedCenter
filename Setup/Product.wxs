@@ -176,6 +176,8 @@
         <File Source="$(var.FeedCenter.TargetDir)\NameBasedGrid.dll" />
 
         <File Source="$(var.FeedCenter.TargetDir)\HtmlAgilityPack.dll" />
+
+        <File Source="$(var.FeedCenter.TargetDir)\Newtonsoft.Json.dll" />
         
         <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.dll" />
         <File Source="$(var.FeedCenter.TargetDir)\EntityFramework.SqlServer.dll" />
