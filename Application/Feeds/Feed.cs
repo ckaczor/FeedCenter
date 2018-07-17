@@ -1,7 +1,4 @@
-﻿using Common.Debug;
-using Common.Xml;
-using FeedCenter.FeedParsers;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,7 +6,12 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Common.Debug;
 using Common.Update;
+using Common.Xml;
+using FeedCenter.Data;
+using FeedCenter.FeedParsers;
+using FeedCenter.Properties;
 
 namespace FeedCenter
 {
@@ -55,6 +57,25 @@ namespace FeedCenter
 
     public partial class Feed
     {
+        // ReSharper disable once UnusedMember.Global
+        public string LastReadResultDescription
+        {
+            get
+            {
+                // Cast the last read result to the proper enum
+                var lastReadResult = LastReadResult;
+
+                // Build the name of the resource using the enum name and the value
+                var resourceName = $"{typeof(FeedReadResult).Name}_{lastReadResult}";
+
+                // Try to get the value from the resources
+                var resourceValue = Resources.ResourceManager.GetString(resourceName);
+
+                // Return the value or just the enum value if not found
+                return resourceValue ?? lastReadResult.ToString();
+            }
+        }
+
         public static Feed Create(FeedCenterEntities database)
         {
             return new Feed { ID = Guid.NewGuid(), CategoryID = database.DefaultCategory.ID };
@@ -75,6 +96,7 @@ namespace FeedCenter
                 case FeedReadResult.NotDue:
                 case FeedReadResult.NotEnabled:
                 case FeedReadResult.NotModified:
+
                     // Ignore
                     break;
 
@@ -86,7 +108,7 @@ namespace FeedCenter
             }
 
             // If the feed was successfully read and we have no last update timestamp - set the last update timestamp to now
-            if (result == FeedReadResult.Success && LastUpdated == Data.Extensions.SqlDateTimeZero.Value)
+            if (result == FeedReadResult.Success && LastUpdated == Extensions.SqlDateTimeZero.Value)
                 LastUpdated = DateTime.Now;
 
             Tracer.DecrementIndentLevel();
@@ -120,13 +142,10 @@ namespace FeedCenter
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
                 // Create the web request
-                var oRequest = WebRequest.Create(new Uri(Source));
-
-                // Attempt to cast to a web request
-                var webRequest = oRequest as HttpWebRequest;
+                var request = WebRequest.Create(new Uri(Source));
 
                 // If this is an http request set some special properties
-                if (webRequest != null)
+                if (request is HttpWebRequest webRequest)
                 {
                     // Make sure to use HTTP version 1.1
                     webRequest.ProtocolVersion = HttpVersion.Version11;
@@ -137,50 +156,56 @@ namespace FeedCenter
                     // Set a timeout
                     webRequest.Timeout = 10000;
 
+                    // Make sure the service point closes the connection right away
+                    webRequest.ServicePoint.ConnectionLeaseTimeout = 0;
+
                     // If we need to authenticate then set the credentials
                     if (Authenticate)
                         webRequest.Credentials = new NetworkCredential(Username, Password, Domain);
 
                     // Set a user agent string
-                    if (string.IsNullOrWhiteSpace(Properties.Settings.Default.DefaultUserAgent))
+                    if (string.IsNullOrWhiteSpace(Settings.Default.DefaultUserAgent))
                         webRequest.UserAgent = "FeedCenter/" + UpdateCheck.LocalVersion;
                     else
-                        webRequest.UserAgent = Properties.Settings.Default.DefaultUserAgent;
+                        webRequest.UserAgent = Settings.Default.DefaultUserAgent;
                 }
 
                 // Set the default encoding
                 var encoding = Encoding.UTF8;
 
                 // Attempt to get the response
-                var response = (HttpWebResponse) oRequest.GetResponse();
+                using (var response = (HttpWebResponse) request.GetResponse())
+                {
+                    // If the response included an encoding then change the encoding
+                    if (response.ContentEncoding.Length > 0)
+                        encoding = Encoding.GetEncoding(response.ContentEncoding);
 
-                // If the response included an encoding then change the encoding
-                if (response.ContentEncoding.Length > 0)
-                    encoding = Encoding.GetEncoding(response.ContentEncoding);
+                    // Get the response stream
+                    using (var responseStream = response.GetResponseStream())
+                    {
+                        if (responseStream == null)
+                            return Tuple.Create(FeedReadResult.NoResponse, string.Empty);
 
-                // Get the response stream
-                var responseStream = response.GetResponseStream();
+                        // Create the text reader
+                        using (StreamReader textReader = new XmlSanitizingStream(responseStream, encoding))
+                        {
+                            // Get the feed text
+                            var feedText = textReader.ReadToEnd();
 
-                if (responseStream == null)
-                    return Tuple.Create(FeedReadResult.NoResponse, string.Empty);
+                            // Get rid of any leading and trailing whitespace
+                            feedText = feedText.Trim();
 
-                // Create the text reader
-                StreamReader textReader = new XmlSanitizingStream(responseStream, encoding);
+                            // Clean up common invalid XML characters
+                            feedText = feedText.Replace("&nbsp;", "&#160;");
 
-                // Get the feed text
-                var feedText = textReader.ReadToEnd();
+                            // Find ampersands that aren't properly escaped and replace them with escaped versions
+                            var r = new Regex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)");
+                            feedText = r.Replace(feedText, "&amp;");
 
-                // Get rid of any leading and trailing whitespace
-                feedText = feedText.Trim();
-
-                // Clean up common invalid XML characters
-                feedText = feedText.Replace("&nbsp;", "&#160;");
-
-                // Find ampersands that aren't properly escaped and replace them with escaped versions
-                var r = new Regex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)");
-                feedText = r.Replace(feedText, "&amp;");
-
-                return Tuple.Create(FeedReadResult.Success, feedText);
+                            return Tuple.Create(FeedReadResult.Success, feedText);
+                        }
+                    }
+                }
             }
             catch (IOException ioException)
             {
@@ -192,23 +217,25 @@ namespace FeedCenter
             {
                 var result = FeedReadResult.UnknownError;
 
-                var errorResponse = webException.Response as HttpWebResponse;
-
-                if (errorResponse != null)
+                if (webException.Response is HttpWebResponse errorResponse)
                 {
                     switch (errorResponse.StatusCode)
                     {
                         case HttpStatusCode.InternalServerError:
+
                             return Tuple.Create(FeedReadResult.ServerError, string.Empty);
 
                         case HttpStatusCode.NotModified:
+
                             return Tuple.Create(FeedReadResult.NotModified, string.Empty);
 
                         case HttpStatusCode.NotFound:
+
                             return Tuple.Create(FeedReadResult.NotFound, string.Empty);
 
                         case HttpStatusCode.Unauthorized:
                         case HttpStatusCode.Forbidden:
+
                             return Tuple.Create(FeedReadResult.Unauthorized, string.Empty);
                     }
                 }
@@ -218,10 +245,12 @@ namespace FeedCenter
                     case WebExceptionStatus.ConnectFailure:
                     case WebExceptionStatus.NameResolutionFailure:
                         result = FeedReadResult.ConnectionFailed;
+
                         break;
 
                     case WebExceptionStatus.Timeout:
                         result = FeedReadResult.Timeout;
+
                         break;
                 }
 
@@ -321,7 +350,7 @@ namespace FeedCenter
 
         private void ProcessActions()
         {
-            var sortedActions = from action in Actions orderby action.Sequence ascending select action;
+            var sortedActions = from action in Actions orderby action.Sequence select action;
 
             foreach (var feedAction in sortedActions)
             {
@@ -329,30 +358,12 @@ namespace FeedCenter
                 {
                     case 0:
                         Title = Title.Replace(feedAction.Search, feedAction.Replace);
+
                         break;
                 }
             }
         }
 
         #endregion
-
-        // ReSharper disable once UnusedMember.Global
-        public string LastReadResultDescription
-        {
-            get
-            {
-                // Cast the last read result to the proper enum
-                var lastReadResult = LastReadResult;
-
-                // Build the name of the resource using the enum name and the value
-                var resourceName = $"{typeof(FeedReadResult).Name}_{lastReadResult}";
-
-                // Try to get the value from the resources
-                var resourceValue = Properties.Resources.ResourceManager.GetString(resourceName);
-
-                // Return the value or just the enum value if not found
-                return resourceValue ?? lastReadResult.ToString();
-            }
-        }
     }
 }
