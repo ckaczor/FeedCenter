@@ -44,13 +44,13 @@ namespace FeedCenter.FeedParsers
                             if (node.Attributes == null)
                                 break;
 
-                            XmlNode relNode = node.Attributes["rel"];
+                            XmlNode relNode = GetAttribute(node, "rel");
 
                             if (relNode != null)
                                 rel = relNode.InnerText;
 
                             if (string.IsNullOrEmpty(rel) || rel == "alternate")
-                                Feed.Link = node.Attributes["href"].InnerText.Trim();
+                                Feed.Link = GetAttribute(node, "href").InnerText.Trim();
 
                             break;
 
@@ -103,14 +103,14 @@ namespace FeedCenter.FeedParsers
                         if (childNode.Attributes == null)
                             break;
 
-                        XmlNode relNode = childNode.Attributes["rel"];
+                        XmlNode relNode = GetAttribute(childNode, "rel");
 
                         if (relNode != null)
                             rel = relNode.InnerText.Trim();
 
                         if (string.IsNullOrEmpty(rel) || rel == "alternate")
                         {
-                            var link = childNode.Attributes["href"].InnerText;
+                            var link = GetAttribute(childNode, "href").InnerText;
 
                             if (link.StartsWith("/"))
                             {
@@ -130,6 +130,14 @@ namespace FeedCenter.FeedParsers
                 feedItem.Guid = feedItem.Link;
 
             return feedItem;
+        }
+
+        private static XmlAttribute GetAttribute(XmlNode node, string attributeName)
+        {
+            if (node?.Attributes == null)
+                return null;
+
+            return node.Attributes[attributeName, node.NamespaceURI] ?? node.Attributes[attributeName];
         }
     }
 }
