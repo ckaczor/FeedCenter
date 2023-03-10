@@ -90,10 +90,7 @@ namespace FeedCenter
             SaveWindowSettings();
 
             // Save settings
-            Settings.Default.Save();
-
-            // Save options
-            _database.SaveChanges();
+            _database.SaveChanges(() => Settings.Default.Save());
 
             // Get rid of the notification icon
             NotificationIcon.Dispose();
@@ -102,16 +99,14 @@ namespace FeedCenter
         private DelayedMethod _windowStateDelay;
         private void HandleWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (_windowStateDelay == null)
-                _windowStateDelay = new DelayedMethod(500, UpdateWindowSettings);
+            _windowStateDelay ??= new DelayedMethod(500, UpdateWindowSettings);
 
             _windowStateDelay.Reset();
         }
 
         private void HandleWindowLocationChanged(object sender, EventArgs e)
         {
-            if (_windowStateDelay == null)
-                _windowStateDelay = new DelayedMethod(500, UpdateWindowSettings);
+            _windowStateDelay ??= new DelayedMethod(500, UpdateWindowSettings);
 
             _windowStateDelay.Reset();
         }

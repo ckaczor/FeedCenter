@@ -28,7 +28,7 @@ namespace FeedCenter
         public static bool OpenLink(string url)
         {
             // Get the browser 
-            Browser browser = FindBrowser(Settings.Default.Browser);
+            var browser = FindBrowser(Settings.Default.Browser);
 
             // Start the browser
             return OpenLink(browser, url);
@@ -47,7 +47,15 @@ namespace FeedCenter
 
                 // Start the browser
                 if (browser == null)
-                    Process.Start(url);
+                {
+                    var ps = new ProcessStartInfo(url)
+                    {
+                        UseShellExecute = true,
+                        Verb = "open"
+                    };
+
+                    Process.Start(ps);
+                }
                 else
                     Process.Start(browser.Command, url);
 

@@ -34,15 +34,14 @@ namespace FeedCenter
             var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
 
             // The feed item has been read and is no longer new
-            feedItem.BeenRead = true;
-            feedItem.New = false;
+            _database.SaveChanges(() =>
+            {
+                feedItem.BeenRead = true;
+                feedItem.New = false;
+            });
 
             // Remove the item from the list
             LinkTextList.Items.Remove(feedItem);
-
-            // Save the changes
-            _database.SaveChanges();
-
         }
 
         private void HandleItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -54,14 +53,14 @@ namespace FeedCenter
             if (BrowserCommon.OpenLink(feedItem.Link))
             {
                 // The feed item has been read and is no longer new
-                feedItem.BeenRead = true;
-                feedItem.New = false;
+                _database.SaveChanges(() =>
+                {
+                    feedItem.BeenRead = true;
+                    feedItem.New = false;
+                });
 
                 // Remove the item from the list
                 LinkTextList.Items.Remove(feedItem);
-
-                // Save the changes
-                _database.SaveChanges();
             }
         }
 
@@ -83,9 +82,8 @@ namespace FeedCenter
                     Tag = feed,
 
                     // Set the current item to bold
-                    FontWeight = feed == _currentFeed ? FontWeights.Bold : FontWeights.Normal
+                    FontWeight = feed.Id == _currentFeed.Id ? FontWeights.Bold : FontWeights.Normal
                 };
-
 
                 // Handle the click
                 menuItem.Click += HandleFeedMenuItemClick;
@@ -113,7 +111,7 @@ namespace FeedCenter
             var feedIndex = 0;
             foreach (var loopFeed in _feedList.OrderBy(loopFeed => loopFeed.Name))
             {
-                if (loopFeed == feed)
+                if (loopFeed.Id == feed.Id)
                 {
                     _feedIndex = feedIndex;
                     break;

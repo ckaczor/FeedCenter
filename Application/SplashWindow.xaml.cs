@@ -9,7 +9,7 @@ using System.Windows.Threading;
 
 namespace FeedCenter
 {
-    public partial class SplashWindow
+    public partial class SplashWindow : IDisposable
     {
         #region Progress step
 
@@ -49,7 +49,7 @@ namespace FeedCenter
             _dispatcher = Dispatcher.CurrentDispatcher;
 
             // Get the version to display
-            string version = UpdateCheck.LocalVersion.ToString();
+            var version = UpdateCheck.LocalVersion.ToString();
 
             // Show the version
             VersionLabel.Content = string.Format(Properties.Resources.Version, version);
@@ -113,10 +113,10 @@ namespace FeedCenter
             Thread.Sleep(100);
 
             // Initialize the skip key
-            string skipKey = string.Empty;
+            var skipKey = string.Empty;
 
             // Loop over all progress steps and execute
-            foreach (ProgressStep progressStep in _progressSteps)
+            foreach (var progressStep in _progressSteps)
             {
                 if (progressStep.Key == skipKey)
                 {
@@ -129,7 +129,7 @@ namespace FeedCenter
                     UpdateProgress(_backgroundWorker, progressStep.Caption);
 
                     // Execute the step and get the result
-                    bool result = progressStep.Callback();
+                    var result = progressStep.Callback();
 
                     // If the step indicated a skip then set the skip key, otherwise clear it
                     skipKey = (result ? string.Empty : progressStep.Key);
@@ -190,12 +190,6 @@ namespace FeedCenter
 
         private static bool CheckDatabase()
         {
-            // Get the data directory
-            string path = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-
-            // Set the path
-            Database.DatabasePath = System.IO.Path.Combine(path, Settings.Default.DatabaseFile);
-
             // If the database exists then we're done
             return !Database.DatabaseExists;
         }
@@ -203,7 +197,7 @@ namespace FeedCenter
         private static bool CreateDatabase()
         {
             // Create the database
-            Database.CreateDatabase();
+            //Database.CreateDatabase();
 
             return true;
         }
@@ -211,7 +205,7 @@ namespace FeedCenter
         private static bool UpdateDatabase()
         {
             // Update the database
-            Database.UpdateDatabase();
+           // Database.UpdateDatabase();
 
             return true;
         }
@@ -219,11 +213,16 @@ namespace FeedCenter
         private static bool MaintainDatabase()
         {
             // Maintain the database
-            Database.MaintainDatabase();
+            //Database.MaintainDatabase();
 
             return true;
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            _backgroundWorker?.Dispose();
+        }
     }
 }

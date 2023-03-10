@@ -3,6 +3,7 @@ using Common.Helpers;
 using Common.IO;
 using Common.Settings;
 using Common.Wpf.Extensions;
+using FeedCenter.Data;
 using FeedCenter.Properties;
 using System;
 using System.Diagnostics;
@@ -48,6 +49,14 @@ namespace FeedCenter
             {
                 // Set the data directory based on debug or not
                 AppDomain.CurrentDomain.SetData("DataDirectory", SystemConfiguration.DataDirectory);
+
+                // Get the data directory
+                var path = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+
+                // Set the path
+                Database.DatabasePath = path;
+                Database.DatabaseFile = System.IO.Path.Combine(path, Settings.Default.DatabaseFile);
+                Database.Load();
 
                 // Get the generic provider
                 var genericProvider = (GenericSettingsProvider) Settings.Default.Providers[typeof(GenericSettingsProvider).Name];

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using FeedCenter.Data;
 
 namespace FeedCenter.Options
 {
@@ -10,7 +11,7 @@ namespace FeedCenter.Options
 
         private readonly List<OptionsPanelBase> _optionPanels = new List<OptionsPanelBase>();
 
-        private readonly FeedCenterEntities _database = new FeedCenterEntities();
+        private readonly FeedCenterEntities _database = Database.Entities;
 
         #endregion
 
@@ -43,7 +44,7 @@ namespace FeedCenter.Options
         private void LoadCategories()
         {
             // Loop over each panel
-            foreach (OptionsPanelBase optionsPanel in _optionPanels)
+            foreach (var optionsPanel in _optionPanels)
             {
                 // Tell the panel to load itself
                 optionsPanel.LoadPanel(_database);
@@ -95,7 +96,7 @@ namespace FeedCenter.Options
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
             // Loop over each panel and ask them to validate
-            foreach (OptionsPanelBase optionsPanel in _optionPanels)
+            foreach (var optionsPanel in _optionPanels)
             {
                 // If validation fails...
                 if (!optionsPanel.ValidatePanel())
@@ -109,14 +110,14 @@ namespace FeedCenter.Options
             }
 
             // Loop over each panel and ask them to save
-            foreach (OptionsPanelBase optionsPanel in _optionPanels)
+            foreach (var optionsPanel in _optionPanels)
             {
                 // Save!
                 optionsPanel.SavePanel();
             }
 
             // Save the actual settings
-            _database.SaveChanges();
+            _database.SaveChanges(() => { });
             Properties.Settings.Default.Save();
 
             DialogResult = true;

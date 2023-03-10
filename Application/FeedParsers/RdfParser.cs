@@ -19,7 +19,7 @@ namespace FeedCenter.FeedParsers
                 document.LoadXml(feedText);
 
                 // Create the namespace manager
-                XmlNamespaceManager namespaceManager = document.GetAllNamespaces();
+                var namespaceManager = document.GetAllNamespaces();
 
                 // Get the root node
                 XmlNode rootNode = document.DocumentElement;
@@ -29,7 +29,7 @@ namespace FeedCenter.FeedParsers
                     return FeedReadResult.UnknownError;
 
                 // Get the channel node
-                XmlNode channelNode = rootNode.SelectSingleNode("default:channel", namespaceManager);
+                var channelNode = rootNode.SelectSingleNode("default:channel", namespaceManager);
 
                 if (channelNode == null)
                     return FeedReadResult.InvalidXml;
@@ -55,7 +55,7 @@ namespace FeedCenter.FeedParsers
                 }
 
                 // Initialize the sequence number for items
-                int sequence = 0;
+                var sequence = 0;
 
                 // Loop over all nodes in the channel node
                 foreach (XmlNode node in rootNode.ChildNodes)
@@ -82,7 +82,7 @@ namespace FeedCenter.FeedParsers
         protected override FeedItem ParseFeedItem(XmlNode node)
         {
             // Create a new feed item
-            FeedItem feedItem = FeedItem.Create();
+            var feedItem = FeedItem.Create();
 
             // Loop over all nodes in the feed node
             foreach (XmlNode childNode in node.ChildNodes)

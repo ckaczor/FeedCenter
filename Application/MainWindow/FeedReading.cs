@@ -21,7 +21,7 @@ namespace FeedCenter
 
         private void SetProgressMode(bool value, int feedCount)
         {
-            // Reset the progress bar if we need it
+            // Refresh the progress bar if we need it
             if (value)
             {
                 FeedReadProgress.Value = 0;
@@ -65,7 +65,7 @@ namespace FeedCenter
                 return;
 
             // Switch to progress mode
-            SetProgressMode(true, _database.Feeds.Count());
+            SetProgressMode(true, _database.Feeds.Count);
 
             // Create the input class
             var workerInput = new FeedReadWorkerInput { ForceRead = forceRead, Feed = null };
@@ -82,7 +82,7 @@ namespace FeedCenter
 
         private void HandleFeedReadWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // Reset the database to current settings
+            // Refresh the database to current settings
             ResetDatabase();
 
             // Save settings
@@ -123,10 +123,10 @@ namespace FeedCenter
             var database = new FeedCenterEntities();
 
             // Get the worker
-            var worker = (BackgroundWorker) sender;
+            var worker = (BackgroundWorker)sender;
 
             // Get the input information
-            var workerInput = (FeedReadWorkerInput) e.Argument;
+            var workerInput = (FeedReadWorkerInput)e.Argument ?? new FeedReadWorkerInput { Feed = null, ForceRead = false };
 
             // Setup for progress
             var currentProgress = 0;
@@ -136,7 +136,7 @@ namespace FeedCenter
 
             // If we have a single feed then add it to the list - otherwise add them all
             if (workerInput.Feed != null)
-                feedsToRead.Add(database.Feeds.First(feed => feed.ID == workerInput.Feed.ID));
+                feedsToRead.Add(database.Feeds.First(feed => feed.Id == workerInput.Feed.Id));
             else
                 feedsToRead.AddRange(database.Feeds);
 
@@ -144,7 +144,7 @@ namespace FeedCenter
             foreach (var feed in feedsToRead)
             {
                 // Read the feed
-                feed.Read(database, workerInput.ForceRead);
+                database.SaveChanges(() => feed.Read(database, workerInput.ForceRead));
 
                 // Increment progress
                 currentProgress += 1;
@@ -152,9 +152,6 @@ namespace FeedCenter
                 // Report progress
                 worker.ReportProgress(currentProgress);
             }
-
-            // Save the changes
-            database.SaveChanges();
 
             // Increment progress
             currentProgress += 1;
@@ -166,7 +163,7 @@ namespace FeedCenter
             if (DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval)
             {
                 // Get the update information
-                UpdateCheck.CheckForUpdate();
+                UpdateCheck.CheckForUpdate().Wait();
 
                 // Update the last check time
                 Settings.Default.LastVersionCheck = DateTime.Now;

@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Xml;
 
 namespace FeedCenter.Options
@@ -28,7 +27,7 @@ namespace FeedCenter.Options
         {
             base.LoadPanel(database);
 
-            var collectionViewSource = new CollectionViewSource { Source = Database.AllCategories };
+            var collectionViewSource = new CollectionViewSource { Source = Database.Categories };
             collectionViewSource.SortDescriptions.Add(new SortDescription("SortKey", ListSortDirection.Ascending));
             collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
@@ -304,7 +303,7 @@ namespace FeedCenter.Options
 
             if (result.HasValue && result.Value)
             {
-                Database.Categories.Add(category);
+                Database.SaveChanges(() => Database.Categories.Add(category));
 
                 CategoryListBox.SelectedItem = category;
 
@@ -330,7 +329,7 @@ namespace FeedCenter.Options
 
             var category = (Category) CategoryListBox.SelectedItem;
 
-            category.Feeds.ToList().ForEach(feed => feed.Category = defaultCategory);
+            category.Feeds?.ToList().ForEach(feed => feed.Category = defaultCategory);
 
             var index = CategoryListBox.SelectedIndex;
 
@@ -339,7 +338,7 @@ namespace FeedCenter.Options
             else
                 CategoryListBox.SelectedIndex = index + 1;
 
-            Database.Categories.Remove(category);
+            Database.SaveChanges(() => Database.Categories.Remove(category));
 
             SetCategoryButtonStates();
         }
@@ -371,7 +370,7 @@ namespace FeedCenter.Options
         {
             if (_collectionViewSource == null)
             {
-                _collectionViewSource = new CollectionViewSource { Source = Database.AllFeeds };
+                _collectionViewSource = new CollectionViewSource { Source = Database.Feeds };
                 _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
                 _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
 
@@ -393,7 +392,7 @@ namespace FeedCenter.Options
 
             var feed = (Feed) e.Item;
 
-            e.Accepted = (feed.Category.ID == selectedCategory.ID);
+            e.Accepted = (feed.Category.Id == selectedCategory.Id);
         }
 
         private void HandleTextBlockDrop(object sender, DragEventArgs e)

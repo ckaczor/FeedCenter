@@ -6,7 +6,7 @@ using FeedCenter.Properties;
 
 namespace FeedCenter
 {
-    public partial class MainWindow
+    public partial class MainWindow : IDisposable
     {
         private void DisplayCategory()
         {
@@ -44,7 +44,7 @@ namespace FeedCenter
                     Tag = category,
 
                     // Set the current item to bold
-                    FontWeight = category.ID == _currentCategory?.ID ? FontWeights.Bold : FontWeights.Normal
+                    FontWeight = category.Id == _currentCategory?.Id ? FontWeights.Bold : FontWeights.Normal
                 };
 
                 // Handle the click
@@ -70,7 +70,7 @@ namespace FeedCenter
             var category = (Category) menuItem.Tag;
 
             // If the category changed then reset the current feed to the first in the category
-            if (_currentCategory?.ID != category?.ID)
+            if (_currentCategory?.Id != category?.Id)
             {
                 _currentFeed = category == null ? _database.Feeds.FirstOrDefault() : category.Feeds.FirstOrDefault();
             }
@@ -79,9 +79,9 @@ namespace FeedCenter
             _currentCategory = category;
 
             // Get the current feed list to match the category
-            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.ID == _currentCategory.ID);
+            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
 
-            // Reset the feed index
+            // Refresh the feed index
             _feedIndex = -1;
 
             // Get the first feed
@@ -94,7 +94,14 @@ namespace FeedCenter
             DisplayCategory();
             DisplayFeed();
 
-            Settings.Default.LastCategoryID = _currentCategory?.ID.ToString() ?? string.Empty;
+            Settings.Default.LastCategoryID = _currentCategory?.Id.ToString() ?? string.Empty;
+        }
+
+        public void Dispose()
+        {
+            _mainTimer?.Dispose();
+            _feedReadWorker?.Dispose();
+            _commandLineListener?.Dispose();
         }
     }
 }

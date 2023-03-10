@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using FeedCenter.Data;
 
 namespace FeedCenter
 {
@@ -18,10 +19,10 @@ namespace FeedCenter
 
         public bool? Display(Window owner)
         {
-            _database = new FeedCenterEntities();
+            _database = Database.Entities;
 
             // Create a view and sort it by name
-            _collectionViewSource = new CollectionViewSource { Source = _database.AllFeeds };
+            _collectionViewSource = new CollectionViewSource { Source = _database.Feeds };
             _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
             _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
@@ -98,7 +99,7 @@ namespace FeedCenter
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
             // Save the actual settings
-            _database.SaveChanges();
+            _database.SaveChanges(() => { });
 
             DialogResult = true;
 

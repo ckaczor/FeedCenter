@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Windows;
 
 [assembly: AssemblyTitle("Feed Center")]
@@ -10,6 +11,8 @@ using System.Windows;
 [assembly: AssemblyCopyright("Copyright © Chris Kaczor 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
+[assembly: SupportedOSPlatform("windows")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug build")]

@@ -22,7 +22,7 @@ namespace FeedCenter.Options
         {
             _checkedListBoxItems = new List<CheckedListItem<Feed>>();
 
-            foreach (var feed in database.AllFeeds)
+            foreach (var feed in database.Feeds)
                 _checkedListBoxItems.Add(new CheckedListItem<Feed> { Item = feed });
 
             _collectionViewSource = new CollectionViewSource { Source = _checkedListBoxItems };

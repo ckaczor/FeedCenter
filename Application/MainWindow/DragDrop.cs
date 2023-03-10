@@ -35,13 +35,16 @@ namespace FeedCenter
             // Get the data as a string
             var data = (string) e.Data.GetData(DataFormats.Text);
 
+            if (string.IsNullOrEmpty(data))
+                return;
+
             // Check to see if the data starts with any known Chrome extension
-            var chromeExtension = _chromeExtensions.FirstOrDefault(c => data.StartsWith(c));
+            var chromeExtension = _chromeExtensions.FirstOrDefault(data.StartsWith);
 
             // Remove the Chrome extension URL and decode the URL
             if (chromeExtension != null)
             {
-                data = data.Substring(chromeExtension.Length);
+                data = data[chromeExtension.Length..];
                 data = WebUtility.UrlDecode(data);
             }
 

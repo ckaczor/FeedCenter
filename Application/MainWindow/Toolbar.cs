@@ -42,7 +42,7 @@ namespace FeedCenter
                 if (BrowserCommon.OpenLink(browser, feedItem.Link))
                 {
                     // Mark the feed as read
-                    feedItem.BeenRead = true;
+                    _database.SaveChanges(() => feedItem.BeenRead = true);
 
                     // Remove the item
                     LinkTextList.Items.Remove(feedItem);
@@ -54,9 +54,6 @@ namespace FeedCenter
                 // Switch to the normal sleep interval
                 sleepInterval = settings.OpenAllSleepInterval;
             }
-
-            // Save the changes
-            _database.SaveChanges();
         }
 
         private void HandleOptionsToolbarButtonClick(object sender, RoutedEventArgs e)
@@ -70,7 +67,7 @@ namespace FeedCenter
             // If okay was selected
             if (result.HasValue && result.Value)
             {
-                // Reset the database to current settings
+                // Refresh the database to current settings
                 ResetDatabase();
 
                 // Re-initialize the feed display
@@ -94,7 +91,7 @@ namespace FeedCenter
             // If okay was selected
             if (result.GetValueOrDefault())
             {
-                // Reset the database to current settings
+                // Refresh the database to current settings
                 ResetDatabase();
 
                 // Re-initialize the feed display
@@ -156,7 +153,7 @@ namespace FeedCenter
             if (result.HasValue && result.Value)
             {
                 // Save
-                _database.SaveChanges();
+                _database.SaveChanges(() => { });
 
                 // Update feed
                 DisplayFeed();
@@ -175,15 +172,8 @@ namespace FeedCenter
             // Move to the next feed
             NextFeed();
 
-            // Delete all items
-            foreach (var item in feedToDelete.Items.ToList())
-                _database.FeedItems.Remove(item);
-
             // Delete the feed
-            _database.Feeds.Remove(feedToDelete);
-
-            // Save
-            _database.SaveChanges();
+            _database.SaveChanges(() => _database.Feeds.Remove(feedToDelete));
         }
 
         private void OpenAllFeedItemsOnSinglePage()

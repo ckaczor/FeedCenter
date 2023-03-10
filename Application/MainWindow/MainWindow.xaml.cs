@@ -2,8 +2,10 @@
 using Common.Helpers;
 using Common.IO;
 using Common.Update;
+using FeedCenter.Data;
 using FeedCenter.Properties;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -18,7 +20,7 @@ namespace FeedCenter
         private int _feedIndex;
 
         private Category _currentCategory;
-        private IQueryable<Feed> _feedList;
+        private IEnumerable<Feed> _feedList;
         private Feed _currentFeed;
 
         public MainWindow()
@@ -26,7 +28,7 @@ namespace FeedCenter
             InitializeComponent();
         }
 
-        public void Initialize()
+        public async void Initialize()
         {
             // Setup the update handler
             InitializeUpdate();
@@ -48,7 +50,7 @@ namespace FeedCenter
             _feedReadWorker.RunWorkerCompleted += HandleFeedReadWorkerCompleted;
 
             // Setup the database
-            _database = new FeedCenterEntities();
+            _database = Database.Entities;
 
             // Initialize the command line listener
             _commandLineListener = new InterprocessMessageListener(Properties.Resources.ApplicationName);
@@ -65,7 +67,7 @@ namespace FeedCenter
 
             // Check for update
             if (Settings.Default.CheckVersionAtStartup)
-                UpdateCheck.CheckForUpdate();
+                await UpdateCheck.CheckForUpdate();
 
             // Show the link if updates are available
             if (UpdateCheck.UpdateAvailable)
@@ -136,18 +138,18 @@ namespace FeedCenter
         private void InitializeDisplay()
         {
             // Get the last category (defaulting to none)
-            _currentCategory = _database.Categories.FirstOrDefault(category => category.ID.ToString() == Settings.Default.LastCategoryID);
+            _currentCategory = _database.Categories.FirstOrDefault(category => category.Id.ToString() == Settings.Default.LastCategoryID);
             DisplayCategory();
 
             // Get the current feed list to match the category
-            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.ID == _currentCategory.ID);
+            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
 
             UpdateToolbarButtonState();
 
             // Clear the link list
             LinkTextList.Items.Clear();
 
-            // Reset the feed index
+            // Refresh the feed index
             _feedIndex = -1;
 
             // Start the timer
@@ -341,11 +343,11 @@ namespace FeedCenter
         private void MarkAllItemsAsRead()
         {
             // Loop over all items and mark them as read
-            foreach (FeedItem feedItem in LinkTextList.Items)
-                feedItem.BeenRead = true;
-
-            // Save the changes
-            _database.SaveChanges();
+            _database.SaveChanges(() =>
+            {
+                foreach (FeedItem feedItem in LinkTextList.Items)
+                    feedItem.BeenRead = true;
+            });
 
             // Clear the list
             LinkTextList.Items.Clear();
@@ -358,12 +360,12 @@ namespace FeedCenter
         private void ResetDatabase()
         {
             // Get the ID of the current feed
-            var currentId = _currentFeed?.ID ?? Guid.Empty;
+            var currentId = _currentFeed?.Id ?? Guid.Empty;
 
             // Create a new database object
-            _database = new FeedCenterEntities();
+            _database.Refresh();
 
-            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.ID == _currentCategory.ID);
+            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
 
             UpdateToolbarButtonState();
 
@@ -371,7 +373,7 @@ namespace FeedCenter
             var feedList = _feedList.OrderBy(f => f.Name).ToList();
 
             // First try to find the current feed by ID to see if it is still there
-            var newIndex = feedList.FindIndex(f => f.ID == currentId);
+            var newIndex = feedList.FindIndex(f => f.Id == currentId);
 
             if (newIndex == -1)
             {

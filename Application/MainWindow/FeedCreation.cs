@@ -64,10 +64,7 @@ namespace FeedCenter
                 feed.Name = feed.Title;
 
                 // Add the feed to the feed table
-                _database.Feeds.Add(feed);
-
-                // Save the changes
-                _database.SaveChanges();
+                _database.SaveChanges(() => _database.Feeds.Add(feed));
 
                 // Show a tip
                 NotificationIcon.ShowBalloonTip(string.Format(Properties.Resources.FeedAddedNotification, feed.Name), System.Windows.Forms.ToolTipIcon.Info);
@@ -77,7 +74,7 @@ namespace FeedCenter
             }
             else
             {
-                // Feed read failed - ceate a new feed window
+                // Feed read failed - create a new feed window
                 var feedForm = new FeedWindow();
 
                 var dialogResult = feedForm.Display(_database, feed, this);
@@ -86,10 +83,7 @@ namespace FeedCenter
                 if (dialogResult.HasValue && dialogResult.Value)
                 {
                     // Add the feed to the feed table
-                    _database.Feeds.Add(feed);
-
-                    // Save the changes
-                    _database.SaveChanges();
+                    _database.SaveChanges(() => _database.Feeds.Add(feed));
 
                     // Re-initialize the feed display
                     DisplayFeed();

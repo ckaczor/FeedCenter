@@ -54,7 +54,7 @@ namespace FeedCenter
             // Toggle the lock setting
             Settings.Default.WindowLocked = !Settings.Default.WindowLocked;
 
-            // Reset the menu choice
+            // Refresh the menu choice
             ((ToolStripMenuItem) sender).Checked = Settings.Default.WindowLocked;
         }
 

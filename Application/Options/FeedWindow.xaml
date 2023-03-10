@@ -3,6 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:FeedCenter.Properties"
         xmlns:feedCenter="clr-namespace:FeedCenter"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        d:DataContext="{d:DesignInstance Type=feedCenter:Feed}"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:validation="clr-namespace:Common.Wpf.Validation;assembly=Common.Wpf"
+        mc:Ignorable="d"
         Title="FeedWindow"
         Height="300"
         Width="450"
@@ -33,8 +38,15 @@
                     <TextBox Name="UrlTextBox"
                              Grid.Row="0"
                              Grid.Column="1"
-                             Text="{Binding Path=Source, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
-                             Margin="6" />
+                             Margin="6">
+                        <TextBox.Text>
+                            <Binding Path="Source" UpdateSourceTrigger="Explicit" ValidatesOnExceptions="True">
+                                <Binding.ValidationRules>
+                                    <validation:RequiredValidationRule></validation:RequiredValidationRule>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <Label Content="{x:Static properties:Resources.feedNameLabel}"
                            VerticalContentAlignment="Center"
                            Target="{Binding ElementName=NameTextBox}"
@@ -44,9 +56,16 @@
                            Padding="0" />
                     <TextBox Name="NameTextBox"
                              Grid.Column="1"
-                             Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=true}"
                              Grid.Row="1"
-                             Margin="6" />
+                             Margin="6">
+                        <TextBox.Text>
+                            <Binding Path="Name" UpdateSourceTrigger="Explicit" ValidatesOnExceptions="True">
+                                <Binding.ValidationRules>
+                                    <validation:RequiredValidationRule></validation:RequiredValidationRule>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <Label Content="{x:Static properties:Resources.feedCategoryLabel}"
                            Target="{Binding ElementName=CategoryComboBox}"
                            VerticalContentAlignment="Center"
@@ -58,10 +77,9 @@
                               Name="CategoryComboBox"
                               DisplayMemberPath="Name"
                               SelectedValuePath="ID"
-                              SelectedValue="{Binding Path=Category.ID}"
+                              SelectedValue="{Binding Path=Category.Id}"
                               Grid.Row="2"
                               Margin="6" />
-
                     <CheckBox Grid.ColumnSpan="2"
                               Grid.Column="0"
                               Name="ReadIntervalCheckBox"
@@ -109,7 +127,6 @@
                               Grid.Row="0"
                               Grid.Column="1"
                               Margin="6">
-
                         <ComboBoxItem Content="{x:Static properties:Resources.openAllSingleToolbarButton}"
                                       Tag="{x:Static feedCenter:MultipleOpenAction.SinglePage}" />
                         <ComboBoxItem Content="{x:Static properties:Resources.openAllMultipleToolbarButton}"
@@ -145,11 +162,18 @@
                            Margin="6"
                            Padding="20,0,0,0" />
                     <TextBox Name="AuthenticationUserNameTextBox"
-                             Text="{Binding Path=Username, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}"
                              Grid.Column="1"
                              IsEnabled="{Binding ElementName=RequiresAuthenticationCheckBox, Path=IsChecked}"
                              Grid.Row="1"
-                             Margin="6" />
+                             Margin="6">
+                        <TextBox.Text>
+                            <Binding Path="Username" UpdateSourceTrigger="Explicit" ValidatesOnExceptions="True">
+                                <Binding.ValidationRules>
+                                    <validation:RequiredValidationRule></validation:RequiredValidationRule>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <Label Content="{x:Static properties:Resources.authenticationPasswordLabel}"
                            Target="{Binding ElementName=AuthenticationPasswordTextBox}"
                            VerticalContentAlignment="Center"

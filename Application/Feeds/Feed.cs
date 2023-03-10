@@ -1,17 +1,21 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Common.Debug;
+﻿using Common.Debug;
 using Common.Update;
 using Common.Xml;
 using FeedCenter.Data;
 using FeedCenter.FeedParsers;
 using FeedCenter.Properties;
+using Realms;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FeedCenter
 {
@@ -55,8 +59,57 @@ namespace FeedCenter
 
     #endregion
 
-    public partial class Feed
+    public class Feed : RealmObject
     {
+        [PrimaryKey]
+        [MapTo("ID")]
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Title { get; set; }
+        public string Source { get; set; }
+        public string Link { get; set; }
+        public string Description { get; set; }
+        public DateTimeOffset LastChecked { get; set; }
+        public int CheckInterval { get; set; }
+        public bool Enabled { get; set; }
+        public bool Authenticate { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Domain { get; set; }
+
+        private string LastReadResultRaw { get; set; }
+
+        public FeedReadResult LastReadResult
+        {
+            get => Enum.TryParse(LastReadResultRaw, out FeedReadResult result) ? result : FeedReadResult.Success;
+            set => LastReadResultRaw = value.ToString();
+        }
+
+        public DateTimeOffset LastUpdated { get; set; }
+
+        private string ItemComparisonRaw { get; set; }
+
+        public FeedItemComparison ItemComparison
+        {
+            get => Enum.TryParse(ItemComparisonRaw, out FeedItemComparison result) ? result : FeedItemComparison.Default;
+            set => ItemComparisonRaw = value.ToString();
+        }
+
+        [MapTo("CategoryID")]
+        public Guid CategoryId { get; set; }
+
+        private string MultipleOpenActionRaw { get; set; }
+
+        public MultipleOpenAction MultipleOpenAction
+        {
+            get => Enum.TryParse(MultipleOpenActionRaw, out MultipleOpenAction result) ? result : MultipleOpenAction.IndividualPages;
+            set => MultipleOpenActionRaw = value.ToString();
+        }
+
+        public Category Category { get; set; }
+
+        public IList<FeedItem> Items { get; }
+
         // ReSharper disable once UnusedMember.Global
         public string LastReadResultDescription
         {
@@ -66,7 +119,7 @@ namespace FeedCenter
                 var lastReadResult = LastReadResult;
 
                 // Build the name of the resource using the enum name and the value
-                var resourceName = $"{typeof(FeedReadResult).Name}_{lastReadResult}";
+                var resourceName = $"{nameof(FeedReadResult)}_{lastReadResult}";
 
                 // Try to get the value from the resources
                 var resourceValue = Resources.ResourceManager.GetString(resourceName);
@@ -76,9 +129,11 @@ namespace FeedCenter
             }
         }
 
+        private static HttpClient _httpClient;
+
         public static Feed Create(FeedCenterEntities database)
         {
-            return new Feed { ID = Guid.NewGuid(), CategoryID = database.DefaultCategory.ID };
+            return new Feed { Id = Guid.NewGuid(), CategoryId = database.DefaultCategory.Id };
         }
 
         #region Reading
@@ -109,7 +164,7 @@ namespace FeedCenter
 
             // If the feed was successfully read and we have no last update timestamp - set the last update timestamp to now
             if (result == FeedReadResult.Success && LastUpdated == Extensions.SqlDateTimeZero.Value)
-                LastUpdated = DateTime.Now;
+                LastUpdated = DateTimeOffset.Now;
 
             Tracer.DecrementIndentLevel();
             Tracer.WriteLine("Done reading feed: {0}", result);
@@ -138,74 +193,46 @@ namespace FeedCenter
         {
             try
             {
-                // Add extra security protocols
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-
-                // Create the web request
-                var request = WebRequest.Create(new Uri(Source));
-
-                // If this is an http request set some special properties
-                if (request is HttpWebRequest webRequest)
+                // Create and configure the HTTP client if needed
+                if (_httpClient == null)
                 {
-                    // Make sure to use HTTP version 1.1
-                    webRequest.ProtocolVersion = HttpVersion.Version11;
-
-                    // Set that we'll accept compressed data
-                    webRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-                    // Set a timeout
-                    webRequest.Timeout = 10000;
-
-                    // Make sure the service point closes the connection right away
-                    webRequest.ServicePoint.ConnectionLeaseTimeout = 0;
-
-                    // If we need to authenticate then set the credentials
-                    if (Authenticate)
-                        webRequest.Credentials = new NetworkCredential(Username, Password, Domain);
+                    _httpClient = new HttpClient(new HttpClientHandler
+                    {
+                        // Set that we'll accept compressed data
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                    });
 
                     // Set a user agent string
-                    if (string.IsNullOrWhiteSpace(Settings.Default.DefaultUserAgent))
-                        webRequest.UserAgent = "FeedCenter/" + UpdateCheck.LocalVersion;
-                    else
-                        webRequest.UserAgent = Settings.Default.DefaultUserAgent;
+                    var userAgent = string.IsNullOrWhiteSpace(Settings.Default.DefaultUserAgent) ? "FeedCenter/" + UpdateCheck.LocalVersion : Settings.Default.DefaultUserAgent;
+                    _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+
+                    // Set a timeout
+                    _httpClient.Timeout = TimeSpan.FromSeconds(10);
                 }
 
-                // Set the default encoding
-                var encoding = Encoding.UTF8;
+                // If we need to authenticate then set the credentials
+                _httpClient.DefaultRequestHeaders.Authorization = Authenticate ? new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{Username}:{Password}"))) : null;
 
                 // Attempt to get the response
-                using (var response = (HttpWebResponse) request.GetResponse())
-                {
-                    // If the response included an encoding then change the encoding
-                    if (response.ContentEncoding.Length > 0)
-                        encoding = Encoding.GetEncoding(response.ContentEncoding);
+                var feedStream = _httpClient.GetStreamAsync(Source).Result;
 
-                    // Get the response stream
-                    using (var responseStream = response.GetResponseStream())
-                    {
-                        if (responseStream == null)
-                            return Tuple.Create(FeedReadResult.NoResponse, string.Empty);
+                // Create the text reader
+                using StreamReader textReader = new XmlSanitizingStream(feedStream, Encoding.UTF8);
 
-                        // Create the text reader
-                        using (StreamReader textReader = new XmlSanitizingStream(responseStream, encoding))
-                        {
-                            // Get the feed text
-                            var feedText = textReader.ReadToEnd();
+                // Get the feed text
+                var feedText = textReader.ReadToEnd();
 
-                            // Get rid of any leading and trailing whitespace
-                            feedText = feedText.Trim();
+                // Get rid of any leading and trailing whitespace
+                feedText = feedText.Trim();
 
-                            // Clean up common invalid XML characters
-                            feedText = feedText.Replace("&nbsp;", "&#160;");
+                // Clean up common invalid XML characters
+                feedText = feedText.Replace("&nbsp;", "&#160;");
 
-                            // Find ampersands that aren't properly escaped and replace them with escaped versions
-                            var r = new Regex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)");
-                            feedText = r.Replace(feedText, "&amp;");
+                // Find ampersands that aren't properly escaped and replace them with escaped versions
+                var r = new Regex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)");
+                feedText = r.Replace(feedText, "&amp;");
 
-                            return Tuple.Create(FeedReadResult.Success, feedText);
-                        }
-                    }
-                }
+                return Tuple.Create(FeedReadResult.Success, feedText);
             }
             catch (IOException ioException)
             {
@@ -281,7 +308,7 @@ namespace FeedCenter
                 if (!forceRead)
                 {
                     // Figure out how long since we last checked
-                    var timeSpan = DateTime.Now - LastChecked;
+                    var timeSpan = DateTimeOffset.Now - LastChecked;
 
                     // Check if we are due to read the feed
                     if (timeSpan.TotalMinutes < CheckInterval)
@@ -289,7 +316,7 @@ namespace FeedCenter
                 }
 
                 // We're checking it now so update the time
-                LastChecked = DateTime.Now;
+                LastChecked = DateTimeOffset.Now;
 
                 // Read the feed text
                 var retrieveResult = RetrieveFeed();
@@ -322,15 +349,9 @@ namespace FeedCenter
                 // Loop over the items to be removed
                 foreach (var itemToRemove in removedItems)
                 {
-                    // Delete the item from the database
-                    database.FeedItems.Remove(itemToRemove);
-
                     // Remove the item from the list
                     Items.Remove(itemToRemove);
                 }
-
-                // Process actions on this feed
-                ProcessActions();
 
                 return FeedReadResult.Success;
             }
@@ -345,22 +366,6 @@ namespace FeedCenter
                 Tracer.WriteLine(exception.Message);
 
                 return FeedReadResult.UnknownError;
-            }
-        }
-
-        private void ProcessActions()
-        {
-            var sortedActions = from action in Actions orderby action.Sequence select action;
-
-            foreach (var feedAction in sortedActions)
-            {
-                switch (feedAction.Field)
-                {
-                    case 0:
-                        Title = Title.Replace(feedAction.Search, feedAction.Replace);
-
-                        break;
-                }
             }
         }
 

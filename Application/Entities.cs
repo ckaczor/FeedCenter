@@ -1,139 +1,96 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data.Entity.Infrastructure;
+﻿using Dapper;
+using FeedCenter.Data;
+using FeedCenter.Options;
+using Realms;
+using System;
+using System.Data.SqlServerCe;
+using System.IO;
 using System.Linq;
 
 namespace FeedCenter
 {
-    public partial class FeedCenterEntities
+    public class FeedCenterEntities
     {
-        #region Dispose
+        public Realm Realm { get; private set; }
 
-        protected override void Dispose(bool disposing)
+        public RealmObservableCollection<Category> Categories { get; private set; }
+        public RealmObservableCollection<Feed> Feeds { get; private set; }
+        public RealmObservableCollection<Setting> Settings { get; private set; }
+
+        public FeedCenterEntities()
         {
-            if (disposing)
-            {
-                var manager = ((IObjectContextAdapter) this).ObjectContext.ObjectStateManager;
-                manager.ObjectStateManagerChanged -= HandleObjectStateManagerObjectStateManagerChanged;
-                _hookedStateManager = false;
-            }
-
-            base.Dispose(disposing);
+            Load();
         }
 
-        #endregion
-
-        private bool _hookedStateManager;
-
-        #region All categories
-
-        private ObservableCollection<Category> _allCategories;
-
-        public ObservableCollection<Category> AllCategories
+        public void Refresh()
         {
-            get
+            Realm.Refresh();
+        }
+
+        public void Load()
+        {
+            var realmConfiguration = new RealmConfiguration($"{Database.DatabasePath}/FeedCenter.realm");
+
+            Realm = Realm.GetInstance(realmConfiguration);
+
+            if (File.Exists(Database.DatabaseFile))
             {
-                if (_allCategories == null)
+                using var connection = new SqlCeConnection($"Data Source={Database.DatabaseFile}");
+
+                connection.Open();
+
+                var settings = connection.Query<Setting>("SELECT * FROM Setting").OrderBy(s => s.Version).ToList();
+                var categories = connection.Query<Category>("SELECT * FROM Category").ToList();
+                var feeds = connection.Query<Feed>("SELECT * FROM Feed").ToList();
+                var feedItems = connection.Query<FeedItem>("SELECT * FROM FeedItem").ToList();
+
+                Realm.Write(() =>
                 {
-                    _allCategories = new ObservableCollection<Category>(Categories);
-
-                    if (!_hookedStateManager)
+                    foreach (var category in categories)
                     {
-                        var manager = ((IObjectContextAdapter) this).ObjectContext.ObjectStateManager;
-                        manager.ObjectStateManagerChanged += HandleObjectStateManagerObjectStateManagerChanged;
-                        _hookedStateManager = true;
+                        category.Feeds = feeds.Where(f => f.CategoryId == category.Id).ToList();
                     }
-                }
 
-                return _allCategories;
+                    foreach (var feed in feeds)
+                    {
+                        feed.Category = categories.FirstOrDefault(c => c.Id == feed.CategoryId);
+                    }
+
+                    foreach (var feedItem in feedItems)
+                    {
+                        var feed = feeds.First(f => f.Id == feedItem.FeedId);
+
+                        feed.Items.Add(feedItem);
+                    }
+
+                    Realm.Add(feeds);
+                    Realm.Add(categories);
+                    Realm.Add(settings, true);
+                });
+
+                connection.Close();
+
+                File.Move(Database.DatabaseFile, Database.DatabaseFile + "_bak");
             }
+
+            Settings = new RealmObservableCollection<Setting>(Realm);
+            Feeds = new RealmObservableCollection<Feed>(Realm);
+            Categories = new RealmObservableCollection<Category>(Realm);
+
+            if (!Categories.Any())
+            {
+                Realm.Write(() => Categories.Add(Category.CreateDefault()));
+            }
+        }
+
+        public void SaveChanges(Action action)
+        {
+            Realm.Write(action);
         }
 
         public Category DefaultCategory
         {
-            get { return AllCategories.First(c => c.IsDefault); }
+            get { return Categories.First(c => c.IsDefault); }
         }
-
-        #endregion
-
-        #region All feeds
-
-        private ObservableCollection<Feed> _allFeeds;
-
-        public ObservableCollection<Feed> AllFeeds
-        {
-            get
-            {
-                if (_allFeeds == null)
-                {
-                    _allFeeds = new ObservableCollection<Feed>(Feeds);
-
-                    if (!_hookedStateManager)
-                    {
-                        var manager = ((IObjectContextAdapter) this).ObjectContext.ObjectStateManager;
-                        manager.ObjectStateManagerChanged += HandleObjectStateManagerObjectStateManagerChanged;
-                        _hookedStateManager = true;
-                    }
-                }
-
-                return _allFeeds;
-            }
-        }
-
-        #endregion
-
-        #region Object state manager
-
-        void HandleObjectStateManagerObjectStateManagerChanged(object sender, CollectionChangeEventArgs e)
-        {
-            var element = e.Element as Category;
-
-            if (element != null)
-            {
-                if (_allCategories == null)
-                    return;
-
-                var category = element;
-
-                switch (e.Action)
-                {
-                    case CollectionChangeAction.Add:
-                        _allCategories.Add(category);
-                        break;
-                    case CollectionChangeAction.Remove:
-                        _allCategories.Remove(category);
-                        break;
-                    case CollectionChangeAction.Refresh:
-                        _allCategories.Clear();
-                        foreach (var loopCategory in Categories)
-                            _allCategories.Add(loopCategory);
-                        break;
-                }
-            }
-            else if (e.Element is Feed)
-            {
-                if (_allFeeds == null)
-                    return;
-
-                var feed = (Feed) e.Element;
-
-                switch (e.Action)
-                {
-                    case CollectionChangeAction.Add:
-                        _allFeeds.Add(feed);
-                        break;
-                    case CollectionChangeAction.Remove:
-                        _allFeeds.Remove(feed);
-                        break;
-                    case CollectionChangeAction.Refresh:
-                        _allFeeds.Clear();
-                        foreach (var loopfeed in Feeds)
-                            _allFeeds.Add(loopfeed);
-                        break;
-                }
-            }
-        }
-
-        #endregion
     }
 }

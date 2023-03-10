@@ -40,7 +40,7 @@ namespace FeedCenter.FeedParsers
         protected void HandleFeedItem(XmlNode node, ref int sequence)
         {
             // Build a feed item from the node
-            FeedItem newFeedItem = ParseFeedItem(node);
+            var newFeedItem = ParseFeedItem(node);
 
             if (newFeedItem == null)
                 return;
@@ -50,7 +50,7 @@ namespace FeedCenter.FeedParsers
                 return;
 
             // Look for an item that has the same guid
-            FeedItem existingFeedItem = Feed.Items.FirstOrDefault(item => item.Guid == newFeedItem.Guid && item.ID != newFeedItem.ID);
+            var existingFeedItem = Feed.Items.FirstOrDefault(item => item.Guid == newFeedItem.Guid && item.Id != newFeedItem.Id);
 
             // Check to see if we already have this feed item
             if (existingFeedItem == null)
@@ -102,7 +102,7 @@ namespace FeedCenter.FeedParsers
 
         public static FeedParserBase CreateFeedParser(Feed feed, string feedText)
         {
-            FeedType feedType = DetectFeedType(feedText);
+            var feedType = DetectFeedType(feedText);
 
             switch (feedType)
             {
