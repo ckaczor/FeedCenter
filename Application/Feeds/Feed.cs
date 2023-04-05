@@ -1,10 +1,9 @@
-﻿using Common.Debug;
-using Common.Update;
-using Common.Xml;
+﻿using CKaczor.ApplicationUpdate;
 using FeedCenter.Data;
 using FeedCenter.FeedParsers;
 using FeedCenter.Properties;
 using Realms;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +15,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FeedCenter.Xml;
+using Resources = FeedCenter.Properties.Resources;
 
 namespace FeedCenter
 {
@@ -64,6 +65,7 @@ namespace FeedCenter
         [PrimaryKey]
         [MapTo("ID")]
         public Guid Id { get; set; }
+
         public string Name { get; set; }
         public string Title { get; set; }
         public string Source { get; set; }
@@ -140,8 +142,7 @@ namespace FeedCenter
 
         public FeedReadResult Read(FeedCenterEntities database, bool forceRead = false)
         {
-            Tracer.WriteLine("Reading feed: {0}", Source);
-            Tracer.IncrementIndentLevel();
+            Log.Logger.Information("Reading feed: {0}", Source);
 
             var result = ReadFeed(database, forceRead);
 
@@ -166,8 +167,7 @@ namespace FeedCenter
             if (result == FeedReadResult.Success && LastUpdated == Extensions.SqlDateTimeZero.Value)
                 LastUpdated = DateTimeOffset.Now;
 
-            Tracer.DecrementIndentLevel();
-            Tracer.WriteLine("Done reading feed: {0}", result);
+            Log.Logger.Information("Done reading feed: {0}", result);
 
             return result;
         }
@@ -236,7 +236,7 @@ namespace FeedCenter
             }
             catch (IOException ioException)
             {
-                Tracer.WriteLine(ioException.Message);
+                Log.Logger.Error(ioException, "Exception");
 
                 return Tuple.Create(FeedReadResult.ConnectionFailed, string.Empty);
             }
@@ -281,7 +281,7 @@ namespace FeedCenter
                         break;
                 }
 
-                Tracer.WriteException(webException);
+                Log.Logger.Error(webException, "Exception");
 
                 if (result == FeedReadResult.UnknownError)
                     Debug.Print("Unknown error");
@@ -290,7 +290,7 @@ namespace FeedCenter
             }
             catch (Exception exception)
             {
-                Tracer.WriteLine(exception.Message);
+                Log.Logger.Error(exception, "Exception");
 
                 return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
             }
@@ -357,13 +357,13 @@ namespace FeedCenter
             }
             catch (InvalidFeedFormatException exception)
             {
-                Tracer.WriteException(exception.InnerException);
+                Log.Logger.Error(exception, "Exception");
 
                 return FeedReadResult.InvalidXml;
             }
             catch (Exception exception)
             {
-                Tracer.WriteLine(exception.Message);
+                Log.Logger.Error(exception, "Exception");
 
                 return FeedReadResult.UnknownError;
             }

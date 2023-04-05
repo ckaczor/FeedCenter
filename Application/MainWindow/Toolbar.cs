@@ -1,4 +1,5 @@
-﻿using FeedCenter.Options;
+﻿using CKaczor.InstalledBrowsers;
+using FeedCenter.Options;
 using FeedCenter.Properties;
 using System.IO;
 using System.Linq;
@@ -26,9 +27,6 @@ namespace FeedCenter
             // Create a new list of feed items
             var feedItems = (from FeedItem feedItem in LinkTextList.Items select feedItem).ToList();
 
-            // Get the browser 
-            var browser = BrowserCommon.FindBrowser(Settings.Default.Browser);
-
             // Cache the settings object
             var settings = Settings.Default;
 
@@ -39,7 +37,7 @@ namespace FeedCenter
             foreach (var feedItem in feedItems)
             {
                 // Try to open the link
-                if (BrowserCommon.OpenLink(browser, feedItem.Link))
+                if (InstalledBrowser.OpenLink(Settings.Default.Browser, feedItem.Link))
                 {
                     // Mark the feed as read
                     _database.SaveChanges(() => feedItem.BeenRead = true);
@@ -236,7 +234,7 @@ namespace FeedCenter
             textWriter.Flush();
             textWriter.Close();
 
-            BrowserCommon.OpenLink(fileName);
+            InstalledBrowser.OpenLink(Settings.Default.Browser, fileName);
 
             MarkAllItemsAsRead();
         }

@@ -1,20 +1,29 @@
-﻿using System;
+﻿using FeedCenter.Options;
+using System;
 using System.Linq;
 using System.Net;
-using Common.Internet;
-using FeedCenter.Options;
 
 namespace FeedCenter
 {
     public partial class MainWindow
     {
         private delegate void NewFeedDelegate(string feedUrl);
+
+        private static string GetAbsoluteUrlString(string baseUrl, string url)
+        {
+            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+            if (!uri.IsAbsoluteUri)
+                uri = new Uri(new Uri(baseUrl), uri);
+            return uri.ToString();
+        }
+
         private void HandleNewFeed(string feedUrl)
         {
             // Create and configure the new feed
             var feed = Feed.Create(_database);
             feed.Source = feedUrl;
             feed.Category = _database.DefaultCategory;
+            feed.Enabled = true;
 
             // Try to detect the feed type
             var feedTypeResult = feed.DetectFeedType();
@@ -32,7 +41,7 @@ namespace FeedCenter
                     // Look for all RSS or atom links in the document
                     var rssLinks = htmlDocument.DocumentNode.Descendants("link")
                         .Where(n => n.Attributes["type"] != null && (n.Attributes["type"].Value == "application/rss+xml" || n.Attributes["type"].Value == "application/atom+xml"))
-                        .Select(n => new Tuple<string, string>(UrlHelper.GetAbsoluteUrlString(feed.Source, n.Attributes["href"].Value), WebUtility.HtmlDecode(n.Attributes["title"]?.Value ?? feedUrl)))
+                        .Select(n => new Tuple<string, string>(GetAbsoluteUrlString(feed.Source, n.Attributes["href"].Value), WebUtility.HtmlDecode(n.Attributes["title"]?.Value ?? feedUrl)))
                         .Distinct()
                         .ToList();
 

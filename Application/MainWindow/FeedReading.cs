@@ -1,4 +1,4 @@
-﻿using Common.Update;
+﻿using CKaczor.ApplicationUpdate;
 using FeedCenter.Properties;
 using System;
 using System.Collections.Generic;
@@ -113,8 +113,8 @@ namespace FeedCenter
 
             // Set the text to match the number of errors
             FeedErrorsLink.Text = feedErrorCount == 1
-                                      ? Properties.Resources.FeedErrorLink
-                                      : string.Format(Properties.Resources.FeedErrorsLink, feedErrorCount);
+                ? Properties.Resources.FeedErrorLink
+                : string.Format(Properties.Resources.FeedErrorsLink, feedErrorCount);
         }
 
         private static void HandleFeedReadWorkerStart(object sender, DoWorkEventArgs e)
@@ -123,10 +123,10 @@ namespace FeedCenter
             var database = new FeedCenterEntities();
 
             // Get the worker
-            var worker = (BackgroundWorker)sender;
+            var worker = (BackgroundWorker) sender;
 
             // Get the input information
-            var workerInput = (FeedReadWorkerInput)e.Argument ?? new FeedReadWorkerInput { Feed = null, ForceRead = false };
+            var workerInput = (FeedReadWorkerInput) e.Argument ?? new FeedReadWorkerInput { Feed = null, ForceRead = false };
 
             // Setup for progress
             var currentProgress = 0;

@@ -1,5 +1,4 @@
-﻿using Common.Wpf;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -36,7 +35,7 @@ namespace FeedCenter.Options
             ShowDialog();
         }
 
-        void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
+        private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
         {
             var checkedListBoxItem = (CheckedListItem<Feed>) e.Item;
 

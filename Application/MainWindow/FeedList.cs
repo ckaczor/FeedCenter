@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CKaczor.InstalledBrowsers;
+using FeedCenter.Properties;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,19 +51,19 @@ namespace FeedCenter
             // Get the feed item
             var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
 
-            // Open the item link
-            if (BrowserCommon.OpenLink(feedItem.Link))
-            {
-                // The feed item has been read and is no longer new
-                _database.SaveChanges(() =>
-                {
-                    feedItem.BeenRead = true;
-                    feedItem.New = false;
-                });
+            // Try to open the item link
+            if (!InstalledBrowser.OpenLink(Settings.Default.Browser, feedItem.Link))
+                return;
 
-                // Remove the item from the list
-                LinkTextList.Items.Remove(feedItem);
-            }
+            // The feed item has been read and is no longer new
+            _database.SaveChanges(() =>
+            {
+                feedItem.BeenRead = true;
+                feedItem.New = false;
+            });
+
+            // Remove the item from the list
+            LinkTextList.Items.Remove(feedItem);
         }
 
         private void HandleFeedButtonClick(object sender, RoutedEventArgs e)

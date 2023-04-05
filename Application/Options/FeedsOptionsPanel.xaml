@@ -4,8 +4,8 @@
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:options="clr-namespace:FeedCenter.Options"
-                          xmlns:linkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
+                          xmlns:controls="clr-namespace:CKaczor.Wpf.Controls;assembly=Wpf.Controls.Link"
                           mc:Ignorable="d"
                           d:DesignHeight="311"
                           d:DesignWidth="425">
@@ -95,39 +95,39 @@
                 BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
             <StackPanel Orientation="Horizontal"
                         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-                <linkControl:LinkControl Name="AddFeedButton"
-                                         Margin="2"
-                                         Click="HandleAddFeedButtonClick"
-                                         Text="{x:Static properties:Resources.AddLink}"
-                                         ToolTip="{x:Static properties:Resources.AddFeedButton}">
-                </linkControl:LinkControl>
-                <linkControl:LinkControl Name="EditFeedButton"
-                                         Margin="2"
-                                         Click="HandleEditFeedButtonClick"
-                                         Text="{x:Static properties:Resources.EditLink}"
-                                         ToolTip="{x:Static properties:Resources.EditFeedButton}">
-                </linkControl:LinkControl>
-                <linkControl:LinkControl Name="DeleteFeedButton"
-                                         Margin="2"
-                                         Click="HandleDeleteFeedButtonClick"
-                                         Text="{x:Static properties:Resources.DeleteLink}"
-                                         ToolTip="{x:Static properties:Resources.DeleteFeedButton}">
-                </linkControl:LinkControl>
-                <linkControl:LinkControl Margin="6,2,2,2"
-                                         Click="HandleImportButtonClick"
-                                         Text="{x:Static properties:Resources.ImportLink}"
-                                         ToolTip="{x:Static properties:Resources.ImportFeedsButton}">
-                </linkControl:LinkControl>
-                <linkControl:LinkControl Margin="2"
-                                         Click="HandleExportButtonClick"
-                                         Text="{x:Static properties:Resources.ExportLink}"
-                                         ToolTip="{x:Static properties:Resources.ExportFeedsButton}">
-                </linkControl:LinkControl>
-                <linkControl:LinkControl Margin="6,2,2,2"
-                                         Click="HandleMultipleEditClick"
-                                         Text="{x:Static properties:Resources.MultipleEditLink}"
-                                         ToolTip="{x:Static properties:Resources.MultipleEditButton}">
-                </linkControl:LinkControl>
+                <controls:Link Name="AddFeedButton"
+                               Margin="2"
+                               Click="HandleAddFeedButtonClick"
+                               Text="{x:Static properties:Resources.AddLink}"
+                               ToolTip="{x:Static properties:Resources.AddFeedButton}">
+                </controls:Link>
+                <controls:Link Name="EditFeedButton"
+                               Margin="2"
+                               Click="HandleEditFeedButtonClick"
+                               Text="{x:Static properties:Resources.EditLink}"
+                               ToolTip="{x:Static properties:Resources.EditFeedButton}">
+                </controls:Link>
+                <controls:Link Name="DeleteFeedButton"
+                               Margin="2"
+                               Click="HandleDeleteFeedButtonClick"
+                               Text="{x:Static properties:Resources.DeleteLink}"
+                               ToolTip="{x:Static properties:Resources.DeleteFeedButton}">
+                </controls:Link>
+                <controls:Link Margin="6,2,2,2"
+                               Click="HandleImportButtonClick"
+                               Text="{x:Static properties:Resources.ImportLink}"
+                               ToolTip="{x:Static properties:Resources.ImportFeedsButton}">
+                </controls:Link>
+                <controls:Link Margin="2"
+                               Click="HandleExportButtonClick"
+                               Text="{x:Static properties:Resources.ExportLink}"
+                               ToolTip="{x:Static properties:Resources.ExportFeedsButton}">
+                </controls:Link>
+                <controls:Link Margin="6,2,2,2"
+                               Click="HandleMultipleEditClick"
+                               Text="{x:Static properties:Resources.MultipleEditLink}"
+                               ToolTip="{x:Static properties:Resources.MultipleEditButton}">
+                </controls:Link>
             </StackPanel>
         </Border>
         <Border Grid.Row="1"
@@ -136,24 +136,24 @@
                 BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
             <StackPanel Orientation="Horizontal"
                         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-                <linkControl:LinkControl Name="AddCategoryButton"
-                                         Margin="2"
-                                         Click="HandleAddCategoryButtonClick"
-                                         Text="{x:Static properties:Resources.AddLink}"
-                                         ToolTip="{x:Static properties:Resources.AddCategoryButton}">
-                </linkControl:LinkControl>
-                <linkControl:LinkControl Name="EditCategoryButton"
-                                         Margin="2"
-                                         Click="HandleEditCategoryButtonClick"
-                                         Text="{x:Static properties:Resources.EditLink}"
-                                         ToolTip="{x:Static properties:Resources.EditCategoryButton}">
-                </linkControl:LinkControl>
-                <linkControl:LinkControl Name="DeleteCategoryButton"
-                                         Margin="2"
-                                         Click="HandleDeleteCategoryButtonClick"
-                                         Text="{x:Static properties:Resources.DeleteLink}"
-                                         ToolTip="{x:Static properties:Resources.DeleteCategoryButton}">
-                </linkControl:LinkControl>
+                <controls:Link Name="AddCategoryButton"
+                               Margin="2"
+                               Click="HandleAddCategoryButtonClick"
+                               Text="{x:Static properties:Resources.AddLink}"
+                               ToolTip="{x:Static properties:Resources.AddCategoryButton}">
+                </controls:Link>
+                <controls:Link Name="EditCategoryButton"
+                               Margin="2"
+                               Click="HandleEditCategoryButtonClick"
+                               Text="{x:Static properties:Resources.EditLink}"
+                               ToolTip="{x:Static properties:Resources.EditCategoryButton}">
+                </controls:Link>
+                <controls:Link Name="DeleteCategoryButton"
+                               Margin="2"
+                               Click="HandleDeleteCategoryButtonClick"
+                               Text="{x:Static properties:Resources.DeleteLink}"
+                               ToolTip="{x:Static properties:Resources.DeleteCategoryButton}">
+                </controls:Link>
             </StackPanel>
         </Border>
     </Grid>

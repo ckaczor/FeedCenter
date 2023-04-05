@@ -1,4 +1,4 @@
-﻿using Common.Update;
+﻿using CKaczor.ApplicationUpdate;
 using FeedCenter.Data;
 using FeedCenter.Properties;
 using System;
@@ -33,7 +33,7 @@ namespace FeedCenter
 
         #region Member variables
 
-        private readonly List<ProgressStep> _progressSteps = new List<ProgressStep>();
+        private readonly List<ProgressStep> _progressSteps = new();
         private readonly Dispatcher _dispatcher;
         private readonly BackgroundWorker _backgroundWorker;
 
@@ -205,7 +205,7 @@ namespace FeedCenter
         private static bool UpdateDatabase()
         {
             // Update the database
-           // Database.UpdateDatabase();
+            // Database.UpdateDatabase();
 
             return true;
         }

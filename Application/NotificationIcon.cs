@@ -20,10 +20,7 @@ namespace FeedCenter
             // Setup the menu
             var contextMenuStrip = new ContextMenuStrip();
 
-            var toolStripMenuItem = new ToolStripMenuItem(Resources.NotificationIconContextMenuLocked, null, HandleLockWindowClicked)
-                                                      {
-                                                          Checked = Settings.Default.WindowLocked
-                                                      };
+            var toolStripMenuItem = new ToolStripMenuItem(Resources.NotificationIconContextMenuLocked, null, HandleLockWindowClicked) { Checked = Settings.Default.WindowLocked };
             contextMenuStrip.Items.Add(toolStripMenuItem);
 
             contextMenuStrip.Items.Add(new ToolStripSeparator());

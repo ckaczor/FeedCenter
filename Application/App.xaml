@@ -4,7 +4,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Common.Wpf;component/Toolbar/SplitButton/SplitButtonStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Wpf.Controls.Toolbar;component/SplitButton/SplitButtonStyle.xaml" />
                 <ResourceDictionary Source="Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

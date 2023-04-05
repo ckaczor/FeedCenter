@@ -1,6 +1,7 @@
-﻿using Common.Debug;
-using Common.Xml;
+﻿using Serilog;
+using System;
 using System.Xml;
+using FeedCenter.Xml;
 
 namespace FeedCenter.FeedParsers
 {
@@ -73,7 +74,7 @@ namespace FeedCenter.FeedParsers
             }
             catch (XmlException xmlException)
             {
-                Tracer.WriteLine("XML error: " + xmlException.Message + "\n" + feedText);
+                Log.Logger.Error(xmlException, "Exception: {0}", feedText);
 
                 return FeedReadResult.InvalidXml;
             }

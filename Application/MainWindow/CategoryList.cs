@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FeedCenter.Properties;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using FeedCenter.Properties;
 
 namespace FeedCenter
 {
-    public partial class MainWindow : IDisposable
+    public partial class MainWindow
     {
         private void DisplayCategory()
         {
@@ -95,13 +95,6 @@ namespace FeedCenter
             DisplayFeed();
 
             Settings.Default.LastCategoryID = _currentCategory?.Id.ToString() ?? string.Empty;
-        }
-
-        public void Dispose()
-        {
-            _mainTimer?.Dispose();
-            _feedReadWorker?.Dispose();
-            _commandLineListener?.Dispose();
         }
     }
 }

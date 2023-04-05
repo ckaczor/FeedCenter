@@ -1,11 +1,11 @@
-﻿using FeedCenter.Properties;
+﻿using DebounceThrottle;
+using FeedCenter.Properties;
 using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using Common.Helpers;
 
 namespace FeedCenter
 {
@@ -90,25 +90,22 @@ namespace FeedCenter
             SaveWindowSettings();
 
             // Save settings
-            _database.SaveChanges(() => Settings.Default.Save());
+            _database.SaveChanges(Settings.Default.Save);
 
             // Get rid of the notification icon
             NotificationIcon.Dispose();
         }
 
-        private DelayedMethod _windowStateDelay;
+        private readonly DebounceDispatcher _updateWindowSettingsDispatcher = new(500);
+
         private void HandleWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _windowStateDelay ??= new DelayedMethod(500, UpdateWindowSettings);
-
-            _windowStateDelay.Reset();
+            _updateWindowSettingsDispatcher.Debounce(() => Dispatcher.Invoke(UpdateWindowSettings));
         }
 
         private void HandleWindowLocationChanged(object sender, EventArgs e)
         {
-            _windowStateDelay ??= new DelayedMethod(500, UpdateWindowSettings);
-
-            _windowStateDelay.Reset();
+            _updateWindowSettingsDispatcher.Debounce(() => Dispatcher.Invoke(UpdateWindowSettings));
         }
 
         private void UpdateBorder()
@@ -152,6 +149,7 @@ namespace FeedCenter
         }
 
         private bool _activated;
+
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);

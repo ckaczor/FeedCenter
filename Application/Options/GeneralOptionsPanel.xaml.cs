@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using Common.Wpf.Extensions;
-using Common.Internet;
+﻿using CKaczor.InstalledBrowsers;
+using CKaczor.Wpf.Application;
+using CKaczor.Wpf.Validation;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -46,7 +46,7 @@ namespace FeedCenter.Options
                 settings.StartWithWindows != StartWithWindowsCheckBox.IsChecked.Value)
                 settings.StartWithWindows = StartWithWindowsCheckBox.IsChecked.Value;
 
-            Application.Current.SetStartWithWindows(settings.StartWithWindows);
+            System.Windows.Application.Current.SetStartWithWindows(settings.StartWithWindows);
 
             settings.Browser = (string) ((ComboBoxItem) BrowserComboBox.SelectedItem).Tag;
 
@@ -54,6 +54,8 @@ namespace FeedCenter.Options
 
             var expressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
             this.UpdateAllSources(expressions);
+
+            this.Validate();
         }
 
         public override string CategoryName => Properties.Resources.optionCategoryGeneral;
@@ -64,7 +66,7 @@ namespace FeedCenter.Options
 
             ComboBoxItem selectedItem = null;
 
-            var browsers = Browser.DetectInstalledBrowsers();
+            var browsers = InstalledBrowser.GetInstalledBrowsers(true);
             foreach (var browser in browsers)
             {
                 var item = new ComboBoxItem { Content = browser.Value.Name, Tag = browser.Key };

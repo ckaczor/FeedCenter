@@ -1,4 +1,5 @@
-﻿using FeedCenter.Properties;
+﻿using CKaczor.InstalledBrowsers;
+using FeedCenter.Properties;
 using System.Windows;
 using System.Windows.Input;
 
@@ -26,7 +27,7 @@ namespace FeedCenter
         {
             // Open the link for the current feed on a left double click
             if (e.ClickCount == 2 && e.ChangedButton == MouseButton.Left)
-                BrowserCommon.OpenLink(_currentFeed.Link);
+                InstalledBrowser.OpenLink(Settings.Default.Browser, _currentFeed.Link);
         }
     }
 }

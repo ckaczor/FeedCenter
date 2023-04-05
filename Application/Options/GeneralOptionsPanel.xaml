@@ -38,8 +38,6 @@
                   Grid.Row="2"
                   Grid.Column="1"
                   VerticalContentAlignment="Center">
-            <ComboBoxItem Content="{x:Static properties:Resources.DefaultBrowserCaption}"
-                          Tag="" />
         </ComboBox>
         <Label Content="{x:Static properties:Resources.defaultUserAgentLabel}"
                Target="{Binding ElementName=BrowserComboBox}"

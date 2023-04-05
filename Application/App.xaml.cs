@@ -1,13 +1,12 @@
-﻿using Common.Debug;
-using Common.Helpers;
-using Common.IO;
-using Common.Settings;
-using Common.Wpf.Extensions;
+﻿using CKaczor.GenericSettingsProvider;
+using CKaczor.Wpf.Application;
 using FeedCenter.Data;
 using FeedCenter.Properties;
+using Serilog;
 using System;
-using System.Diagnostics;
-using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Windows.Threading;
 
 namespace FeedCenter
 {
@@ -34,32 +33,23 @@ namespace FeedCenter
             var app = new App();
             app.InitializeComponent();
 
-            // Create an isolation handle to see if we are already running
-            var isolationHandle = ApplicationIsolation.GetIsolationHandle(FeedCenter.Properties.Resources.ApplicationName);
+            // Create an single instance handle to see if we are already running
+            var isolationHandle = SingleInstance.GetSingleInstanceHandleAsync(Name).Result;
 
             // If there is another copy then pass it the command line and exit
             if (isolationHandle == null)
-            {
-                InterprocessMessageSender.SendMessage(FeedCenter.Properties.Resources.ApplicationName, Environment.CommandLine);
                 return;
-            }
 
             // Use the handle over the lifetime of the application
             using (isolationHandle)
             {
-                // Set the data directory based on debug or not
-                AppDomain.CurrentDomain.SetData("DataDirectory", SystemConfiguration.DataDirectory);
-
-                // Get the data directory
-                var path = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-
                 // Set the path
-                Database.DatabasePath = path;
-                Database.DatabaseFile = System.IO.Path.Combine(path, Settings.Default.DatabaseFile);
+                Database.DatabasePath = SystemConfiguration.DataDirectory;
+                Database.DatabaseFile = Path.Combine(SystemConfiguration.DataDirectory, Settings.Default.DatabaseFile);
                 Database.Load();
 
                 // Get the generic provider
-                var genericProvider = (GenericSettingsProvider) Settings.Default.Providers[typeof(GenericSettingsProvider).Name];
+                var genericProvider = (GenericSettingsProvider) Settings.Default.Providers[nameof(GenericSettingsProvider)];
 
                 if (genericProvider == null)
                     return;
@@ -73,8 +63,22 @@ namespace FeedCenter
                 genericProvider.GetVersionList = SettingsStore.GetVersionList;
                 genericProvider.DeleteOldVersionsOnUpgrade = !IsDebugBuild;
 
-                // Initialize the tracer with the current process ID
-                Tracer.Initialize(SystemConfiguration.UserSettingsPath, FeedCenter.Properties.Resources.ApplicationName, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture), false);
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.WithThreadId()
+                    .WriteTo.Console()
+                    .WriteTo.File(
+                        Path.Join(SystemConfiguration.UserSettingsPath, $"{FeedCenter.Properties.Resources.ApplicationName}_.txt"),
+                        rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5,
+                        outputTemplate: "[{Timestamp:u} - {ThreadId} - {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                    .CreateLogger();
+
+                Log.Logger.Information("---");
+                Log.Logger.Information("Application started");
+
+                Log.Logger.Information("Command line arguments:");
+
+                foreach (var arg in Environment.GetCommandLineArgs().Select((value, index) => (Value: value, Index: index)))
+                    Log.Logger.Information("\tArg {0}: {1}", arg.Index, arg.Value);
 
                 Current.DispatcherUnhandledException += HandleCurrentDispatcherUnhandledException;
                 AppDomain.CurrentDomain.UnhandledException += HandleCurrentDomainUnhandledException;
@@ -103,22 +107,19 @@ namespace FeedCenter
 
                 // Run the app
                 app.Run(mainWindow);
-
-                // Terminate the tracer
-                Tracer.Dispose();
             }
         }
 
         private static void HandleCurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Tracer.WriteException((Exception) e.ExceptionObject);
-            Tracer.Flush();
+            Log.Logger.Error((Exception) e.ExceptionObject, "Exception");
         }
 
-        private static void HandleCurrentDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private static void HandleCurrentDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            Tracer.WriteException(e.Exception);
-            Tracer.Flush();
+            Log.Logger.Error(e.Exception, "Exception");
         }
+
+        public static string Name => FeedCenter.Properties.Resources.ApplicationName;
     }
 }

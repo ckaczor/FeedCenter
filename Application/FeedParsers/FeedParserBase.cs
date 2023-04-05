@@ -1,4 +1,4 @@
-﻿using Common.Debug;
+﻿using Serilog;
 using System;
 using System.Linq;
 using System.Xml;
@@ -55,7 +55,7 @@ namespace FeedCenter.FeedParsers
             // Check to see if we already have this feed item
             if (existingFeedItem == null)
             {
-                Tracer.WriteLine("New link: " + newFeedItem.Link);
+                Log.Logger.Information("New link: " + newFeedItem.Link);
 
                 // Associate the new item with the right feed
                 newFeedItem.Feed = Feed;
@@ -71,7 +71,7 @@ namespace FeedCenter.FeedParsers
             }
             else
             {
-                Tracer.WriteLine("Existing link: " + newFeedItem.Link);
+                Log.Logger.Information("Existing link: " + newFeedItem.Link);
 
                 // Update the fields in the existing item
                 existingFeedItem.Link = newFeedItem.Link;
@@ -150,8 +150,8 @@ namespace FeedCenter.FeedParsers
             }
             catch (Exception exception)
             {
-                Tracer.WriteException(exception);                
-                
+                Log.Logger.Error(exception, "Exception: {0}", feedText);
+
                 return FeedType.Unknown;
             }
         }

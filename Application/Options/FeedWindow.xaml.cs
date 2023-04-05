@@ -1,4 +1,4 @@
-﻿using Common.Wpf.Extensions;
+﻿using CKaczor.Wpf.Validation;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;

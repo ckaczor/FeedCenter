@@ -1,4 +1,4 @@
-﻿using Common.Update;
+﻿using CKaczor.ApplicationUpdate;
 using FeedCenter.Properties;
 using System.Windows;
 
@@ -8,12 +8,13 @@ namespace FeedCenter
     {
         private static void InitializeUpdate()
         {
-            UpdateCheck.ApplicationName = Properties.Resources.ApplicationDisplayName;
-            UpdateCheck.UpdateServerType = ServerType.GitHub;
-            UpdateCheck.UpdateServer = Settings.Default.VersionLocation;
-            UpdateCheck.ApplicationShutdown = ApplicationShutdown;
-            UpdateCheck.ApplicationCurrentMessage = ApplicationCurrentMessage;
-            UpdateCheck.ApplicationUpdateMessage = ApplicationUpdateMessage;
+            UpdateCheck.Initialize(ServerType.GitHub,
+                Settings.Default.VersionLocation,
+                string.Empty,
+                Properties.Resources.ApplicationDisplayName,
+                ApplicationShutdown,
+                ApplicationCurrentMessage,
+                ApplicationUpdateMessage);
         }
 
         private static bool ApplicationUpdateMessage(string title, string message)
@@ -33,7 +34,6 @@ namespace FeedCenter
 
         private void HandleNewVersionLinkClick(object sender, RoutedEventArgs e)
         {
-            // Display update information
             UpdateCheck.DisplayUpdateInformation(true);
         }
     }

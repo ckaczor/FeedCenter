@@ -1,9 +1,11 @@
-﻿using FeedCenter.Options;
+﻿using CKaczor.InstalledBrowsers;
+using FeedCenter.Data;
+using FeedCenter.Options;
+using FeedCenter.Properties;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using FeedCenter.Data;
 
 namespace FeedCenter
 {
@@ -87,13 +89,13 @@ namespace FeedCenter
         private void HandleOpenPageButtonClick(object sender, RoutedEventArgs e)
         {
             var feed = (Feed) FeedDataGrid.SelectedItem;
-            BrowserCommon.OpenLink(feed.Link);
+            InstalledBrowser.OpenLink(Settings.Default.Browser, feed.Link);
         }
 
         private void HandleOpenFeedButtonClick(object sender, RoutedEventArgs e)
         {
             var feed = (Feed) FeedDataGrid.SelectedItem;
-            BrowserCommon.OpenLink(feed.Source);
+            InstalledBrowser.OpenLink(Settings.Default.Browser, feed.Source);
         }
 
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)

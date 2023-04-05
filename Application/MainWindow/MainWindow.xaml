@@ -2,13 +2,13 @@
                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:properties="clr-namespace:FeedCenter.Properties"
-                        xmlns:windows="clr-namespace:Common.Wpf.Windows;assembly=Common.Wpf"
-                        xmlns:toolbar="clr-namespace:Common.Wpf.Toolbar;assembly=Common.Wpf"
-                        xmlns:splitButton="clr-namespace:Common.Wpf.Toolbar.SplitButton;assembly=Common.Wpf"
-                        xmlns:linkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
-                        xmlns:htmlTextBlock="clr-namespace:Common.Wpf.HtmlTextBlock;assembly=Common.Wpf"
+                        xmlns:windows="clr-namespace:CKaczor.Wpf.Windows;assembly=Wpf.Windows.SnappingWindow"
+                        xmlns:toolbar="clr-namespace:CKaczor.Wpf.Controls.Toolbar;assembly=Wpf.Controls.Toolbar"
+                        xmlns:splitButton="clr-namespace:CKaczor.Wpf.Controls.Toolbar;assembly=Wpf.Controls.Toolbar"
+                        xmlns:htmlTextBlock="clr-namespace:CKaczor.Wpf.Controls;assembly=Wpf.Controls.HtmlTextBlock"
                         xmlns:system="clr-namespace:System;assembly=mscorlib"
                         xmlns:nameBasedGrid="clr-namespace:NameBasedGrid;assembly=NameBasedGrid"
+                        xmlns:controls="clr-namespace:CKaczor.Wpf.Controls;assembly=Wpf.Controls.Link"
                         Title="MainWindow"
                         Height="360"
                         Width="252"
@@ -80,18 +80,19 @@
                         FontFamily="Marlett"
                         Content="r"
                         FontSize="8"
-                        Grid.Column="1"></Button>
+                        Grid.Column="1">
+                </Button>
             </Grid>
-            <linkControl:LinkControl Name="NewVersionLink"
-                                     Height="21"
-                                     nameBasedGrid:NameBasedGrid.Row="NewVersionRow"
-                                     Text="{x:Static properties:Resources.NewVersionLink}"
-                                     Background="AntiqueWhite"
-                                     VerticalContentAlignment="Center"
-                                     HorizontalContentAlignment="Center"
-                                     Visibility="Collapsed"
-                                     Click="HandleNewVersionLinkClick">
-            </linkControl:LinkControl>
+            <controls:Link Name="NewVersionLink"
+                           Height="21"
+                           nameBasedGrid:NameBasedGrid.Row="NewVersionRow"
+                           Text="{x:Static properties:Resources.NewVersionLink}"
+                           Background="AntiqueWhite"
+                           VerticalContentAlignment="Center"
+                           HorizontalContentAlignment="Center"
+                           Visibility="Collapsed"
+                           Click="HandleNewVersionLinkClick">
+            </controls:Link>
             <Grid Name="CategoryGrid"
                   Height="21"
                   nameBasedGrid:NameBasedGrid.Row="CategoryRow"
@@ -186,12 +187,14 @@
                                             <Setter Property="Panel.Background"
                                                     TargetName="Bd">
                                                 <Setter.Value>
-                                                    <DynamicResource ResourceKey="{x:Static SystemColors.HighlightBrushKey}" />
+                                                    <DynamicResource
+                                                        ResourceKey="{x:Static SystemColors.HighlightBrushKey}" />
                                                 </Setter.Value>
                                             </Setter>
                                             <Setter Property="TextElement.Foreground">
                                                 <Setter.Value>
-                                                    <DynamicResource ResourceKey="{x:Static SystemColors.HighlightTextBrushKey}" />
+                                                    <DynamicResource
+                                                        ResourceKey="{x:Static SystemColors.HighlightTextBrushKey}" />
                                                 </Setter.Value>
                                             </Setter>
                                             <Setter Property="Panel.Cursor"
@@ -295,17 +298,17 @@
                     </splitButton:SplitButton>
                 </ToolBar>
             </ToolBarTray>
-            <linkControl:LinkControl Name="FeedErrorsLink"
-                                     Height="21"
-                                     nameBasedGrid:NameBasedGrid.Row="FeedErrorsRow"
-                                     Text="{x:Static properties:Resources.FeedErrorsLink}"
-                                     ToolTip="{x:Static properties:Resources.showErrorsToolbarButton}"
-                                     Background="AntiqueWhite"
-                                     VerticalContentAlignment="Center"
-                                     HorizontalContentAlignment="Center"
-                                     Visibility="Collapsed"
-                                     Click="HandleShowErrorsButtonClick">
-            </linkControl:LinkControl>
+            <controls:Link Name="FeedErrorsLink"
+                           Height="21"
+                           nameBasedGrid:NameBasedGrid.Row="FeedErrorsRow"
+                           Text="{x:Static properties:Resources.FeedErrorsLink}"
+                           ToolTip="{x:Static properties:Resources.showErrorsToolbarButton}"
+                           Background="AntiqueWhite"
+                           VerticalContentAlignment="Center"
+                           HorizontalContentAlignment="Center"
+                           Visibility="Collapsed"
+                           Click="HandleShowErrorsButtonClick">
+            </controls:Link>
         </nameBasedGrid:NameBasedGrid>
     </Border>
 </windows:SnappingWindow>

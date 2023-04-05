@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:windows="clr-namespace:Common.Wpf.Windows;assembly=Common.Wpf"
         xmlns:my="clr-namespace:FeedCenter.Properties"
+        xmlns:controlBox="clr-namespace:CKaczor.Wpf.Windows;assembly=Wpf.Windows.ControlBox"
         mc:Ignorable="d"
         Title="{x:Static my:Resources.FeedChooserWindow}"
         Height="247.297"
@@ -12,8 +12,8 @@
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
         FocusManager.FocusedElement="{Binding ElementName=FeedDataGrid}"
-        windows:ControlBox.HasMaximizeButton="False"
-        windows:ControlBox.HasMinimizeButton="False">
+        controlBox:ControlBox.HasMaximizeButton="False"
+        controlBox:ControlBox.HasMinimizeButton="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

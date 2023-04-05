@@ -5,8 +5,8 @@
         Height="300"
         Width="500"
         xmlns:my="clr-namespace:FeedCenter.Properties"
-        xmlns:linkControl="clr-namespace:Common.Wpf.LinkControl;assembly=Common.Wpf"
         xmlns:feedCenter="clr-namespace:FeedCenter"
+        xmlns:controls="clr-namespace:CKaczor.Wpf.Controls;assembly=Wpf.Controls.Link"
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
         FocusManager.FocusedElement="{Binding ElementName=FeedLinkFilterText}">
@@ -61,18 +61,18 @@
                         <TextBlock Margin="2"
                                    Text="{x:Static my:Resources.SelectLabel}">
                         </TextBlock>
-                        <linkControl:LinkControl Margin="2"
-                                                 Click="HandleSelectAll"
-                                                 Text="{x:Static my:Resources.SelectAllLabel}">
-                        </linkControl:LinkControl>
-                        <linkControl:LinkControl Margin="2"
-                                                 Click="HandleSelectNone"
-                                                 Text="{x:Static my:Resources.SelectNoneLabel}">
-                        </linkControl:LinkControl>
-                        <linkControl:LinkControl Margin="2"
-                                                 Click="HandleSelectInvert"
-                                                 Text="{x:Static my:Resources.SelectInvertLabel}">
-                        </linkControl:LinkControl>
+                        <controls:Link Margin="2"
+                                       Click="HandleSelectAll"
+                                       Text="{x:Static my:Resources.SelectAllLabel}">
+                        </controls:Link>
+                        <controls:Link Margin="2"
+                                       Click="HandleSelectNone"
+                                       Text="{x:Static my:Resources.SelectNoneLabel}">
+                        </controls:Link>
+                        <controls:Link Margin="2"
+                                       Click="HandleSelectInvert"
+                                       Text="{x:Static my:Resources.SelectInvertLabel}">
+                        </controls:Link>
                     </StackPanel>
                 </Border>
             </Grid>

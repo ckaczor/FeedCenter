@@ -1,9 +1,8 @@
-﻿using Common.Debug;
-using Common.Helpers;
-using Common.IO;
-using Common.Update;
+﻿using CKaczor.ApplicationUpdate;
+using CKaczor.Wpf.Application;
 using FeedCenter.Data;
 using FeedCenter.Properties;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +13,7 @@ using System.Windows.Media;
 
 namespace FeedCenter
 {
-    public partial class MainWindow
+    public partial class MainWindow : IDisposable
     {
         private FeedCenterEntities _database;
         private int _feedIndex;
@@ -26,6 +25,21 @@ namespace FeedCenter
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        protected override async void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            await SingleInstance.Stop();
+        }
+
+        public void Dispose()
+        {
+            _mainTimer?.Dispose();
+            _feedReadWorker?.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public async void Initialize()
@@ -52,12 +66,12 @@ namespace FeedCenter
             // Setup the database
             _database = Database.Entities;
 
-            // Initialize the command line listener
-            _commandLineListener = new InterprocessMessageListener(Properties.Resources.ApplicationName);
-            _commandLineListener.MessageReceived += HandleCommandLine;
+            // Initialize the single instance listener
+            SingleInstance.MessageReceived += SingleInstance_MessageReceived;
+            await SingleInstance.StartAsync(App.Name);
 
             // Handle any command line we were started with
-            HandleCommandLine(null, new InterprocessMessageListener.InterprocessMessageEventArgs(Environment.CommandLine));
+            HandleCommandLine(Environment.CommandLine);
 
             // Create a timer to keep track of things we need to do
             InitializeTimer();
@@ -73,7 +87,12 @@ namespace FeedCenter
             if (UpdateCheck.UpdateAvailable)
                 NewVersionLink.Visibility = Visibility.Visible;
 
-            Tracer.WriteLine("MainForm creation finished");
+            Log.Logger.Information("MainForm creation finished");
+        }
+
+        private void SingleInstance_MessageReceived(object sender, string commandLine)
+        {
+            HandleCommandLine(commandLine);
         }
 
         #region Setting events
@@ -87,30 +106,36 @@ namespace FeedCenter
                 return;
             }
 
-            if (e.PropertyName == Reflection.GetPropertyName(() => Settings.Default.MultipleLineDisplay))
+            switch (e.PropertyName)
             {
-                // Update the current feed
-                DisplayFeed();
-            }
-            else if (e.PropertyName == Reflection.GetPropertyName(() => Settings.Default.WindowLocked))
-            {
-                // Update the window for the new window lock value
-                HandleWindowLockState();
-            }
-            else if (e.PropertyName == Reflection.GetPropertyName(() => Settings.Default.ToolbarLocation))
-            {
-                // Update the window for the toolbar location
-                switch (Settings.Default.ToolbarLocation)
-                {
-                    case Dock.Top:
-                        NameBasedGrid.NameBasedGrid.SetRow(NavigationToolbarTray, "TopToolbarRow");
+                case nameof(Settings.Default.MultipleLineDisplay):
+                    // Update the current feed
+                    DisplayFeed();
+                    break;
+                case nameof(Settings.Default.WindowLocked):
+                    // Update the window for the new window lock value
+                    HandleWindowLockState();
+                    break;
+                case nameof(Settings.Default.ToolbarLocation):
+                    // Update the window for the toolbar location
+                    switch (Settings.Default.ToolbarLocation)
+                    {
+                        case Dock.Top:
+                            NameBasedGrid.NameBasedGrid.SetRow(NavigationToolbarTray, "TopToolbarRow");
 
-                        break;
-                    case Dock.Bottom:
-                        NameBasedGrid.NameBasedGrid.SetRow(NavigationToolbarTray, "BottomToolbarRow");
+                            break;
+                        case Dock.Bottom:
+                            NameBasedGrid.NameBasedGrid.SetRow(NavigationToolbarTray, "BottomToolbarRow");
 
-                        break;
-                }
+                            break;
+                        case Dock.Left:
+                        case Dock.Right:
+                            throw new NotSupportedException();
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(Settings.Default.ToolbarLocation));
+                    }
+
+                    break;
             }
         }
 
@@ -124,15 +149,15 @@ namespace FeedCenter
             var feedCount = _feedList?.Count() ?? 0;
 
             // Set button states
-            PreviousToolbarButton.IsEnabled = (feedCount > 1);
-            NextToolbarButton.IsEnabled = (feedCount > 1);
-            RefreshToolbarButton.IsEnabled = (feedCount > 0);
-            FeedButton.IsEnabled = (feedCount > 0);
-            OpenAllToolbarButton.IsEnabled = (feedCount > 0);
-            MarkReadToolbarButton.IsEnabled = (feedCount > 0);
-            FeedLabel.Visibility = (feedCount == 0 ? Visibility.Hidden : Visibility.Visible);
-            FeedButton.Visibility = (feedCount > 1 ? Visibility.Hidden : Visibility.Visible);
-            CategoryGrid.Visibility = (_database.Categories.Count() > 1 ? Visibility.Visible : Visibility.Collapsed);
+            PreviousToolbarButton.IsEnabled = feedCount > 1;
+            NextToolbarButton.IsEnabled = feedCount > 1;
+            RefreshToolbarButton.IsEnabled = feedCount > 0;
+            FeedButton.IsEnabled = feedCount > 0;
+            OpenAllToolbarButton.IsEnabled = feedCount > 0;
+            MarkReadToolbarButton.IsEnabled = feedCount > 0;
+            FeedLabel.Visibility = feedCount == 0 ? Visibility.Hidden : Visibility.Visible;
+            FeedButton.Visibility = feedCount > 1 ? Visibility.Hidden : Visibility.Visible;
+            CategoryGrid.Visibility = _database.Categories.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void InitializeDisplay()
@@ -196,7 +221,7 @@ namespace FeedCenter
                     _currentFeed = _feedList.OrderBy(feed => feed.Name).AsEnumerable().ElementAt(_feedIndex);
 
                     // If the current feed has unread items then we can display it
-                    if (_currentFeed.Items.Count(item => !item.BeenRead) > 0)
+                    if (_currentFeed.Items.Any(item => !item.BeenRead))
                     {
                         found = true;
                         break;
@@ -204,8 +229,7 @@ namespace FeedCenter
 
                     // Increment the index and adjust if we've gone around the end
                     _feedIndex = (_feedIndex + 1) % feedCount;
-                }
-                while (_feedIndex != startIndex);
+                } while (_feedIndex != startIndex);
 
                 // If nothing was found then clear the current feed
                 if (!found)
@@ -263,7 +287,7 @@ namespace FeedCenter
                     _currentFeed = _feedList.OrderBy(feed => feed.Name).AsEnumerable().ElementAt(_feedIndex);
 
                     // If the current feed has unread items then we can display it
-                    if (_currentFeed.Items.Count(item => !item.BeenRead) > 0)
+                    if (_currentFeed.Items.Any(item => !item.BeenRead))
                     {
                         found = true;
                         break;
@@ -275,8 +299,7 @@ namespace FeedCenter
                     // If we've gone below the start of the list then reset to the end
                     if (_feedIndex < 0)
                         _feedIndex = feedCount - 1;
-                }
-                while (_feedIndex != startIndex);
+                } while (_feedIndex != startIndex);
 
                 // If nothing was found then clear the current feed
                 if (!found)

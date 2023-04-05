@@ -1,4 +1,4 @@
-﻿using Common.Update;
+﻿using CKaczor.ApplicationUpdate;
 using System.Reflection;
 
 namespace FeedCenter.Options
