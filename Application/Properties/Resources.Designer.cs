@@ -1298,11 +1298,11 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Checking database existence....
+        ///   Looks up a localized string similar to Checking for legacy database....
         /// </summary>
-        public static string SplashCheckingForDatabase {
+        public static string SplashCheckingForLegacyDatabase {
             get {
-                return ResourceManager.GetString("SplashCheckingForDatabase", resourceCulture);
+                return ResourceManager.GetString("SplashCheckingForLegacyDatabase", resourceCulture);
             }
         }
         
@@ -1343,11 +1343,29 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maintaining database....
+        ///   Looks up a localized string similar to Loading database....
         /// </summary>
-        public static string SplashMaintainingDatabase {
+        public static string SplashLoadingDatabase {
             get {
-                return ResourceManager.GetString("SplashMaintainingDatabase", resourceCulture);
+                return ResourceManager.GetString("SplashLoadingDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maintaining legacy database....
+        /// </summary>
+        public static string SplashMaintainingLegacyDatabase {
+            get {
+                return ResourceManager.GetString("SplashMaintainingLegacyDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Migrating legacy database....
+        /// </summary>
+        public static string SplashMigratingLegacyDatabase {
+            get {
+                return ResourceManager.GetString("SplashMigratingLegacyDatabase", resourceCulture);
             }
         }
         
@@ -1370,11 +1388,11 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updating database....
+        ///   Looks up a localized string similar to Updating legacy database....
         /// </summary>
-        public static string SplashUpdatingDatabase {
+        public static string SplashUpdatingLegacyDatabase {
             get {
-                return ResourceManager.GetString("SplashUpdatingDatabase", resourceCulture);
+                return ResourceManager.GetString("SplashUpdatingLegacyDatabase", resourceCulture);
             }
         }
         

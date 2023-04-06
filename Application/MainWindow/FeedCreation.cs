@@ -23,7 +23,6 @@ namespace FeedCenter
             var feed = Feed.Create(_database);
             feed.Source = feedUrl;
             feed.Category = _database.DefaultCategory;
-            feed.Enabled = true;
 
             // Try to detect the feed type
             var feedTypeResult = feed.DetectFeedType();

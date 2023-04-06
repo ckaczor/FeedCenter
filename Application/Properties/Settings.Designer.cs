@@ -74,9 +74,9 @@ namespace FeedCenter.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("FeedCenter.sdf")]
-        public string DatabaseFile {
+        public string DatabaseFile_Legacy {
             get {
-                return ((string)(this["DatabaseFile"]));
+                return ((string)(this["DatabaseFile_Legacy"]));
             }
         }
         
@@ -291,6 +291,15 @@ namespace FeedCenter.Properties {
             }
             set {
                 this["DefaultUserAgent"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("FeedCenter.realm")]
+        public string DatabaseFile {
+            get {
+                return ((string)(this["DatabaseFile"]));
             }
         }
     }

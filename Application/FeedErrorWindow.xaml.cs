@@ -108,13 +108,14 @@ namespace FeedCenter
             Close();
         }
 
-        private async void HandleRefreshCurrentButtonClick(object sender, RoutedEventArgs e)
+        private void HandleRefreshCurrentButtonClick(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
             Mouse.OverrideCursor = Cursors.Wait;
 
             var feed = (Feed) FeedDataGrid.SelectedItem;
-            await feed.ReadAsync(_database, true);
+
+            _database.SaveChanges(() => feed.Read(_database, true));
 
             var selectedIndex = FeedDataGrid.SelectedIndex;
 

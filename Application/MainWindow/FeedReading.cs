@@ -15,8 +15,23 @@ namespace FeedCenter
 
         private class FeedReadWorkerInput
         {
-            public bool ForceRead;
-            public Feed Feed;
+            public bool ForceRead { get; }
+            public Guid? FeedId { get; }
+
+            public FeedReadWorkerInput()
+            {
+            }
+
+            public FeedReadWorkerInput(bool forceRead)
+            {
+                ForceRead = forceRead;
+            }
+
+            public FeedReadWorkerInput(bool forceRead, Guid? feedId)
+            {
+                ForceRead = forceRead;
+                FeedId = feedId;
+            }
         }
 
         private void SetProgressMode(bool value, int feedCount)
@@ -48,7 +63,7 @@ namespace FeedCenter
             SetProgressMode(true, 1);
 
             // Create the input class
-            var workerInput = new FeedReadWorkerInput { ForceRead = forceRead, Feed = _currentFeed };
+            var workerInput = new FeedReadWorkerInput(forceRead, _currentFeed.Id);
 
             // Start the worker
             _feedReadWorker.RunWorkerAsync(workerInput);
@@ -68,7 +83,7 @@ namespace FeedCenter
             SetProgressMode(true, _database.Feeds.Count);
 
             // Create the input class
-            var workerInput = new FeedReadWorkerInput { ForceRead = forceRead, Feed = null };
+            var workerInput = new FeedReadWorkerInput(forceRead);
 
             // Start the worker
             _feedReadWorker.RunWorkerAsync(workerInput);
@@ -126,7 +141,7 @@ namespace FeedCenter
             var worker = (BackgroundWorker) sender;
 
             // Get the input information
-            var workerInput = (FeedReadWorkerInput) e.Argument ?? new FeedReadWorkerInput { Feed = null, ForceRead = false };
+            var workerInput = (FeedReadWorkerInput) e.Argument ?? new FeedReadWorkerInput();
 
             // Setup for progress
             var currentProgress = 0;
@@ -135,8 +150,8 @@ namespace FeedCenter
             var feedsToRead = new List<Feed>();
 
             // If we have a single feed then add it to the list - otherwise add them all
-            if (workerInput.Feed != null)
-                feedsToRead.Add(database.Feeds.First(feed => feed.Id == workerInput.Feed.Id));
+            if (workerInput.FeedId != null)
+                feedsToRead.Add(database.Feeds.First(feed => feed.Id == workerInput.FeedId));
             else
                 feedsToRead.AddRange(database.Feeds);
 

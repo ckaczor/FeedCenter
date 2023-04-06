@@ -9,7 +9,7 @@ namespace FeedCenter.Options
     {
         #region Member variables
 
-        private readonly List<OptionsPanelBase> _optionPanels = new List<OptionsPanelBase>();
+        private readonly List<OptionsPanelBase> _optionPanels = new();
 
         private readonly FeedCenterEntities _database = Database.Entities;
 

@@ -29,7 +29,7 @@ namespace FeedCenter.Options
 
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
-            if (!this.Validate())
+            if (!this.IsValid())
                 return;
 
             // Dialog is good

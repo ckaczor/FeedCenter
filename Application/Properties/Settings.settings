@@ -2,19 +2,19 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FeedCenter.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WindowLocked" Provider="Common.Settings.GenericSettingsProvider" Type="System.Boolean" Scope="User">
+    <Setting Name="WindowLocked" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="WindowSize" Provider="Common.Settings.GenericSettingsProvider" Type="System.Windows.Size" Scope="User">
+    <Setting Name="WindowSize" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Size" Scope="User">
       <Value Profile="(Default)">0,0</Value>
     </Setting>
-    <Setting Name="WindowLocation" Provider="Common.Settings.GenericSettingsProvider" Type="System.Windows.Point" Scope="User">
+    <Setting Name="WindowLocation" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Point" Scope="User">
       <Value Profile="(Default)">0,0</Value>
     </Setting>
     <Setting Name="LogDatabase" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="DatabaseFile" Type="System.String" Scope="Application">
+    <Setting Name="DatabaseFile_Legacy" Type="System.String" Scope="Application">
       <Value Profile="(Default)">FeedCenter.sdf</Value>
     </Setting>
     <Setting Name="ProgressSleepInterval" Type="System.Int32" Scope="Application">
@@ -26,40 +26,40 @@
     <Setting Name="BalloonTipTimeout" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5000</Value>
     </Setting>
-    <Setting Name="FeedScrollInterval" Provider="Common.Settings.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
+    <Setting Name="FeedScrollInterval" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:01:00</Value>
     </Setting>
-    <Setting Name="FeedCheckInterval" Provider="Common.Settings.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
+    <Setting Name="FeedCheckInterval" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:30:00</Value>
     </Setting>
-    <Setting Name="DisplayEmptyFeeds" Provider="Common.Settings.GenericSettingsProvider" Type="System.Boolean" Scope="User">
+    <Setting Name="DisplayEmptyFeeds" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="LastVersionCheck" Provider="Common.Settings.GenericSettingsProvider" Type="System.DateTime" Scope="User">
+    <Setting Name="LastVersionCheck" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="VersionCheckInterval" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">01:00:00</Value>
     </Setting>
-    <Setting Name="StartWithWindows" Provider="Common.Settings.GenericSettingsProvider" Type="System.Boolean" Scope="User">
+    <Setting Name="StartWithWindows" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="FirstRun" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ToolbarLocation" Provider="Common.Settings.GenericSettingsProvider" Type="System.Windows.Controls.Dock" Scope="User">
+    <Setting Name="ToolbarLocation" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Controls.Dock" Scope="User">
       <Value Profile="(Default)">Bottom</Value>
     </Setting>
-    <Setting Name="OpenAllSleepInterval" Provider="Common.Settings.GenericSettingsProvider" Type="System.Int32" Scope="User">
+    <Setting Name="OpenAllSleepInterval" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">500</Value>
     </Setting>
-    <Setting Name="Browser" Provider="Common.Settings.GenericSettingsProvider" Type="System.String" Scope="User">
+    <Setting Name="Browser" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="OpenAllSleepIntervalFirst" Provider="Common.Settings.GenericSettingsProvider" Type="System.Int32" Scope="User">
+    <Setting Name="OpenAllSleepIntervalFirst" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1500</Value>
     </Setting>
-    <Setting Name="MultipleLineDisplay" Provider="Common.Settings.GenericSettingsProvider" Type="FeedCenter.Options.MultipleLineDisplay" Scope="User">
+    <Setting Name="MultipleLineDisplay" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="FeedCenter.Options.MultipleLineDisplay" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
     <Setting Name="VersionLocation" Type="System.String" Scope="Application">
@@ -68,8 +68,11 @@
     <Setting Name="LastCategoryID" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DefaultUserAgent" Provider="Common.Settings.GenericSettingsProvider" Type="System.String" Scope="User">
+    <Setting Name="DefaultUserAgent" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DatabaseFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">FeedCenter.realm</Value>
     </Setting>
   </Settings>
 </SettingsFile>

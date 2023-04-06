@@ -44,9 +44,11 @@ namespace FeedCenter
             using (isolationHandle)
             {
                 // Set the path
+                LegacyDatabase.DatabasePath = SystemConfiguration.DataDirectory;
+                LegacyDatabase.DatabaseFile = Path.Combine(SystemConfiguration.DataDirectory, Settings.Default.DatabaseFile_Legacy);
+
                 Database.DatabasePath = SystemConfiguration.DataDirectory;
                 Database.DatabaseFile = Path.Combine(SystemConfiguration.DataDirectory, Settings.Default.DatabaseFile);
-                Database.Load();
 
                 // Get the generic provider
                 var genericProvider = (GenericSettingsProvider) Settings.Default.Providers[nameof(GenericSettingsProvider)];

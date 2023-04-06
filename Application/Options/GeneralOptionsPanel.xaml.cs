@@ -54,8 +54,6 @@ namespace FeedCenter.Options
 
             var expressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
             this.UpdateAllSources(expressions);
-
-            this.Validate();
         }
 
         public override string CategoryName => Properties.Resources.optionCategoryGeneral;
@@ -106,22 +104,22 @@ namespace FeedCenter.Options
         {
             var userAgents = new List<UserAgentItem>
             {
-                new UserAgentItem
+                new()
                 {
                     Caption = Properties.Resources.DefaultUserAgentCaption,
                     UserAgent = string.Empty
                 },
-                new UserAgentItem
+                new()
                 {
                     Caption = "Windows RSS Platform 2.0",
                     UserAgent = "Windows-RSS-Platform/2.0 (MSIE 9.0; Windows NT 6.1)"
                 },
-                new UserAgentItem
+                new()
                 {
                     Caption = "Feedly 1.0",
                     UserAgent = "Feedly/1.0"
                 },
-                new UserAgentItem
+                new()
                 {
                     Caption = "curl",
                     UserAgent = "curl/7.47.0"

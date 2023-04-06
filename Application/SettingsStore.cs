@@ -10,6 +10,11 @@ namespace FeedCenter
     {
         public static object OpenDataStore()
         {
+            if (!Database.Exists)
+                return null;
+
+            Database.Load();
+
             return Database.Entities;
         }
 

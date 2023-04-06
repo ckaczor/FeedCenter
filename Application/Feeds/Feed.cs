@@ -72,8 +72,8 @@ namespace FeedCenter
         public string Link { get; set; }
         public string Description { get; set; }
         public DateTimeOffset LastChecked { get; set; }
-        public int CheckInterval { get; set; }
-        public bool Enabled { get; set; }
+        public int CheckInterval { get; set; } = 60;
+        public bool Enabled { get; set; } = true;
         public bool Authenticate { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -164,17 +164,12 @@ namespace FeedCenter
             }
 
             // If the feed was successfully read and we have no last update timestamp - set the last update timestamp to now
-            if (result == FeedReadResult.Success && LastUpdated == Extensions.SqlDateTimeZero.Value)
+            if (result == FeedReadResult.Success && LastUpdated == default)
                 LastUpdated = DateTimeOffset.Now;
 
             Log.Logger.Information("Done reading feed: {0}", result);
 
             return result;
-        }
-
-        public async Task<FeedReadResult> ReadAsync(FeedCenterEntities database, bool forceRead = false)
-        {
-            return await Task.Run(() => Read(database, forceRead));
         }
 
         public Tuple<FeedType, string> DetectFeedType()

@@ -154,8 +154,8 @@
   <data name="SplashCheckingForUpdate" xml:space="preserve">
     <value>Checking for update...</value>
   </data>
-  <data name="SplashCheckingForDatabase" xml:space="preserve">
-    <value>Checking database existence...</value>
+  <data name="SplashCheckingForLegacyDatabase" xml:space="preserve">
+    <value>Checking for legacy database...</value>
   </data>
   <data name="SplashCreatingDatabase" xml:space="preserve">
     <value>Creating database...</value>
@@ -169,11 +169,11 @@
   <data name="SplashDownloadingUpdate" xml:space="preserve">
     <value>Downloading update...</value>
   </data>
-  <data name="SplashMaintainingDatabase" xml:space="preserve">
-    <value>Maintaining database...</value>
+  <data name="SplashMaintainingLegacyDatabase" xml:space="preserve">
+    <value>Maintaining legacy database...</value>
   </data>
-  <data name="SplashUpdatingDatabase" xml:space="preserve">
-    <value>Updating database...</value>
+  <data name="SplashUpdatingLegacyDatabase" xml:space="preserve">
+    <value>Updating legacy database...</value>
   </data>
   <data name="SplashStarting" xml:space="preserve">
     <value>Starting...</value>
@@ -528,5 +528,11 @@
   </data>
   <data name="defaultUserAgentLabel" xml:space="preserve">
     <value>Default _user agent:</value>
+  </data>
+  <data name="SplashLoadingDatabase" xml:space="preserve">
+    <value>Loading database...</value>
+  </data>
+  <data name="SplashMigratingLegacyDatabase" xml:space="preserve">
+    <value>Migrating legacy database...</value>
   </data>
 </root>

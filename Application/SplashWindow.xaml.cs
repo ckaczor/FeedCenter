@@ -7,222 +7,191 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Threading;
 
-namespace FeedCenter
+namespace FeedCenter;
+
+public partial class SplashWindow : IDisposable
 {
-    public partial class SplashWindow : IDisposable
+    private class ProgressStep
     {
-        #region Progress step
+        public delegate bool ProgressCallback();
 
-        private class ProgressStep
+        public readonly string Key;
+        public readonly string Caption;
+        public readonly ProgressCallback Callback;
+
+        public ProgressStep(string key, string caption, ProgressCallback callback)
         {
-            public delegate bool ProgressCallback();
+            Key = key;
+            Caption = caption;
+            Callback = callback;
+        }
+    }
 
-            public readonly string Key;
-            public readonly string Caption;
-            public readonly ProgressCallback Callback;
+    private readonly List<ProgressStep> _progressSteps = new();
+    private readonly Dispatcher _dispatcher;
+    private readonly BackgroundWorker _backgroundWorker;
 
-            public ProgressStep(string key, string caption, ProgressCallback callback)
+    public SplashWindow()
+    {
+        InitializeComponent();
+
+        // Store the dispatcher - the background worker has trouble getting the right thread when called from Main
+        _dispatcher = Dispatcher.CurrentDispatcher;
+
+        VersionLabel.Content = string.Format(Properties.Resources.Version, UpdateCheck.LocalVersion.ToString());
+
+        StatusLabel.Content = Properties.Resources.SplashStarting;
+
+        LoadProgressSteps();
+
+        ProgressBar.Maximum = _progressSteps.Count;
+
+        _backgroundWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+
+        _backgroundWorker.DoWork += HandleBackgroundWorkerDoWork;
+        _backgroundWorker.ProgressChanged += HandleBackgroundWorkerProgressChanged;
+        _backgroundWorker.RunWorkerCompleted += HandleBackgroundWorkerCompleted;
+    }
+
+    protected override void OnContentRendered(EventArgs e)
+    {
+        base.OnContentRendered(e);
+
+        _backgroundWorker.RunWorkerAsync();
+    }
+
+    private void HandleBackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+    {
+        if (!_dispatcher.CheckAccess())
+        {
+            _dispatcher.Invoke(new EventHandler<ProgressChangedEventArgs>(HandleBackgroundWorkerProgressChanged), sender, e);
+            return;
+        }
+
+        ProgressBar.Value += e.ProgressPercentage;
+
+        // Get the message
+        var message = (string) e.UserState;
+
+        // Update the status label if one was supplied
+        if (!string.IsNullOrEmpty(message))
+            StatusLabel.Content = message;
+    }
+
+    private void HandleBackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
+    {
+        // Wait just a little bit to make sure the window is up
+        Thread.Sleep(100);
+
+        // Initialize the skip key
+        var skipKey = string.Empty;
+
+        // Loop over all progress steps and execute
+        foreach (var progressStep in _progressSteps)
+        {
+            if (progressStep.Key == skipKey)
             {
-                Key = key;
-                Caption = caption;
-                Callback = callback;
+                // Update progress with an empty step
+                UpdateProgress(_backgroundWorker, string.Empty);
             }
-        }
-
-        #endregion
-
-        #region Member variables
-
-        private readonly List<ProgressStep> _progressSteps = new();
-        private readonly Dispatcher _dispatcher;
-        private readonly BackgroundWorker _backgroundWorker;
-
-        #endregion
-
-        #region Constructor
-
-        public SplashWindow()
-        {
-            InitializeComponent();
-
-            // Store the dispatcher - the background worker has trouble getting the right thread when called from Main
-            _dispatcher = Dispatcher.CurrentDispatcher;
-
-            // Get the version to display
-            var version = UpdateCheck.LocalVersion.ToString();
-
-            // Show the version
-            VersionLabel.Content = string.Format(Properties.Resources.Version, version);
-
-            // Set the starting caption
-            StatusLabel.Content = Properties.Resources.SplashStarting;
-
-            // Build the progress steps
-            LoadProgressSteps();
-
-            // Set the progress bar to the number of steps
-            ProgressBar.Maximum = _progressSteps.Count;
-
-            // Create the worker with progress and cancel
-            _backgroundWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-
-            // Setup the events
-            _backgroundWorker.DoWork += HandleBackgroundWorkerDoWork;
-            _backgroundWorker.ProgressChanged += HandleBackgroundWorkerProgressChanged;
-            _backgroundWorker.RunWorkerCompleted += HandleBackgroundWorkerCompleted;
-        }
-
-        #endregion
-
-        #region Form overrides
-
-        protected override void OnContentRendered(EventArgs e)
-        {
-            base.OnContentRendered(e);
-
-            // Start the worker
-            _backgroundWorker.RunWorkerAsync();
-        }
-
-        #endregion
-
-        #region Background worker
-
-        private void HandleBackgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            if (!_dispatcher.CheckAccess())
+            else
             {
-                _dispatcher.Invoke(new EventHandler<ProgressChangedEventArgs>(HandleBackgroundWorkerProgressChanged), sender, e);
+                // Update progress
+                UpdateProgress(_backgroundWorker, progressStep.Caption);
+
+                // Execute the step and get the result
+                var result = progressStep.Callback();
+
+                // If the step indicated a skip then set the skip key, otherwise clear it
+                skipKey = result ? string.Empty : progressStep.Key;
+            }
+
+            // Stop if cancelled
+            if (_backgroundWorker.CancellationPending)
                 return;
-            }
-
-            // Update the progress bar
-            ProgressBar.Value += e.ProgressPercentage;
-
-            // Get the message
-            var message = (string) e.UserState;
-
-            // Update the status label if one was supplied
-            if (!string.IsNullOrEmpty(message))
-                StatusLabel.Content = message;
         }
+    }
 
-        private void HandleBackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
+    private static void UpdateProgress(BackgroundWorker worker, string progressMessage)
+    {
+        // Update the worker
+        worker.ReportProgress(1, progressMessage);
+
+        // Sleep a bit if we actually updated
+        if (!string.IsNullOrEmpty(progressMessage))
+            Thread.Sleep(Settings.Default.ProgressSleepInterval);
+    }
+
+    private void HandleBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+        if (!_dispatcher.CheckAccess())
         {
-            // Wait just a little bit to make sure the window is up
-            Thread.Sleep(100);
-
-            // Initialize the skip key
-            var skipKey = string.Empty;
-
-            // Loop over all progress steps and execute
-            foreach (var progressStep in _progressSteps)
-            {
-                if (progressStep.Key == skipKey)
-                {
-                    // Update progress with an empty step
-                    UpdateProgress(_backgroundWorker, string.Empty);
-                }
-                else
-                {
-                    // Update progress
-                    UpdateProgress(_backgroundWorker, progressStep.Caption);
-
-                    // Execute the step and get the result
-                    var result = progressStep.Callback();
-
-                    // If the step indicated a skip then set the skip key, otherwise clear it
-                    skipKey = (result ? string.Empty : progressStep.Key);
-                }
-
-                // Stop if cancelled
-                if (_backgroundWorker.CancellationPending)
-                    return;
-            }
+            _dispatcher.Invoke(new EventHandler<RunWorkerCompletedEventArgs>(HandleBackgroundWorkerCompleted), sender, e);
+            return;
         }
 
-        private static void UpdateProgress(BackgroundWorker worker, string progressMessage)
+        // Move the progress bar to the max just in case
+        ProgressBar.Value = ProgressBar.Maximum;
+
+        Close();
+    }
+
+    private static class ProgressKey
+    {
+        public const string ManageLegacyDatabase = "ManageLegacyDatabase";
+        public const string ManageDatabase = "ManageDatabase";
+    }
+
+    private void LoadProgressSteps()
+    {
+        _progressSteps.Add(new ProgressStep(ProgressKey.ManageLegacyDatabase, Properties.Resources.SplashCheckingForLegacyDatabase, CheckDatabase));
+        _progressSteps.Add(new ProgressStep(ProgressKey.ManageLegacyDatabase, Properties.Resources.SplashUpdatingLegacyDatabase, UpdateDatabase));
+        _progressSteps.Add(new ProgressStep(ProgressKey.ManageLegacyDatabase, Properties.Resources.SplashMaintainingLegacyDatabase, MaintainDatabase));
+        _progressSteps.Add(new ProgressStep(ProgressKey.ManageLegacyDatabase, Properties.Resources.SplashMigratingLegacyDatabase, MigrateDatabase));
+
+        _progressSteps.Add(new ProgressStep(ProgressKey.ManageDatabase, Properties.Resources.SplashLoadingDatabase, LoadDatabase));
+    }
+
+    private static bool CheckDatabase()
+    {
+        return LegacyDatabase.Exists;
+    }
+
+    private static bool UpdateDatabase()
+    {
+        LegacyDatabase.UpdateDatabase();
+
+        return true;
+    }
+
+    private static bool MaintainDatabase()
+    {
+        LegacyDatabase.MaintainDatabase();
+
+        return true;
+    }
+
+    private static bool MigrateDatabase()
+    {
+        LegacyDatabase.MigrateDatabase();
+
+        return true;
+    }
+
+    private bool LoadDatabase()
+    {
+        _dispatcher.Invoke(() =>
         {
-            // Update the worker
-            worker.ReportProgress(1, progressMessage);
+            Database.Load();
 
-            // Sleep a bit if we actually updated
-            if (!string.IsNullOrEmpty(progressMessage))
-                Thread.Sleep(Settings.Default.ProgressSleepInterval);
-        }
+            Settings.Default.Reload();
+        });
 
-        private void HandleBackgroundWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (!_dispatcher.CheckAccess())
-            {
-                _dispatcher.Invoke(new EventHandler<RunWorkerCompletedEventArgs>(HandleBackgroundWorkerCompleted), sender, e);
-                return;
-            }
+        return true;
+    }
 
-            // Move the progress bar to the max just in case
-            ProgressBar.Value = ProgressBar.Maximum;
-
-            // Close the window
-            Close();
-        }
-
-        #endregion
-
-        #region Progress steps
-
-        private static class ProgressKey
-        {
-            public const string DatabaseCreate = "CreateDatabase";
-            public const string DatabaseUpdate = "UpdateDatabase";
-            public const string DatabaseMaintenance = "MaintainDatabase";
-        }
-
-        private void LoadProgressSteps()
-        {
-            // Load the progress steps
-            _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseCreate, Properties.Resources.SplashCheckingForDatabase, CheckDatabase));
-            _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseCreate, Properties.Resources.SplashCreatingDatabase, CreateDatabase));
-
-            _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseUpdate, Properties.Resources.SplashUpdatingDatabase, UpdateDatabase));
-
-            _progressSteps.Add(new ProgressStep(ProgressKey.DatabaseMaintenance, Properties.Resources.SplashMaintainingDatabase, MaintainDatabase));
-        }
-
-        private static bool CheckDatabase()
-        {
-            // If the database exists then we're done
-            return !Database.DatabaseExists;
-        }
-
-        private static bool CreateDatabase()
-        {
-            // Create the database
-            //Database.CreateDatabase();
-
-            return true;
-        }
-
-        private static bool UpdateDatabase()
-        {
-            // Update the database
-            // Database.UpdateDatabase();
-
-            return true;
-        }
-
-        private static bool MaintainDatabase()
-        {
-            // Maintain the database
-            //Database.MaintainDatabase();
-
-            return true;
-        }
-
-        #endregion
-
-        public void Dispose()
-        {
-            _backgroundWorker?.Dispose();
-        }
+    public void Dispose()
+    {
+        _backgroundWorker?.Dispose();
     }
 }
