@@ -24,7 +24,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool WindowLocked {
@@ -37,7 +37,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
         public global::System.Windows.Size WindowSize {
@@ -50,7 +50,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
         public global::System.Windows.Point WindowLocation {
@@ -111,7 +111,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:01:00")]
         public global::System.TimeSpan FeedScrollInterval {
@@ -124,7 +124,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:30:00")]
         public global::System.TimeSpan FeedCheckInterval {
@@ -137,7 +137,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool DisplayEmptyFeeds {
@@ -150,7 +150,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::System.DateTime LastVersionCheck {
             get {
@@ -171,7 +171,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool StartWithWindows {
@@ -196,7 +196,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Bottom")]
         public global::System.Windows.Controls.Dock ToolbarLocation {
@@ -209,7 +209,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("500")]
         public int OpenAllSleepInterval {
@@ -222,7 +222,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Browser {
@@ -235,7 +235,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1500")]
         public int OpenAllSleepIntervalFirst {
@@ -248,7 +248,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
         public global::FeedCenter.Options.MultipleLineDisplay MultipleLineDisplay {
@@ -282,7 +282,7 @@ namespace FeedCenter.Properties {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(CKaczor.GenericSettingsProvider.GenericSettingsProvider))]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DefaultUserAgent {

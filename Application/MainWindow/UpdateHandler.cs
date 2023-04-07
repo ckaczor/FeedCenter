@@ -1,4 +1,4 @@
-﻿using CKaczor.ApplicationUpdate;
+﻿using ChrisKaczor.ApplicationUpdate;
 using FeedCenter.Properties;
 using System.Windows;
 

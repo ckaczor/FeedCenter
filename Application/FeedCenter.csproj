@@ -125,19 +125,19 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Public\namebasedgrid\src\NameBasedGrid\NameBasedGrid.csproj" />
-    <ProjectReference Include="..\..\ApplicationUpdate\ApplicationUpdate.csproj" />
-    <ProjectReference Include="..\..\GenericSettingsProvider\GenericSettingsProvider.csproj" />
-    <ProjectReference Include="..\..\InstalledBrowsers\InstalledBrowsers.csproj" />
-    <ProjectReference Include="..\..\Wpf.Application.SingleInstance\Wpf.Application.SingleInstance.csproj" />
-    <ProjectReference Include="..\..\Wpf.Application.StartWithWindows\Wpf.Application.StartWithWindows.csproj" />
-    <ProjectReference Include="..\..\Wpf.Controls.HtmlTextBlock\Wpf.Controls.HtmlTextBlock.csproj" />
-    <ProjectReference Include="..\..\Wpf.Controls.Link\Wpf.Controls.Link.csproj" />
-    <ProjectReference Include="..\..\Wpf.Controls.Toolbar\Wpf.Controls.Toolbar.csproj" />
-    <ProjectReference Include="..\..\Wpf.Validation\Wpf.Validation.csproj" />
-    <ProjectReference Include="..\..\Wpf.Windows.ControlBox\Wpf.Windows.ControlBox.csproj" />
-    <ProjectReference Include="..\..\Wpf.Windows.SnappingWindow\Wpf.Windows.SnappingWindow.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.3" />
+    <PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.1" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="DebounceThrottle" Version="2.0.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />

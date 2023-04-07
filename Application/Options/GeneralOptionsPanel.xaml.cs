@@ -1,9 +1,9 @@
-﻿using CKaczor.InstalledBrowsers;
-using CKaczor.Wpf.Application;
-using CKaczor.Wpf.Validation;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Data;
+using ChrisKaczor.Wpf.Application;
+using ChrisKaczor.InstalledBrowsers;
+using ChrisKaczor.Wpf.Validation;
 
 internal class UserAgentItem
 {
@@ -19,6 +19,8 @@ namespace FeedCenter.Options
         {
             InitializeComponent();
         }
+
+        public override string CategoryName => Properties.Resources.optionCategoryGeneral;
 
         public override void LoadPanel(FeedCenterEntities database)
         {
@@ -55,8 +57,6 @@ namespace FeedCenter.Options
             var expressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
             this.UpdateAllSources(expressions);
         }
-
-        public override string CategoryName => Properties.Resources.optionCategoryGeneral;
 
         private static void LoadBrowserComboBox(ComboBox comboBox, string selected)
         {

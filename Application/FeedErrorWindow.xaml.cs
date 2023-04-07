@@ -1,4 +1,4 @@
-﻿using CKaczor.InstalledBrowsers;
+﻿using ChrisKaczor.InstalledBrowsers;
 using FeedCenter.Data;
 using FeedCenter.Options;
 using FeedCenter.Properties;

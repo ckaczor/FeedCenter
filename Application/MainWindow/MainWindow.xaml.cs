@@ -1,37 +1,29 @@
-﻿using CKaczor.ApplicationUpdate;
-using CKaczor.Wpf.Application;
-using FeedCenter.Data;
-using FeedCenter.Properties;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ChrisKaczor.Wpf.Application;
+using ChrisKaczor.ApplicationUpdate;
+using FeedCenter.Data;
+using FeedCenter.Properties;
+using Serilog;
 
 namespace FeedCenter
 {
     public partial class MainWindow : IDisposable
     {
+        private Category _currentCategory;
+        private Feed _currentFeed;
         private FeedCenterEntities _database;
         private int _feedIndex;
-
-        private Category _currentCategory;
         private IEnumerable<Feed> _feedList;
-        private Feed _currentFeed;
 
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        protected override async void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            await SingleInstance.Stop();
         }
 
         public void Dispose()
@@ -40,6 +32,13 @@ namespace FeedCenter
             _feedReadWorker?.Dispose();
 
             GC.SuppressFinalize(this);
+        }
+
+        protected override async void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            await SingleInstance.Stop();
         }
 
         public async void Initialize()
@@ -54,7 +53,9 @@ namespace FeedCenter
             LoadWindowSettings();
 
             // Set the foreground color to something that can be seen
-            LinkTextList.Foreground = (System.Drawing.SystemColors.Desktop.GetBrightness() < 0.5) ? Brushes.White : Brushes.Black;
+            LinkTextList.Foreground = (System.Drawing.SystemColors.Desktop.GetBrightness() < 0.5)
+                ? Brushes.White
+                : Brushes.Black;
             HeaderLabel.Foreground = LinkTextList.Foreground;
 
             // Create the background worker that does the actual reading
@@ -141,6 +142,50 @@ namespace FeedCenter
 
         #endregion
 
+        #region Database helpers
+
+        private void ResetDatabase()
+        {
+            // Get the ID of the current feed
+            var currentId = _currentFeed?.Id ?? Guid.Empty;
+
+            // Create a new database object
+            _database.Refresh();
+
+            _feedList = _currentCategory == null
+                ? _database.Feeds
+                : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
+
+            UpdateToolbarButtonState();
+
+            // Get a list of feeds ordered by name
+            var feedList = _feedList.OrderBy(f => f.Name).ToList();
+
+            // First try to find the current feed by ID to see if it is still there
+            var newIndex = feedList.FindIndex(f => f.Id == currentId);
+
+            if (newIndex == -1)
+            {
+                // The current feed isn't there anymore so see if we can find a feed at the old index
+                if (feedList.ElementAtOrDefault(_feedIndex) != null)
+                    newIndex = _feedIndex;
+
+                // If there is no feed at the old location then give up and go back to the start
+                if (newIndex == -1 && feedList.Count > 0)
+                    newIndex = 0;
+            }
+
+            // Set the current index to the new index
+            _feedIndex = newIndex;
+
+            // Re-get the current feed
+            _currentFeed = (_feedIndex == -1
+                ? null
+                : _feedList.OrderBy(feed => feed.Name).AsEnumerable().ElementAt(_feedIndex));
+        }
+
+        #endregion
+
         #region Feed display
 
         private void UpdateToolbarButtonState()
@@ -163,11 +208,15 @@ namespace FeedCenter
         private void InitializeDisplay()
         {
             // Get the last category (defaulting to none)
-            _currentCategory = _database.Categories.FirstOrDefault(category => category.Id.ToString() == Settings.Default.LastCategoryID);
+            _currentCategory =
+                _database.Categories.FirstOrDefault(category =>
+                    category.Id.ToString() == Settings.Default.LastCategoryID);
             DisplayCategory();
 
             // Get the current feed list to match the category
-            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
+            _feedList = _currentCategory == null
+                ? _database.Feeds
+                : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
 
             UpdateToolbarButtonState();
 
@@ -374,46 +423,6 @@ namespace FeedCenter
 
             // Clear the list
             LinkTextList.Items.Clear();
-        }
-
-        #endregion
-
-        #region Database helpers
-
-        private void ResetDatabase()
-        {
-            // Get the ID of the current feed
-            var currentId = _currentFeed?.Id ?? Guid.Empty;
-
-            // Create a new database object
-            _database.Refresh();
-
-            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
-
-            UpdateToolbarButtonState();
-
-            // Get a list of feeds ordered by name
-            var feedList = _feedList.OrderBy(f => f.Name).ToList();
-
-            // First try to find the current feed by ID to see if it is still there
-            var newIndex = feedList.FindIndex(f => f.Id == currentId);
-
-            if (newIndex == -1)
-            {
-                // The current feed isn't there anymore so see if we can find a feed at the old index
-                if (feedList.ElementAtOrDefault(_feedIndex) != null)
-                    newIndex = _feedIndex;
-
-                // If there is no feed at the old location then give up and go back to the start
-                if (newIndex == -1 && feedList.Count > 0)
-                    newIndex = 0;
-            }
-
-            // Set the current index to the new index
-            _feedIndex = newIndex;
-
-            // Re-get the current feed
-            _currentFeed = (_feedIndex == -1 ? null : _feedList.OrderBy(feed => feed.Name).AsEnumerable().ElementAt(_feedIndex));
         }
 
         #endregion

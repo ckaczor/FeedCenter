@@ -2,13 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FeedCenter.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WindowLocked" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
+    <Setting Name="WindowLocked" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="WindowSize" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Size" Scope="User">
+    <Setting Name="WindowSize" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Size" Scope="User">
       <Value Profile="(Default)">0,0</Value>
     </Setting>
-    <Setting Name="WindowLocation" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Point" Scope="User">
+    <Setting Name="WindowLocation" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Point" Scope="User">
       <Value Profile="(Default)">0,0</Value>
     </Setting>
     <Setting Name="LogDatabase" Type="System.Boolean" Scope="Application">
@@ -26,40 +26,40 @@
     <Setting Name="BalloonTipTimeout" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5000</Value>
     </Setting>
-    <Setting Name="FeedScrollInterval" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
+    <Setting Name="FeedScrollInterval" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:01:00</Value>
     </Setting>
-    <Setting Name="FeedCheckInterval" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
+    <Setting Name="FeedCheckInterval" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:30:00</Value>
     </Setting>
-    <Setting Name="DisplayEmptyFeeds" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
+    <Setting Name="DisplayEmptyFeeds" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="LastVersionCheck" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.DateTime" Scope="User">
+    <Setting Name="LastVersionCheck" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="VersionCheckInterval" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">01:00:00</Value>
     </Setting>
-    <Setting Name="StartWithWindows" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
+    <Setting Name="StartWithWindows" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="FirstRun" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ToolbarLocation" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Controls.Dock" Scope="User">
+    <Setting Name="ToolbarLocation" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Windows.Controls.Dock" Scope="User">
       <Value Profile="(Default)">Bottom</Value>
     </Setting>
-    <Setting Name="OpenAllSleepInterval" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Int32" Scope="User">
+    <Setting Name="OpenAllSleepInterval" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">500</Value>
     </Setting>
-    <Setting Name="Browser" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.String" Scope="User">
+    <Setting Name="Browser" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="OpenAllSleepIntervalFirst" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Int32" Scope="User">
+    <Setting Name="OpenAllSleepIntervalFirst" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1500</Value>
     </Setting>
-    <Setting Name="MultipleLineDisplay" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="FeedCenter.Options.MultipleLineDisplay" Scope="User">
+    <Setting Name="MultipleLineDisplay" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="FeedCenter.Options.MultipleLineDisplay" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
     <Setting Name="VersionLocation" Type="System.String" Scope="Application">
@@ -68,7 +68,7 @@
     <Setting Name="LastCategoryID" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DefaultUserAgent" Provider="CKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.String" Scope="User">
+    <Setting Name="DefaultUserAgent" Provider="ChrisKaczor.GenericSettingsProvider.GenericSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DatabaseFile" Type="System.String" Scope="Application">

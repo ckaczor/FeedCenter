@@ -1,4 +1,4 @@
-﻿using CKaczor.ApplicationUpdate;
+﻿using ChrisKaczor.ApplicationUpdate;
 using System.Reflection;
 
 namespace FeedCenter.Options

@@ -1,4 +1,4 @@
-﻿using CKaczor.Wpf.Validation;
+﻿using ChrisKaczor.Wpf.Validation;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;

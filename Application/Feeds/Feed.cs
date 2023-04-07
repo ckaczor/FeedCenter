@@ -1,4 +1,4 @@
-﻿using CKaczor.ApplicationUpdate;
+﻿using ChrisKaczor.ApplicationUpdate;
 using FeedCenter.Data;
 using FeedCenter.FeedParsers;
 using FeedCenter.Properties;

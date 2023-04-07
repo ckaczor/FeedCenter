@@ -1,12 +1,12 @@
-﻿using CKaczor.GenericSettingsProvider;
-using CKaczor.Wpf.Application;
-using FeedCenter.Data;
-using FeedCenter.Properties;
-using Serilog;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Threading;
+using ChrisKaczor.Wpf.Application;
+using ChrisKaczor.GenericSettingsProvider;
+using FeedCenter.Data;
+using FeedCenter.Properties;
+using Serilog;
 
 namespace FeedCenter
 {
@@ -25,6 +25,8 @@ namespace FeedCenter
             }
         }
         // ReSharper restore ConvertPropertyToExpressionBody
+
+        public static string Name => FeedCenter.Properties.Resources.ApplicationName;
 
         [STAThread]
         public static void Main()
@@ -45,13 +47,15 @@ namespace FeedCenter
             {
                 // Set the path
                 LegacyDatabase.DatabasePath = SystemConfiguration.DataDirectory;
-                LegacyDatabase.DatabaseFile = Path.Combine(SystemConfiguration.DataDirectory, Settings.Default.DatabaseFile_Legacy);
+                LegacyDatabase.DatabaseFile = Path.Combine(SystemConfiguration.DataDirectory,
+                    Settings.Default.DatabaseFile_Legacy);
 
                 Database.DatabasePath = SystemConfiguration.DataDirectory;
                 Database.DatabaseFile = Path.Combine(SystemConfiguration.DataDirectory, Settings.Default.DatabaseFile);
 
                 // Get the generic provider
-                var genericProvider = (GenericSettingsProvider) Settings.Default.Providers[nameof(GenericSettingsProvider)];
+                var genericProvider =
+                    (GenericSettingsProvider) Settings.Default.Providers[nameof(GenericSettingsProvider)];
 
                 if (genericProvider == null)
                     return;
@@ -69,7 +73,8 @@ namespace FeedCenter
                     .Enrich.WithThreadId()
                     .WriteTo.Console()
                     .WriteTo.File(
-                        Path.Join(SystemConfiguration.UserSettingsPath, $"{FeedCenter.Properties.Resources.ApplicationName}_.txt"),
+                        Path.Join(SystemConfiguration.UserSettingsPath,
+                            $"{FeedCenter.Properties.Resources.ApplicationName}_.txt"),
                         rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5,
                         outputTemplate: "[{Timestamp:u} - {ThreadId} - {Level:u3}] {Message:lj}{NewLine}{Exception}")
                     .CreateLogger();
@@ -79,7 +84,8 @@ namespace FeedCenter
 
                 Log.Logger.Information("Command line arguments:");
 
-                foreach (var arg in Environment.GetCommandLineArgs().Select((value, index) => (Value: value, Index: index)))
+                foreach (var arg in Environment.GetCommandLineArgs()
+                             .Select((value, index) => (Value: value, Index: index)))
                     Log.Logger.Information("\tArg {0}: {1}", arg.Index, arg.Value);
 
                 Current.DispatcherUnhandledException += HandleCurrentDispatcherUnhandledException;
@@ -117,11 +123,10 @@ namespace FeedCenter
             Log.Logger.Error((Exception) e.ExceptionObject, "Exception");
         }
 
-        private static void HandleCurrentDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private static void HandleCurrentDispatcherUnhandledException(object sender,
+            DispatcherUnhandledExceptionEventArgs e)
         {
             Log.Logger.Error(e.Exception, "Exception");
         }
-
-        public static string Name => FeedCenter.Properties.Resources.ApplicationName;
     }
 }

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:my="clr-namespace:FeedCenter.Properties"
-        xmlns:controlBox="clr-namespace:CKaczor.Wpf.Windows;assembly=Wpf.Windows.ControlBox"
+        xmlns:controlBox="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=Wpf.Windows.ControlBox"
         mc:Ignorable="d"
         Title="{x:Static my:Resources.FeedChooserWindow}"
         Height="247.297"
