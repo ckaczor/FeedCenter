@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{14
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NameBasedGrid", "..\..\Public\namebasedgrid\src\NameBasedGrid\NameBasedGrid.csproj", "{01D2D040-A2AF-42A1-9821-D1C6D77A3309}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - With Setup|Any CPU = Debug - With Setup|Any CPU
@@ -120,38 +118,6 @@ Global
 		{5E5C13A5-635E-4310-A653-0F9760F46935}.Release|x64.ActiveCfg = Release|x86
 		{5E5C13A5-635E-4310-A653-0F9760F46935}.Release|x86.ActiveCfg = Release|x86
 		{5E5C13A5-635E-4310-A653-0F9760F46935}.Release|x86.Build.0 = Release|x86
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|Any CPU.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|Any CPU.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|Mixed Platforms.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|x64.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|x64.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|x86.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug - With Setup|x86.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|x64.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Debug|x86.Build.0 = Debug|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|Any CPU.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|Any CPU.Build.0 = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|Mixed Platforms.Build.0 = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|x64.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|x64.Build.0 = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|x86.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release - With Setup|x86.Build.0 = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|Any CPU.Build.0 = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|x64.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|x64.Build.0 = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|x86.ActiveCfg = Release|Any CPU
-		{01D2D040-A2AF-42A1-9821-D1C6D77A3309}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -124,9 +124,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Public\namebasedgrid\src\NameBasedGrid\NameBasedGrid.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.2" />
     <PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.2" />
     <PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.2" />
@@ -146,6 +143,9 @@
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
+    <PackageReference Include="NameBasedGrid" Version="0.10.1">
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
     <PackageReference Include="Realm" Version="10.21.0" />
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
