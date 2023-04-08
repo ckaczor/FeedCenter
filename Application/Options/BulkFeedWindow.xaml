@@ -6,7 +6,7 @@
         Width="500"
         xmlns:my="clr-namespace:FeedCenter.Properties"
         xmlns:feedCenter="clr-namespace:FeedCenter"
-        xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=Wpf.Controls.Link"
+        xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
         FocusManager.FocusedElement="{Binding ElementName=FeedLinkFilterText}">

@@ -6,7 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         d:DataContext="{d:DesignInstance Type=feedCenter:Feed}"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:validation="clr-namespace:ChrisKaczor.Wpf.Validation;assembly=Wpf.Validation"
+        xmlns:validation="clr-namespace:ChrisKaczor.Wpf.Validation;assembly=ChrisKaczor.Wpf.Validation"
         mc:Ignorable="d"
         Title="FeedWindow"
         Height="300"

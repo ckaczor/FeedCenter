@@ -5,7 +5,7 @@
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:options="clr-namespace:FeedCenter.Options"
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
-                          xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=Wpf.Controls.Link"
+                          xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
                           mc:Ignorable="d"
                           d:DesignHeight="311"
                           d:DesignWidth="425">

@@ -127,17 +127,17 @@
     <ProjectReference Include="..\..\..\Public\namebasedgrid\src\NameBasedGrid\NameBasedGrid.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.3" />
-    <PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.2" />
-    <PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.1" />
-    <PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.1" />
+    <PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.4" />
+    <PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.3" />
+    <PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.2" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="DebounceThrottle" Version="2.0.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
@@ -146,7 +146,7 @@
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
-    <PackageReference Include="Realm" Version="10.20.0" />
+    <PackageReference Include="Realm" Version="10.21.0" />
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
