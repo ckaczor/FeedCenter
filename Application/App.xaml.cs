@@ -62,12 +62,8 @@ namespace FeedCenter
 
                 // Set the callbacks into the provider
                 genericProvider.OpenDataStore = SettingsStore.OpenDataStore;
-                genericProvider.CloseDataStore = SettingsStore.CloseDataStore;
                 genericProvider.GetSettingValue = SettingsStore.GetSettingValue;
                 genericProvider.SetSettingValue = SettingsStore.SetSettingValue;
-                genericProvider.DeleteSettingsForVersion = SettingsStore.DeleteSettingsForVersion;
-                genericProvider.GetVersionList = SettingsStore.GetVersionList;
-                genericProvider.DeleteOldVersionsOnUpgrade = !IsDebugBuild;
 
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.WithThreadId()

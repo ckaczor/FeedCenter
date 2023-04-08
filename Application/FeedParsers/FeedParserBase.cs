@@ -104,19 +104,13 @@ namespace FeedCenter.FeedParsers
         {
             var feedType = DetectFeedType(feedText);
 
-            switch (feedType)
+            return feedType switch
             {
-                case FeedType.Rss:
-                    return new RssParser(feed);
-
-                case FeedType.Rdf:
-                    return new RdfParser(feed);
-
-                case FeedType.Atom:
-                    return new AtomParser(feed);
-            }
-
-            throw new ArgumentException($"Feed type {feedType} is not supported");
+                FeedType.Rss => new RssParser(feed),
+                FeedType.Rdf => new RdfParser(feed),
+                FeedType.Atom => new AtomParser(feed),
+                _ => throw new ArgumentException($"Feed type {feedType} is not supported")
+            };
         }
 
         public static FeedType DetectFeedType(string feedText)

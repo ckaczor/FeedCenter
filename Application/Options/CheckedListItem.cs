@@ -24,7 +24,7 @@ public class CheckedListItem<T> : INotifyPropertyChanged
         {
             _item = value;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Item)));
         }
     }
 
@@ -35,7 +35,7 @@ public class CheckedListItem<T> : INotifyPropertyChanged
         {
             _isChecked = value;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsChecked"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsChecked)));
         }
     }
 }

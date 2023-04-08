@@ -115,7 +115,7 @@ namespace FeedCenter
 
             var feed = (Feed) FeedDataGrid.SelectedItem;
 
-            _database.SaveChanges(() => feed.Read(_database, true));
+            _database.SaveChanges(() => feed.Read(true));
 
             var selectedIndex = FeedDataGrid.SelectedIndex;
 

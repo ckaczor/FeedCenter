@@ -125,7 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.2" />
-    <PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.2" />
+    <PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.3" />
     <PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.2" />
     <PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.4" />
     <PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.2" />

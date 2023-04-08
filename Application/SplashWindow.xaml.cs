@@ -193,5 +193,7 @@ public partial class SplashWindow : IDisposable
     public void Dispose()
     {
         _backgroundWorker?.Dispose();
+
+        GC.SuppressFinalize(this);
     }
 }

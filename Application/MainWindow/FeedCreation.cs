@@ -63,7 +63,7 @@ namespace FeedCenter
             }
 
             // Read the feed for the first time
-            var feedReadResult = feed.Read(_database);
+            var feedReadResult = feed.Read();
 
             // See if we read the feed okay
             if (feedReadResult == FeedReadResult.Success)

@@ -1,7 +1,6 @@
 ﻿using FeedCenter.Data;
 using FeedCenter.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace FeedCenter
@@ -18,11 +17,7 @@ namespace FeedCenter
             return Database.Entities;
         }
 
-        public static void CloseDataStore(object dataStore)
-        {
-        }
-
-        public static string GetSettingValue(object dataStore, string name, Version version)
+        public static string GetSettingValue(object dataStore, string name, Version _)
         {
             var entities = (FeedCenterEntities) dataStore;
 
@@ -31,7 +26,7 @@ namespace FeedCenter
             return setting?.Value;
         }
 
-        public static void SetSettingValue(object dataStore, string name, Version version, string value)
+        public static void SetSettingValue(object dataStore, string name, Version _, string value)
         {
             var entities = (FeedCenterEntities) dataStore;
 
@@ -56,12 +51,6 @@ namespace FeedCenter
                 // Set the value into the setting
                 setting.Value = value;
             });
-        }
-
-        public static List<Version> GetVersionList(object dataStore) => null;
-
-        public static void DeleteSettingsForVersion(object dataStore, Version version)
-        {
         }
     }
 }

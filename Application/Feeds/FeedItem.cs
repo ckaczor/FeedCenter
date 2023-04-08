@@ -1,11 +1,11 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using FeedCenter.Options;
+﻿using FeedCenter.Options;
 using Realms;
+using System;
+using System.Text.RegularExpressions;
 
 namespace FeedCenter
 {
-    public class FeedItem : RealmObject
+    public partial class FeedItem : RealmObject
     {
         [PrimaryKey]
         [MapTo("ID")]
@@ -30,22 +30,20 @@ namespace FeedCenter
             return new FeedItem { Id = System.Guid.NewGuid() };
         }
 
-        #region Methods
-
         public override string ToString()
         {
             var title = Title;
 
             switch (Properties.Settings.Default.MultipleLineDisplay)
             {
-                case Options.MultipleLineDisplay.SingleLine:
+                case MultipleLineDisplay.SingleLine:
 
                     // Strip any newlines from the title
-                    title = Regex.Replace(title, @"\n", " ");
+                    title = NewlineRegex().Replace(title, " ");
 
                     break;
 
-                case Options.MultipleLineDisplay.FirstLine:
+                case MultipleLineDisplay.FirstLine:
 
                     // Find the first newline
                     var newlineIndex = title.IndexOf("\n", StringComparison.Ordinal);
@@ -62,10 +60,10 @@ namespace FeedCenter
             }
 
             // Condense multiple spaces to one space
-            title = Regex.Replace(title, @"[ ]{2,}", " ");
+            title = MultipleSpaceRegex().Replace(title, " ");
 
             // Condense tabs to one space
-            title = Regex.Replace(title, @"\t", " ");
+            title = TabRegex().Replace(title, " ");
 
             // If the title is blank then put in the "no title" title
             if (title.Length == 0)
@@ -74,20 +72,13 @@ namespace FeedCenter
             return title;
         }
 
-        //public void ProcessActions(IEnumerable<FeedAction> feedActions)
-        //{
-        //    foreach (FeedAction feedAction in feedActions)
-        //    {
-        //        switch (feedAction.Field)
-        //        {
-        //            case 1:
+        [GeneratedRegex("\\n")]
+        private static partial Regex NewlineRegex();
 
-        //                Title = Regex.Replace(Title, feedAction.Search, feedAction.Replace);
-        //                break;
-        //        }
-        //    }
-        //}
+        [GeneratedRegex("[ ]{2,}")]
+        private static partial Regex MultipleSpaceRegex();
 
-        #endregion
+        [GeneratedRegex("\\t")]
+        private static partial Regex TabRegex();
     }
 }

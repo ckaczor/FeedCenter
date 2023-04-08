@@ -131,9 +131,8 @@ namespace FeedCenter
                             break;
                         case Dock.Left:
                         case Dock.Right:
-                            throw new NotSupportedException();
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(Settings.Default.ToolbarLocation));
+                            throw new NotSupportedException();
                     }
 
                     break;
@@ -153,8 +152,8 @@ namespace FeedCenter
             _database.Refresh();
 
             _feedList = _currentCategory == null
-                ? _database.Feeds
-                : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
+                ? _database.Feeds.ToList()
+                : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id).ToList();
 
             UpdateToolbarButtonState();
 

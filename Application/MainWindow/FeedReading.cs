@@ -159,7 +159,7 @@ namespace FeedCenter
             foreach (var feed in feedsToRead)
             {
                 // Read the feed
-                database.SaveChanges(() => feed.Read(database, workerInput.ForceRead));
+                database.SaveChanges(() => feed.Read(workerInput.ForceRead));
 
                 // Increment progress
                 currentProgress += 1;

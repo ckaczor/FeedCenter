@@ -60,7 +60,7 @@ namespace FeedCenter
 
     #endregion
 
-    public class Feed : RealmObject
+    public partial class Feed : RealmObject
     {
         [PrimaryKey]
         [MapTo("ID")]
@@ -140,11 +140,11 @@ namespace FeedCenter
 
         #region Reading
 
-        public FeedReadResult Read(FeedCenterEntities database, bool forceRead = false)
+        public FeedReadResult Read(bool forceRead = false)
         {
             Log.Logger.Information("Reading feed: {0}", Source);
 
-            var result = ReadFeed(database, forceRead);
+            var result = ReadFeed(forceRead);
 
             // Handle the result
             switch (result)
@@ -224,7 +224,7 @@ namespace FeedCenter
                 feedText = feedText.Replace("&nbsp;", "&#160;");
 
                 // Find ampersands that aren't properly escaped and replace them with escaped versions
-                var r = new Regex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)");
+                var r = UnescapedAmpersandRegex();
                 feedText = r.Replace(feedText, "&amp;");
 
                 return Tuple.Create(FeedReadResult.Success, feedText);
@@ -291,7 +291,7 @@ namespace FeedCenter
             }
         }
 
-        private FeedReadResult ReadFeed(FeedCenterEntities database, bool forceRead)
+        private FeedReadResult ReadFeed(bool forceRead)
         {
             try
             {
@@ -363,6 +363,9 @@ namespace FeedCenter
                 return FeedReadResult.UnknownError;
             }
         }
+
+        [GeneratedRegex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)")]
+        private static partial Regex UnescapedAmpersandRegex();
 
         #endregion
     }

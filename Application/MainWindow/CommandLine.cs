@@ -26,7 +26,7 @@ namespace FeedCenter
             var endPosition = commandLine.IndexOf(" ", startPosition, StringComparison.Ordinal);
 
             // Extract the feed URL
-            var feedUrl = commandLine.Substring(startPosition, endPosition - startPosition);
+            var feedUrl = commandLine[startPosition..endPosition];
 
             // Add the HTTP protocol by default
             feedUrl = "http://" + feedUrl;

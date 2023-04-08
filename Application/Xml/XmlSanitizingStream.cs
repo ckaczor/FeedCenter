@@ -48,28 +48,26 @@ public class XmlSanitizingStream : StreamReader
                         character <= 0x8 ||
                         character == 0xB ||
                         character == 0xC ||
-                        (character >= 0xE && character <= 0x1F) ||
-                        (character >= 0x7F && character <= 0x84) ||
-                        (character >= 0x86 && character <= 0x9F) ||
+                        character is >= 0xE and <= 0x1F ||
+                        character is >= 0x7F and <= 0x84 ||
+                        character is >= 0x86 and <= 0x9F ||
                         character > 0x10FFFF
                     );
             }
             case "1.0": // http://www.w3.org/TR/REC-xml/#charsets
             {
                 return
-                (
-                    character == 0x9 /* == '\t' == 9   */ ||
-                    character == 0xA /* == '\n' == 10  */ ||
-                    character == 0xD /* == '\r' == 13  */ ||
-                    (character >= 0x20 && character <= 0xD7FF) ||
-                    (character >= 0xE000 && character <= 0xFFFD) ||
-                    (character >= 0x10000 && character <= 0x10FFFF)
-                );
+                character == 0x9 /* == '\t' == 9   */ ||
+                character == 0xA /* == '\n' == 10  */ ||
+                character == 0xD /* == '\r' == 13  */ ||
+                character is >= 0x20 and <= 0xD7FF ||
+                character is >= 0xE000 and <= 0xFFFD ||
+                character is >= 0x10000 and <= 0x10FFFF;
             }
             default:
             {
                 throw new ArgumentOutOfRangeException
-                    ("xmlVersion", string.Format("'{0}' is not a valid XML version.", xmlVersion));
+                    (nameof(xmlVersion), @$"'{xmlVersion}' is not a valid XML version.");
             }
         }
     }
@@ -133,28 +131,28 @@ public class XmlSanitizingStream : StreamReader
     #region Read*() method overrides
 
     // The following methods are exact copies of the methods in TextReader, 
-    // extracting by disassembling it in Refelctor
+    // extracting by disassembling it in Reflector
 
     public override int Read(char[] buffer, int index, int count)
     {
         if (buffer == null)
         {
-            throw new ArgumentNullException("buffer");
+            throw new ArgumentNullException(nameof(buffer));
         }
 
         if (index < 0)
         {
-            throw new ArgumentOutOfRangeException("index");
+            throw new ArgumentOutOfRangeException(nameof(index));
         }
 
         if (count < 0)
         {
-            throw new ArgumentOutOfRangeException("count");
+            throw new ArgumentOutOfRangeException(nameof(count));
         }
 
-        if ((buffer.Length - index) < count)
+        if (buffer.Length - index < count)
         {
-            throw new ArgumentException();
+            throw new ArgumentOutOfRangeException(nameof(buffer));
         }
 
         var num = 0;
@@ -179,7 +177,7 @@ public class XmlSanitizingStream : StreamReader
         do
         {
             num2 += num = Read(buffer, index + num2, count - num2);
-        } while ((num > 0) && (num2 < count));
+        } while (num > 0 && num2 < count);
 
         return num2;
     }
@@ -193,16 +191,11 @@ public class XmlSanitizingStream : StreamReader
             switch (num)
             {
                 case -1:
-                    if (builder.Length > 0)
-                    {
-                        return builder.ToString();
-                    }
-
-                    return null;
+                    return builder.Length > 0 ? builder.ToString() : null;
 
                 case 13:
                 case 10:
-                    if ((num == 13) && (Peek() == 10))
+                    if (num == 13 && Peek() == 10)
                     {
                         Read();
                     }
