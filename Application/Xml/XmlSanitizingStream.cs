@@ -42,33 +42,33 @@ public class XmlSanitizingStream : StreamReader
         switch (xmlVersion)
         {
             case "1.1": // http://www.w3.org/TR/xml11/#charsets
-            {
-                return
-                    !(
-                        character <= 0x8 ||
-                        character == 0xB ||
-                        character == 0xC ||
-                        character is >= 0xE and <= 0x1F ||
-                        character is >= 0x7F and <= 0x84 ||
-                        character is >= 0x86 and <= 0x9F ||
-                        character > 0x10FFFF
-                    );
-            }
+                {
+                    return
+                        !(
+                            character <= 0x8 ||
+                            character == 0xB ||
+                            character == 0xC ||
+                            character is >= 0xE and <= 0x1F ||
+                            character is >= 0x7F and <= 0x84 ||
+                            character is >= 0x86 and <= 0x9F ||
+                            character > 0x10FFFF
+                        );
+                }
             case "1.0": // http://www.w3.org/TR/REC-xml/#charsets
-            {
-                return
-                character == 0x9 /* == '\t' == 9   */ ||
-                character == 0xA /* == '\n' == 10  */ ||
-                character == 0xD /* == '\r' == 13  */ ||
-                character is >= 0x20 and <= 0xD7FF ||
-                character is >= 0xE000 and <= 0xFFFD ||
-                character is >= 0x10000 and <= 0x10FFFF;
-            }
+                {
+                    return
+                    character == 0x9 /* == '\t' == 9   */ ||
+                    character == 0xA /* == '\n' == 10  */ ||
+                    character == 0xD /* == '\r' == 13  */ ||
+                    character is >= 0x20 and <= 0xD7FF ||
+                    character is >= 0xE000 and <= 0xFFFD ||
+                    character is >= 0x10000 and <= 0x10FFFF;
+                }
             default:
-            {
-                throw new ArgumentOutOfRangeException
-                    (nameof(xmlVersion), @$"'{xmlVersion}' is not a valid XML version.");
-            }
+                {
+                    throw new ArgumentOutOfRangeException
+                        (nameof(xmlVersion), @$"'{xmlVersion}' is not a valid XML version.");
+                }
         }
     }
 

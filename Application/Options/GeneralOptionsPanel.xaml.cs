@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ChrisKaczor.InstalledBrowsers;
+using ChrisKaczor.Wpf.Application;
+using ChrisKaczor.Wpf.Validation;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Data;
-using ChrisKaczor.Wpf.Application;
-using ChrisKaczor.InstalledBrowsers;
-using ChrisKaczor.Wpf.Validation;
 
 internal class UserAgentItem
 {

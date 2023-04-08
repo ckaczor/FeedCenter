@@ -1,7 +1,7 @@
-﻿using System;
+﻿using FeedCenter.Properties;
+using System;
 using System.IO;
 using System.Reflection;
-using FeedCenter.Properties;
 
 namespace FeedCenter
 {

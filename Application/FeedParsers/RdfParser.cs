@@ -1,7 +1,6 @@
-﻿using Serilog;
-using System;
+﻿using FeedCenter.Xml;
+using Serilog;
 using System.Xml;
-using FeedCenter.Xml;
 
 namespace FeedCenter.FeedParsers
 {

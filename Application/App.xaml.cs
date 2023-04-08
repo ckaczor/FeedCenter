@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Windows.Threading;
+﻿using ChrisKaczor.GenericSettingsProvider;
 using ChrisKaczor.Wpf.Application;
-using ChrisKaczor.GenericSettingsProvider;
 using FeedCenter.Data;
 using FeedCenter.Properties;
 using Serilog;
+using System;
+using System.IO;
+using System.Linq;
+using System.Windows.Threading;
 
 namespace FeedCenter
 {

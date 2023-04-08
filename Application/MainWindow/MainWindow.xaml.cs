@@ -1,15 +1,15 @@
-﻿using System;
+﻿using ChrisKaczor.ApplicationUpdate;
+using ChrisKaczor.Wpf.Application;
+using FeedCenter.Data;
+using FeedCenter.Properties;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ChrisKaczor.Wpf.Application;
-using ChrisKaczor.ApplicationUpdate;
-using FeedCenter.Data;
-using FeedCenter.Properties;
-using Serilog;
 
 namespace FeedCenter
 {

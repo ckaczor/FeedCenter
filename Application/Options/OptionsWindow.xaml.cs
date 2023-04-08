@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using FeedCenter.Data;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using FeedCenter.Data;
 
 namespace FeedCenter.Options
 {

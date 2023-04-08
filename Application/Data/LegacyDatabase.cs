@@ -169,9 +169,9 @@ public static class LegacyDatabase
 
         var realm = Realm.GetInstance(realmConfiguration);
 
-        if (!File.Exists(DatabaseFile)) 
+        if (!File.Exists(DatabaseFile))
             return;
-        
+
         using var connection = new SqlCeConnection($"Data Source={DatabaseFile}");
 
         connection.Open();

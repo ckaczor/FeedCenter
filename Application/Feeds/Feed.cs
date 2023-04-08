@@ -1,7 +1,8 @@
 ﻿using ChrisKaczor.ApplicationUpdate;
-using FeedCenter.Data;
 using FeedCenter.FeedParsers;
 using FeedCenter.Properties;
+using FeedCenter.Xml;
+using JetBrains.Annotations;
 using Realms;
 using Serilog;
 using System;
@@ -14,8 +15,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using FeedCenter.Xml;
 using Resources = FeedCenter.Properties.Resources;
 
 namespace FeedCenter
@@ -34,12 +33,6 @@ namespace FeedCenter
         Rss,
         Rdf,
         Atom
-    }
-
-    public enum FeedItemComparison : byte
-    {
-        Default,
-        Title
     }
 
     public enum FeedReadResult
@@ -77,7 +70,6 @@ namespace FeedCenter
         public bool Authenticate { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Domain { get; set; }
 
         private string LastReadResultRaw { get; set; }
 
@@ -88,14 +80,6 @@ namespace FeedCenter
         }
 
         public DateTimeOffset LastUpdated { get; set; }
-
-        private string ItemComparisonRaw { get; set; }
-
-        public FeedItemComparison ItemComparison
-        {
-            get => Enum.TryParse(ItemComparisonRaw, out FeedItemComparison result) ? result : FeedItemComparison.Default;
-            set => ItemComparisonRaw = value.ToString();
-        }
 
         [MapTo("CategoryID")]
         public Guid CategoryId { get; set; }
@@ -110,6 +94,7 @@ namespace FeedCenter
 
         public Category Category { get; set; }
 
+        [UsedImplicitly]
         public IList<FeedItem> Items { get; }
 
         // ReSharper disable once UnusedMember.Global
@@ -216,6 +201,9 @@ namespace FeedCenter
 
                 // Get the feed text
                 var feedText = textReader.ReadToEnd();
+
+                if (string.IsNullOrEmpty(feedText))
+                    return Tuple.Create(FeedReadResult.NoResponse, string.Empty);
 
                 // Get rid of any leading and trailing whitespace
                 feedText = feedText.Trim();
