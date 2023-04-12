@@ -1,5 +1,6 @@
 ﻿using ChrisKaczor.Wpf.Validation;
 using System.Windows;
+using FeedCenter.Data;
 
 namespace FeedCenter.Options
 {
@@ -29,8 +30,16 @@ namespace FeedCenter.Options
 
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
+            var transaction = Database.Entities.BeginTransaction();
+
             if (!this.IsValid())
+            {
+                transaction.Rollback();
                 return;
+            }
+
+            transaction.Commit();
+            Database.Entities.Refresh();
 
             // Dialog is good
             DialogResult = true;

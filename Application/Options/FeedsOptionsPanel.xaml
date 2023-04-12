@@ -6,6 +6,7 @@
                           xmlns:options="clr-namespace:FeedCenter.Options"
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
                           xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
+                          xmlns:feedCenter="clr-namespace:FeedCenter"
                           mc:Ignorable="d"
                           d:DesignHeight="311"
                           d:DesignWidth="425">
@@ -65,7 +66,8 @@
                   IsReadOnly="True"
                   HeadersVisibility="Column"
                   AllowDrop="True"
-                  Background="{x:Null}">
+                  Background="{x:Null}" 
+                  d:DataContext="{d:DesignInstance Type=feedCenter:Category }">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}"
                                     Header="{x:Static properties:Resources.CategoryNameColumnHeader}"
@@ -75,11 +77,13 @@
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="Drop"
-                                 Handler="HandleTextBlockDrop" />
+                                 Handler="CategoryListBox_Drop" />
                     <EventSetter Event="DragEnter"
-                                 Handler="HandleTextBlockDragEnter" />
+                                 Handler="CategoryListBox_DragEnter" />
                     <EventSetter Event="DragLeave"
-                                 Handler="HandleTextBlockDragLeave" />
+                                 Handler="CategoryListBox_DragLeave" />
+                    <EventSetter Event="MouseDoubleClick"
+                                 Handler="CategoryListBox_MouseDoubleClick" />
                 </Style>
             </DataGrid.ItemContainerStyle>
             <DataGrid.CellStyle>

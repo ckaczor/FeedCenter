@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using FeedCenter.Data;
 
 namespace FeedCenter.Options
 {
@@ -17,11 +18,11 @@ namespace FeedCenter.Options
             InitializeComponent();
         }
 
-        public void Display(Window window, FeedCenterEntities database)
+        public void Display(Window window)
         {
             _checkedListBoxItems = new List<CheckedListItem<Feed>>();
 
-            foreach (var feed in database.Feeds)
+            foreach (var feed in Database.Entities.Feeds)
                 _checkedListBoxItems.Add(new CheckedListItem<Feed> { Item = feed });
 
             _collectionViewSource = new CollectionViewSource { Source = _checkedListBoxItems };

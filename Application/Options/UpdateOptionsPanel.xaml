@@ -11,7 +11,8 @@
     <Grid>
         <CheckBox Content="{x:Static properties:Resources.checkVersionOnStartupCheckBox}"
                   Name="CheckVersionOnStartupCheckBox"
-                  VerticalAlignment="Top" />
+                  VerticalAlignment="Top"
+                  Click="CheckVersionOnStartupCheckBox_Click" />
         <Button Content="{x:Static properties:Resources.checkVersionNowButton}"
                 Height="23"
                 HorizontalAlignment="Left"

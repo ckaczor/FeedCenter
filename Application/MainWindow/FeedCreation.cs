@@ -20,7 +20,7 @@ namespace FeedCenter
         private void HandleNewFeed(string feedUrl)
         {
             // Create and configure the new feed
-            var feed = Feed.Create(_database);
+            var feed = Feed.Create();
             feed.Source = feedUrl;
             feed.Category = _database.DefaultCategory;
 
@@ -85,7 +85,7 @@ namespace FeedCenter
                 // Feed read failed - create a new feed window
                 var feedForm = new FeedWindow();
 
-                var dialogResult = feedForm.Display(_database, feed, this);
+                var dialogResult = feedForm.Display(feed, this);
 
                 // Display the new feed form
                 if (dialogResult.HasValue && dialogResult.Value)

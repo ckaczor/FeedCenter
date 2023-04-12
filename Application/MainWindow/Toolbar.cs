@@ -145,7 +145,7 @@ namespace FeedCenter
             var feedWindow = new FeedWindow();
 
             // Display the feed window and get the result
-            var result = feedWindow.Display(_database, _currentFeed, this);
+            var result = feedWindow.Display(_currentFeed, this);
 
             // If OK was clicked...
             if (result.HasValue && result.Value)

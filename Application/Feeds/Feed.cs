@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.ApplicationUpdate;
+using FeedCenter.Data;
 using FeedCenter.FeedParsers;
 using FeedCenter.Properties;
 using FeedCenter.Xml;
@@ -118,9 +119,9 @@ namespace FeedCenter
 
         private static HttpClient _httpClient;
 
-        public static Feed Create(FeedCenterEntities database)
+        public static Feed Create()
         {
-            return new Feed { Id = Guid.NewGuid(), CategoryId = database.DefaultCategory.Id };
+            return new Feed { Id = Guid.NewGuid(), CategoryId = Database.Entities.DefaultCategory.Id };
         }
 
         #region Reading

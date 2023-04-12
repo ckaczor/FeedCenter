@@ -8,9 +8,9 @@ namespace FeedCenter
 {
     public class FeedCenterEntities
     {
-        public Realm Realm { get; private set; }
+        public Realm RealmInstance { get; }
 
-        public RealmObservableCollection<Category> Categories { get; private set; }
+        public RealmObservableCollection<Category> Categories { get; }
         public RealmObservableCollection<Feed> Feeds { get; private set; }
         public RealmObservableCollection<Setting> Settings { get; private set; }
 
@@ -18,26 +18,31 @@ namespace FeedCenter
         {
             var realmConfiguration = new RealmConfiguration($"{Database.DatabaseFile}");
 
-            Realm = Realm.GetInstance(realmConfiguration);
+            RealmInstance = Realm.GetInstance(realmConfiguration);
 
-            Settings = new RealmObservableCollection<Setting>(Realm);
-            Feeds = new RealmObservableCollection<Feed>(Realm);
-            Categories = new RealmObservableCollection<Category>(Realm);
+            Settings = new RealmObservableCollection<Setting>(RealmInstance);
+            Feeds = new RealmObservableCollection<Feed>(RealmInstance);
+            Categories = new RealmObservableCollection<Category>(RealmInstance);
 
             if (!Categories.Any())
             {
-                Realm.Write(() => Categories.Add(Category.CreateDefault()));
+                RealmInstance.Write(() => Categories.Add(Category.CreateDefault()));
             }
         }
 
         public void Refresh()
         {
-            Realm.Refresh();
+            RealmInstance.Refresh();
         }
 
         public void SaveChanges(Action action)
         {
-            Realm.Write(action);
+            RealmInstance.Write(action);
+        }
+
+        public Transaction BeginTransaction()
+        {
+            return RealmInstance.BeginWrite();
         }
 
         public Category DefaultCategory

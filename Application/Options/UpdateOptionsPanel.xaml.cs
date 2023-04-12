@@ -1,37 +1,35 @@
 ﻿using ChrisKaczor.ApplicationUpdate;
 
-namespace FeedCenter.Options
+namespace FeedCenter.Options;
+
+public partial class UpdateOptionsPanel
 {
-    public partial class UpdateOptionsPanel
+    public UpdateOptionsPanel()
     {
-        public UpdateOptionsPanel()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        public override void LoadPanel(FeedCenterEntities database)
-        {
-            base.LoadPanel(database);
+    public override void LoadPanel()
+    {
+        base.LoadPanel();
 
-            CheckVersionOnStartupCheckBox.IsChecked = Properties.Settings.Default.CheckVersionAtStartup;
-        }
+        CheckVersionOnStartupCheckBox.IsChecked = Properties.Settings.Default.CheckVersionAtStartup;
 
-        public override bool ValidatePanel()
-        {
-            return true;
-        }
+        MarkLoaded();
+    }
 
-        public override void SavePanel()
-        {
-            if (CheckVersionOnStartupCheckBox.IsChecked.HasValue && Properties.Settings.Default.CheckVersionAtStartup != CheckVersionOnStartupCheckBox.IsChecked.Value)
-                Properties.Settings.Default.CheckVersionAtStartup = CheckVersionOnStartupCheckBox.IsChecked.Value;
-        }
+    public override string CategoryName => Properties.Resources.optionCategoryUpdate;
 
-        public override string CategoryName => Properties.Resources.optionCategoryUpdate;
+    private void HandleCheckVersionNowButtonClick(object sender, System.Windows.RoutedEventArgs e)
+    {
+        UpdateCheck.DisplayUpdateInformation(true);
+    }
 
-        private void HandleCheckVersionNowButtonClick(object sender, System.Windows.RoutedEventArgs e)
-        {
-            UpdateCheck.DisplayUpdateInformation(true);
-        }
+    private void CheckVersionOnStartupCheckBox_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        if (!HasLoaded) return;
+
+        if (CheckVersionOnStartupCheckBox.IsChecked.HasValue && Properties.Settings.Default.CheckVersionAtStartup != CheckVersionOnStartupCheckBox.IsChecked.Value)
+            Properties.Settings.Default.CheckVersionAtStartup = CheckVersionOnStartupCheckBox.IsChecked.Value;
     }
 }

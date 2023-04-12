@@ -7,58 +7,42 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
+using FeedCenter.Data;
 
 namespace FeedCenter.Options
 {
     public partial class FeedsOptionsPanel
     {
-        #region Constructor
-
         public FeedsOptionsPanel()
         {
             InitializeComponent();
         }
 
-        #endregion
-
-        #region OptionsPanelBase overrides
-
-        public override void LoadPanel(FeedCenterEntities database)
+        public override void LoadPanel()
         {
-            base.LoadPanel(database);
+            base.LoadPanel();
 
-            var collectionViewSource = new CollectionViewSource { Source = Database.Categories };
+            var collectionViewSource = new CollectionViewSource { Source = Database.Entities.Categories };
             collectionViewSource.SortDescriptions.Add(new SortDescription("SortKey", ListSortDirection.Ascending));
             collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            collectionViewSource.IsLiveSortingRequested = true;
 
             CategoryListBox.ItemsSource = collectionViewSource.View;
             CategoryListBox.SelectedIndex = 0;
         }
 
-        public override bool ValidatePanel()
-        {
-            return true;
-        }
-
-        public override void SavePanel()
-        { }
-
         public override string CategoryName => Properties.Resources.optionCategoryFeeds;
-
-        #endregion
-
-        #region Feed list management
 
         private void SetFeedButtonStates()
         {
             AddFeedButton.IsEnabled = true;
-            EditFeedButton.IsEnabled = (FeedListBox.SelectedItem != null);
-            DeleteFeedButton.IsEnabled = (FeedListBox.SelectedItem != null);
+            EditFeedButton.IsEnabled = FeedListBox.SelectedItem != null;
+            DeleteFeedButton.IsEnabled = FeedListBox.SelectedItem != null;
         }
 
         private void AddFeed()
         {
-            var feed = Feed.Create(Database);
+            var feed = Feed.Create();
 
             var category = (Category) CategoryListBox.SelectedItem;
 
@@ -66,16 +50,16 @@ namespace FeedCenter.Options
 
             var feedWindow = new FeedWindow();
 
-            var result = feedWindow.Display(Database, feed, Window.GetWindow(this));
+            var result = feedWindow.Display(feed, Window.GetWindow(this));
 
-            if (result.HasValue && result.Value)
-            {
-                Database.Feeds.Add(feed);
+            if (!result.HasValue || !result.Value) 
+                return;
 
-                FeedListBox.SelectedItem = feed;
+            Database.Entities.Feeds.Add(feed);
 
-                SetFeedButtonStates();
-            }
+            FeedListBox.SelectedItem = feed;
+
+            SetFeedButtonStates();
         }
 
         private void EditSelectedFeed()
@@ -87,21 +71,17 @@ namespace FeedCenter.Options
 
             var feedWindow = new FeedWindow();
 
-            feedWindow.Display(Database, feed, Window.GetWindow(this));
+            feedWindow.Display(feed, Window.GetWindow(this));
         }
 
         private void DeleteSelectedFeed()
         {
             var feed = (Feed) FeedListBox.SelectedItem;
 
-            Database.Feeds.Remove(feed);
+            Database.Entities.Feeds.Remove(feed);
 
             SetFeedButtonStates();
         }
-
-        #endregion
-
-        #region Feed event handlers
 
         private void HandleAddFeedButtonClick(object sender, RoutedEventArgs e)
         {
@@ -128,15 +108,11 @@ namespace FeedCenter.Options
             ExportFeeds();
         }
 
-        #endregion
-
-        #region Feed import and export
-
-        private void ExportFeeds()
+        private static void ExportFeeds()
         {
-            // Setup the save file dialog
             var saveFileDialog = new SaveFileDialog
             {
+                FileName = Properties.Resources.ApplicationName,
                 Filter = Properties.Resources.ImportExportFilter,
                 FilterIndex = 0,
                 OverwritePrompt = true
@@ -147,7 +123,6 @@ namespace FeedCenter.Options
             if (!result.GetValueOrDefault(false))
                 return;
 
-            // Setup the writer settings
             var writerSettings = new XmlWriterSettings
             {
                 Indent = true,
@@ -155,48 +130,32 @@ namespace FeedCenter.Options
                 ConformanceLevel = ConformanceLevel.Document
             };
 
-            // Create an XML writer for the file chosen
             var xmlWriter = XmlWriter.Create(saveFileDialog.FileName, writerSettings);
 
-            // Start the opml element
             xmlWriter.WriteStartElement("opml");
-
-            // Start the body element
             xmlWriter.WriteStartElement("body");
 
-            // Loop over each feed
-            foreach (var feed in Database.Feeds.OrderBy(feed => feed.Name))
+            foreach (var feed in Database.Entities.Feeds.OrderBy(feed => feed.Name))
             {
-                // Start the outline element
                 xmlWriter.WriteStartElement("outline");
 
-                // Write the title
                 xmlWriter.WriteAttributeString("title", feed.Title);
-
-                // Write the HTML link
                 xmlWriter.WriteAttributeString("htmlUrl", feed.Link);
-
-                // Write the XML link
                 xmlWriter.WriteAttributeString("xmlUrl", feed.Source);
 
-                // End the outline element
                 xmlWriter.WriteEndElement();
             }
 
-            // End the body element
             xmlWriter.WriteEndElement();
 
-            // End the opml element
             xmlWriter.WriteEndElement();
 
-            // Flush and close the writer
             xmlWriter.Flush();
             xmlWriter.Close();
         }
 
-        private void ImportFeeds()
+        private static void ImportFeeds()
         {
-            // Setup the open file dialog
             var openFileDialog = new OpenFileDialog
             {
                 Filter = Properties.Resources.ImportExportFilter,
@@ -208,44 +167,36 @@ namespace FeedCenter.Options
             if (!result.GetValueOrDefault(false))
                 return;
 
-            // Setup the reader settings
             var xmlReaderSettings = new XmlReaderSettings { IgnoreWhitespace = true };
 
-            // Create an XML reader for the file chosen
             var xmlReader = XmlReader.Create(openFileDialog.FileName, xmlReaderSettings);
 
             try
             {
-                // Read the first node
                 xmlReader.Read();
 
-                // Read the OPML node
                 xmlReader.ReadStartElement("opml");
-
-                // Read the body node
                 xmlReader.ReadStartElement("body");
 
-                // Read all outline nodes
                 while (xmlReader.NodeType != XmlNodeType.EndElement)
                 {
-                    // Create a new feed
-                    var feed = Feed.Create(Database);
-                    feed.Category = Database.Categories.First(c => c.IsDefault);
+                    var feed = Feed.Create();
+                    feed.Category = Database.Entities.Categories.First(c => c.IsDefault);
 
-                    // Loop over all attributes
                     while (xmlReader.MoveToNextAttribute())
                     {
-                        // Handle the attibute
                         switch (xmlReader.Name.ToLower())
                         {
                             case "title":
                                 feed.Title = xmlReader.Value;
                                 break;
 
+                            // ReSharper disable once StringLiteralTypo
                             case "htmlurl":
                                 feed.Link = xmlReader.Value;
                                 break;
 
+                            // ReSharper disable once StringLiteralTypo
                             case "xmlurl":
                                 feed.Source = xmlReader.Value;
                                 break;
@@ -256,24 +207,18 @@ namespace FeedCenter.Options
                         }
                     }
 
-                    // Fill in defaults for optional fields
                     if (string.IsNullOrEmpty(feed.Name))
                         feed.Name = feed.Title;
 
-                    // Add the feed to the main list
-                    Database.Feeds.Add(feed);
+                    Database.Entities.Feeds.Add(feed);
 
-                    // Move back to the element node
                     xmlReader.MoveToElement();
 
-                    // Skip to the next node
                     xmlReader.Skip();
                 }
 
-                // End the body node
                 xmlReader.ReadEndElement();
 
-                // End the OPML node
                 xmlReader.ReadEndElement();
             }
             finally
@@ -282,33 +227,32 @@ namespace FeedCenter.Options
             }
         }
 
-        #endregion
-
-        #region Category list management
-
         private void SetCategoryButtonStates()
         {
             AddCategoryButton.IsEnabled = true;
-            EditCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null && CategoryListBox.SelectedItem != Database.DefaultCategory);
-            DeleteCategoryButton.IsEnabled = (CategoryListBox.SelectedItem != null && CategoryListBox.SelectedItem != Database.DefaultCategory);
+
+            var selectedId = ((Category) CategoryListBox.SelectedItem).Id;
+
+            EditCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null && selectedId != Database.Entities.DefaultCategory.Id;
+            DeleteCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null && selectedId != Database.Entities.DefaultCategory.Id;
         }
 
         private void AddCategory()
         {
-            var category = Category.Create();
+            var category = new Category();
 
             var categoryWindow = new CategoryWindow();
 
             var result = categoryWindow.Display(category, Window.GetWindow(this));
 
-            if (result.HasValue && result.Value)
-            {
-                Database.SaveChanges(() => Database.Categories.Add(category));
+            if (!result.HasValue || !result.Value)
+                return;
 
-                CategoryListBox.SelectedItem = category;
+            Database.Entities.SaveChanges(() => Database.Entities.Categories.Add(category));
 
-                SetCategoryButtonStates();
-            }
+            CategoryListBox.SelectedItem = category;
+
+            SetCategoryButtonStates();
         }
 
         private void EditSelectedCategory()
@@ -325,7 +269,7 @@ namespace FeedCenter.Options
 
         private void DeleteSelectedCategory()
         {
-            var defaultCategory = Database.DefaultCategory;
+            var defaultCategory = Database.Entities.DefaultCategory;
 
             var category = (Category) CategoryListBox.SelectedItem;
 
@@ -338,14 +282,10 @@ namespace FeedCenter.Options
             else
                 CategoryListBox.SelectedIndex = index + 1;
 
-            Database.SaveChanges(() => Database.Categories.Remove(category));
+            Database.Entities.SaveChanges(() => Database.Entities.Categories.Remove(category));
 
             SetCategoryButtonStates();
         }
-
-        #endregion
-
-        #region Category event handlers
 
         private void HandleAddCategoryButtonClick(object sender, RoutedEventArgs e)
         {
@@ -362,15 +302,13 @@ namespace FeedCenter.Options
             DeleteSelectedCategory();
         }
 
-        #endregion
-
         private CollectionViewSource _collectionViewSource;
 
         private void HandleCategoryListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_collectionViewSource == null)
             {
-                _collectionViewSource = new CollectionViewSource { Source = Database.Feeds };
+                _collectionViewSource = new CollectionViewSource { Source = Database.Entities.Feeds };
                 _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
                 _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
 
@@ -392,16 +330,16 @@ namespace FeedCenter.Options
 
             var feed = (Feed) e.Item;
 
-            e.Accepted = (feed.Category.Id == selectedCategory.Id);
+            e.Accepted = feed.Category.Id == selectedCategory.Id;
         }
 
-        private void HandleTextBlockDrop(object sender, DragEventArgs e)
+        private void CategoryListBox_Drop(object sender, DragEventArgs e)
         {
             var feedList = (List<Feed>) e.Data.GetData(typeof(List<Feed>));
 
             var category = (Category) ((DataGridRow) sender).Item;
 
-            foreach (var feed in feedList)
+            foreach (var feed in feedList!)
                 feed.Category = category;
 
             _collectionViewSource.View.Refresh();
@@ -413,22 +351,22 @@ namespace FeedCenter.Options
 
         private void HandleListBoxItemPreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                var selectedItems = FeedListBox.SelectedItems.Cast<Feed>().ToList();
+            if (e.LeftButton != MouseButtonState.Pressed)
+                return;
 
-                DragDrop.DoDragDrop(FeedListBox, selectedItems, DragDropEffects.Move);
-            }
+            var selectedItems = FeedListBox.SelectedItems.Cast<Feed>().ToList();
+
+            DragDrop.DoDragDrop(FeedListBox, selectedItems, DragDropEffects.Move);
         }
 
-        private void HandleTextBlockDragEnter(object sender, DragEventArgs e)
+        private void CategoryListBox_DragEnter(object sender, DragEventArgs e)
         {
             var dataGridRow = (DataGridRow) sender;
 
             dataGridRow.FontWeight = FontWeights.Bold;
         }
 
-        private void HandleTextBlockDragLeave(object sender, DragEventArgs e)
+        private void CategoryListBox_DragLeave(object sender, DragEventArgs e)
         {
             var dataGridRow = (DataGridRow) sender;
 
@@ -443,7 +381,7 @@ namespace FeedCenter.Options
         private void HandleMultipleEditClick(object sender, RoutedEventArgs e)
         {
             var bulkFeedWindow = new BulkFeedWindow();
-            bulkFeedWindow.Display(Window.GetWindow(this), Database);
+            bulkFeedWindow.Display(Window.GetWindow(this));
         }
 
         private void HandleFeedListPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -457,6 +395,14 @@ namespace FeedCenter.Options
             // If the selection already contains this row then ignore it
             if (dataGridRow != null && FeedListBox.SelectedItems.Contains(dataGridRow.Item))
                 e.Handled = true;
+        }
+
+        private void CategoryListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!EditCategoryButton.IsEnabled)
+                return;
+
+            EditSelectedCategory();
         }
     }
 }

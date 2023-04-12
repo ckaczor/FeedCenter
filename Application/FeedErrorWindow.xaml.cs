@@ -65,7 +65,7 @@ namespace FeedCenter
 
             var feedWindow = new FeedWindow();
 
-            feedWindow.Display(_database, feed, GetWindow(this));
+            feedWindow.Display(feed, GetWindow(this));
         }
 
         private void DeleteSelectedFeed()

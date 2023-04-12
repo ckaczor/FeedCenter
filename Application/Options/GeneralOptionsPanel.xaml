@@ -26,7 +26,8 @@
                   VerticalAlignment="Top"
                   VerticalContentAlignment="Center"
                   Margin="0,5"
-                  Grid.ColumnSpan="2" />
+                  Grid.ColumnSpan="2"
+                  Click="StartWithWindowsCheckBox_Click" />
         <Label Content="{x:Static properties:Resources.defaultBrowserLabel}"
                Target="{Binding ElementName=BrowserComboBox}"
                Grid.Column="0"
@@ -37,7 +38,8 @@
         <ComboBox Name="BrowserComboBox"
                   Grid.Row="2"
                   Grid.Column="1"
-                  VerticalContentAlignment="Center">
+                  VerticalContentAlignment="Center"
+                  SelectionChanged="BrowserComboBox_SelectionChanged">
         </ComboBox>
         <Label Content="{x:Static properties:Resources.defaultUserAgentLabel}"
                Target="{Binding ElementName=BrowserComboBox}"
@@ -49,8 +51,8 @@
         <ComboBox Name="UserAgentComboBox"
                   Grid.Row="4"
                   Grid.Column="1"
-                  VerticalContentAlignment="Center">
+                  VerticalContentAlignment="Center"
+                  SelectionChanged="UserAgentComboBox_SelectionChanged">
         </ComboBox>
-
     </Grid>
 </options:OptionsPanelBase>

@@ -215,6 +215,15 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Name:.
+        /// </summary>
+        public static string categoryNameLabel {
+            get {
+                return ResourceManager.GetString("categoryNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Category.
         /// </summary>
         public static string CategoryWindowAdd {

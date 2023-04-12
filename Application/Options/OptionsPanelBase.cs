@@ -1,27 +1,19 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
-namespace FeedCenter.Options
+namespace FeedCenter.Options;
+
+public class OptionsPanelBase : UserControl
 {
-    public class OptionsPanelBase : UserControl
+    public bool HasLoaded { get; private set; }
+
+    public virtual void LoadPanel()
     {
-        protected FeedCenterEntities Database { get; private set; }
-
-        public virtual void LoadPanel(FeedCenterEntities database)
-        {
-            Database = database;
-        }
-
-        public virtual bool ValidatePanel()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void SavePanel()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual string CategoryName => null;
     }
+
+    public void MarkLoaded()
+    {
+        HasLoaded = true;
+    }
+
+    public virtual string CategoryName => null;
 }

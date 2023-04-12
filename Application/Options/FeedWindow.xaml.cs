@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.Wpf.Validation;
+using FeedCenter.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,10 +15,10 @@ namespace FeedCenter.Options
             InitializeComponent();
         }
 
-        public bool? Display(FeedCenterEntities database, Feed feed, Window owner)
+        public bool? Display(Feed feed, Window owner)
         {
             // Bind the category combo box
-            CategoryComboBox.ItemsSource = database.Categories;
+            CategoryComboBox.ItemsSource = Database.Entities.Categories;
 
             // Set the data context
             DataContext = feed;

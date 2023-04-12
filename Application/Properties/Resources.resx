@@ -535,4 +535,7 @@
   <data name="SplashMigratingLegacyDatabase" xml:space="preserve">
     <value>Migrating legacy database...</value>
   </data>
+  <data name="categoryNameLabel" xml:space="preserve">
+    <value>_Name:</value>
+  </data>
 </root>

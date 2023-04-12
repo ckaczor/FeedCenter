@@ -17,15 +17,7 @@
         <ContentControl Margin="144,12,12,41"
                         Name="ContentControl"
                         IsTabStop="False" />
-        <Button Content="{x:Static properties:Resources.OkayButton}"
-                Height="23"
-                HorizontalAlignment="Right"
-                Margin="0,0,93,12"
-                VerticalAlignment="Bottom"
-                Width="75"
-                IsDefault="True"
-                Click="HandleOkayButtonClick" />
-        <Button Content="{x:Static properties:Resources.CancelButton}"
+        <Button Content="{x:Static properties:Resources.CloseButton}"
                 Margin="0,0,12,12"
                 Height="23"
                 VerticalAlignment="Bottom"

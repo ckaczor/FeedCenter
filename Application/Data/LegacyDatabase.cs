@@ -185,6 +185,9 @@ public static class LegacyDatabase
         {
             foreach (var category in categories)
             {
+                if (category.Name == Category.DefaultName)
+                    category.IsDefault = true;
+
                 category.Feeds = feeds.Where(f => f.CategoryId == category.Id).ToList();
             }
 

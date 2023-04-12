@@ -1,132 +1,104 @@
 ﻿using ChrisKaczor.InstalledBrowsers;
 using ChrisKaczor.Wpf.Application;
-using ChrisKaczor.Wpf.Validation;
-using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Data;
+using System.Windows.Controls.Primitives;
 
-internal class UserAgentItem
-{
-    internal string Caption { get; set; }
-    internal string UserAgent { get; set; }
-}
+namespace FeedCenter.Options;
 
-namespace FeedCenter.Options
+public partial class GeneralOptionsPanel
 {
-    public partial class GeneralOptionsPanel
+    public GeneralOptionsPanel()
     {
-        public GeneralOptionsPanel()
+        InitializeComponent();
+    }
+
+    public override string CategoryName => Properties.Resources.optionCategoryGeneral;
+
+    public override void LoadPanel()
+    {
+        base.LoadPanel();
+
+        var settings = Properties.Settings.Default;
+
+        StartWithWindowsCheckBox.IsChecked = settings.StartWithWindows;
+
+        LoadBrowserComboBox(BrowserComboBox, settings.Browser);
+
+        LoadUserAgentComboBox(UserAgentComboBox, settings.DefaultUserAgent);
+
+        MarkLoaded();
+    }
+
+    private static void LoadBrowserComboBox(Selector selector, string selected)
+    {
+        selector.SelectedIndex = 0;
+
+        ComboBoxItem selectedItem = null;
+
+        var browsers = InstalledBrowser.GetInstalledBrowsers(true);
+        foreach (var browser in browsers)
         {
-            InitializeComponent();
+            var item = new ComboBoxItem { Content = browser.Value.Name, Tag = browser.Key };
+
+            selector.Items.Add(item);
+
+            if (browser.Key == selected)
+                selectedItem = item;
         }
 
-        public override string CategoryName => Properties.Resources.optionCategoryGeneral;
+        if (selectedItem != null)
+            selector.SelectedItem = selectedItem;
+    }
 
-        public override void LoadPanel(FeedCenterEntities database)
+    private static void LoadUserAgentComboBox(Selector selector, string selected)
+    {
+        selector.SelectedIndex = 0;
+
+        ComboBoxItem selectedItem = null;
+
+        var userAgents = UserAgentItem.GetUserAgents();
+        foreach (var userAgent in userAgents)
         {
-            base.LoadPanel(database);
+            var item = new ComboBoxItem { Content = userAgent.Caption, Tag = userAgent.UserAgent };
 
-            var settings = Properties.Settings.Default;
+            selector.Items.Add(item);
 
-            StartWithWindowsCheckBox.IsChecked = settings.StartWithWindows;
-
-            LoadBrowserComboBox(BrowserComboBox, settings.Browser);
-
-            LoadUserAgentComboBox(UserAgentComboBox, settings.DefaultUserAgent);
+            if (userAgent.UserAgent == selected)
+                selectedItem = item;
         }
 
-        public override bool ValidatePanel()
-        {
-            return true;
-        }
+        if (selectedItem != null)
+            selector.SelectedItem = selectedItem;
+    }
 
-        public override void SavePanel()
-        {
-            var settings = Properties.Settings.Default;
+    private void StartWithWindowsCheckBox_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        if (!HasLoaded) return;
 
-            if (StartWithWindowsCheckBox.IsChecked.HasValue &&
-                settings.StartWithWindows != StartWithWindowsCheckBox.IsChecked.Value)
-                settings.StartWithWindows = StartWithWindowsCheckBox.IsChecked.Value;
+        var settings = Properties.Settings.Default;
 
-            System.Windows.Application.Current.SetStartWithWindows(settings.StartWithWindows);
+        if (StartWithWindowsCheckBox.IsChecked.HasValue &&
+            settings.StartWithWindows != StartWithWindowsCheckBox.IsChecked.Value)
+            settings.StartWithWindows = StartWithWindowsCheckBox.IsChecked.Value;
 
-            settings.Browser = (string) ((ComboBoxItem) BrowserComboBox.SelectedItem).Tag;
+        System.Windows.Application.Current.SetStartWithWindows(settings.StartWithWindows);
+    }
 
-            settings.DefaultUserAgent = (string) ((ComboBoxItem) UserAgentComboBox.SelectedItem).Tag;
+    private void BrowserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!HasLoaded) return;
 
-            var expressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
-            this.UpdateAllSources(expressions);
-        }
+        var settings = Properties.Settings.Default;
 
-        private static void LoadBrowserComboBox(ComboBox comboBox, string selected)
-        {
-            comboBox.SelectedIndex = 0;
+        settings.Browser = (string) ((ComboBoxItem) BrowserComboBox.SelectedItem).Tag;
+    }
 
-            ComboBoxItem selectedItem = null;
+    private void UserAgentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!HasLoaded) return;
 
-            var browsers = InstalledBrowser.GetInstalledBrowsers(true);
-            foreach (var browser in browsers)
-            {
-                var item = new ComboBoxItem { Content = browser.Value.Name, Tag = browser.Key };
+        var settings = Properties.Settings.Default;
 
-                comboBox.Items.Add(item);
-
-                if (browser.Key == selected)
-                    selectedItem = item;
-            }
-
-            if (selectedItem != null)
-                comboBox.SelectedItem = selectedItem;
-        }
-
-        private static void LoadUserAgentComboBox(ComboBox comboBox, string selected)
-        {
-            comboBox.SelectedIndex = 0;
-
-            ComboBoxItem selectedItem = null;
-
-            var userAgents = GetUserAgents();
-            foreach (var userAgent in userAgents)
-            {
-                var item = new ComboBoxItem { Content = userAgent.Caption, Tag = userAgent.UserAgent };
-
-                comboBox.Items.Add(item);
-
-                if (userAgent.UserAgent == selected)
-                    selectedItem = item;
-            }
-
-            if (selectedItem != null)
-                comboBox.SelectedItem = selectedItem;
-        }
-
-        private static List<UserAgentItem> GetUserAgents()
-        {
-            var userAgents = new List<UserAgentItem>
-            {
-                new()
-                {
-                    Caption = Properties.Resources.DefaultUserAgentCaption,
-                    UserAgent = string.Empty
-                },
-                new()
-                {
-                    Caption = "Windows RSS Platform 2.0",
-                    UserAgent = "Windows-RSS-Platform/2.0 (MSIE 9.0; Windows NT 6.1)"
-                },
-                new()
-                {
-                    Caption = "Feedly 1.0",
-                    UserAgent = "Feedly/1.0"
-                },
-                new()
-                {
-                    Caption = "curl",
-                    UserAgent = "curl/7.47.0"
-                }
-            };
-
-            return userAgents;
-        }
+        settings.DefaultUserAgent = (string) ((ComboBoxItem) UserAgentComboBox.SelectedItem).Tag;
     }
 }

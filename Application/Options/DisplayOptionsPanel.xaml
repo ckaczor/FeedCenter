@@ -19,7 +19,8 @@
                   Name="LockWindowCheckBox"
                   VerticalAlignment="Top"
                   Width="300"
-                  Grid.ColumnSpan="2" />
+                  Grid.ColumnSpan="2"
+                  Click="LockWindowCheckBox_Click" />
         <CheckBox Content="{x:Static properties:Resources.displayEmptyFeedsCheckBox}"
                   Height="16"
                   HorizontalAlignment="Left"
@@ -28,7 +29,8 @@
                   VerticalAlignment="Top"
                   Width="300"
                   Grid.ColumnSpan="2"
-                  Grid.Column="0" />
+                  Grid.Column="0"
+                  Click="DisplayEmptyFeedsCheckBox_Click" />
         <Label Grid.Column="0"
                Content="{x:Static properties:Resources.toolbarLocationLabel}"
                VerticalAlignment="Top"
@@ -39,7 +41,8 @@
         <ComboBox Margin="8,53,0,0"
                   Name="ToolbarLocationComboBox"
                   VerticalAlignment="Top"
-                  Grid.Column="1">
+                  Grid.Column="1"
+                  SelectionChanged="ToolbarLocationComboBox_SelectionChanged">
             <ComboBoxItem Content="{x:Static properties:Resources.Top}"
                           Tag="{x:Static Dock.Top}" />
             <ComboBoxItem Content="{x:Static properties:Resources.Bottom}"
@@ -55,7 +58,8 @@
         <ComboBox Margin="8,86,0,0"
                   Name="MultipleLineDisplayComboBox"
                   VerticalAlignment="Top"
-                  Grid.Column="1">
+                  Grid.Column="1"
+                  SelectionChanged="MultipleLineDisplayComboBox_SelectionChanged">
             <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplayNormal}"
                           Tag="{x:Static options:MultipleLineDisplay.Normal}" />
             <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplaySingleLine}"

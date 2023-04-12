@@ -6,7 +6,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:validation="clr-namespace:ChrisKaczor.Wpf.Validation;assembly=ChrisKaczor.Wpf.Validation"
         xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.ControlBox"
         d:DataContext="{d:DesignInstance Type=feedCenter:Category}"
         Title="CategoryWindow"
@@ -18,40 +17,31 @@
         FocusManager.FocusedElement="{Binding ElementName=NameTextBox}"
         controls:ControlBox.HasMinimizeButton="False"
         controls:ControlBox.HasMaximizeButton="False">
-    <Grid Margin="8">
+    <Grid Margin="6,3,6,6">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Content="{x:Static properties:Resources.feedCategoryLabel}"
-               HorizontalAlignment="Left"
-               Grid.Column="0" 
-               Grid.Row="0"
-               Target="{Binding ElementName=NameTextBox}"
-               VerticalAlignment="Center"
-               VerticalContentAlignment="Center" />
-        <TextBox Name="NameTextBox"
-                 VerticalAlignment="Center"
-                 Grid.Row="0"
-                 Grid.Column="1">
-            <TextBox.Text>
-                <Binding Path="Name" UpdateSourceTrigger="Explicit" ValidatesOnExceptions="True">
-                    <Binding.ValidationRules>
-                        <validation:RequiredValidationRule></validation:RequiredValidationRule>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
+        <StackPanel 
+            Grid.Row="0" 
+            Grid.Column="0">
+            <Label Content="{x:Static properties:Resources.categoryNameLabel}"
+                   Padding="0"
+                   Margin="0,0,0,1"
+                   Target="{Binding ElementName=NameTextBox}" />
+            <TextBox Name="NameTextBox"
+                     VerticalAlignment="Center"
+                     Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}">
+            </TextBox>
+        </StackPanel>
         <StackPanel
-            Grid.Column="1"
-            Grid.Row="2"
+            Grid.Column="0"
+            Grid.Row="1"
             Orientation="Horizontal"
-            Margin="0,4,0,0"
+            Margin="0,5,0,0"
             HorizontalAlignment="Right">
             <Button Content="{x:Static properties:Resources.OkayButton}"
                     Height="23"
