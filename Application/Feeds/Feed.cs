@@ -1,12 +1,4 @@
-﻿using ChrisKaczor.ApplicationUpdate;
-using FeedCenter.Data;
-using FeedCenter.FeedParsers;
-using FeedCenter.Properties;
-using FeedCenter.Xml;
-using JetBrains.Annotations;
-using Realms;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,9 +6,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using Resources = FeedCenter.Properties.Resources;
+using ChrisKaczor.ApplicationUpdate;
+using FeedCenter.Data;
+using FeedCenter.FeedParsers;
+using FeedCenter.Properties;
+using FeedCenter.Xml;
+using JetBrains.Annotations;
+using Realms;
+using Serilog;
 
 namespace FeedCenter
 {
@@ -49,52 +49,36 @@ namespace FeedCenter
         NotFound,
         Timeout,
         ConnectionFailed,
-        ServerError
+        ServerError,
+        Moved
     }
 
     #endregion
 
     public partial class Feed : RealmObject
     {
+        private static HttpClient _httpClient;
+        public bool Authenticate { get; set; }
+
+        public Guid CategoryId { get; set; }
+
+        public int CheckInterval { get; set; } = 60;
+        public string Description { get; set; }
+        public bool Enabled { get; set; } = true;
+
         [PrimaryKey]
-        [MapTo("ID")]
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
-        public string Title { get; set; }
-        public string Source { get; set; }
-        public string Link { get; set; }
-        public string Description { get; set; }
-        public DateTimeOffset LastChecked { get; set; }
-        public int CheckInterval { get; set; } = 60;
-        public bool Enabled { get; set; } = true;
-        public bool Authenticate { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
+        [UsedImplicitly]
+        public IList<FeedItem> Items { get; }
 
-        private string LastReadResultRaw { get; set; }
+        public DateTimeOffset LastChecked { get; set; }
 
         public FeedReadResult LastReadResult
         {
             get => Enum.TryParse(LastReadResultRaw, out FeedReadResult result) ? result : FeedReadResult.Success;
             set => LastReadResultRaw = value.ToString();
         }
-
-        public DateTimeOffset LastUpdated { get; set; }
-
-        [MapTo("CategoryID")]
-        public Guid CategoryId { get; set; }
-
-        private string MultipleOpenActionRaw { get; set; }
-
-        public MultipleOpenAction MultipleOpenAction
-        {
-            get => Enum.TryParse(MultipleOpenActionRaw, out MultipleOpenAction result) ? result : MultipleOpenAction.IndividualPages;
-            set => MultipleOpenActionRaw = value.ToString();
-        }
-
-        [UsedImplicitly]
-        public IList<FeedItem> Items { get; }
 
         // ReSharper disable once UnusedMember.Global
         public string LastReadResultDescription
@@ -115,7 +99,24 @@ namespace FeedCenter
             }
         }
 
-        private static HttpClient _httpClient;
+        private string LastReadResultRaw { get; set; }
+
+        public DateTimeOffset LastUpdated { get; set; }
+        public string Link { get; set; }
+
+        public MultipleOpenAction MultipleOpenAction
+        {
+            get => Enum.TryParse(MultipleOpenActionRaw, out MultipleOpenAction result) ? result : MultipleOpenAction.IndividualPages;
+            set => MultipleOpenActionRaw = value.ToString();
+        }
+
+        private string MultipleOpenActionRaw { get; set; }
+
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public string Source { get; set; }
+        public string Title { get; set; }
+        public string Username { get; set; }
 
         public static Feed Create()
         {
@@ -175,11 +176,14 @@ namespace FeedCenter
                 // Create and configure the HTTP client if needed
                 if (_httpClient == null)
                 {
-                    _httpClient = new HttpClient(new HttpClientHandler
+                    var clientHandler = new HttpClientHandler
                     {
                         // Set that we'll accept compressed data
-                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-                    });
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                        AllowAutoRedirect = true
+                    };
+
+                    _httpClient = new HttpClient(clientHandler);
 
                     // Set a user agent string
                     var userAgent = string.IsNullOrWhiteSpace(Settings.Default.DefaultUserAgent) ? "FeedCenter/" + UpdateCheck.LocalVersion : Settings.Default.DefaultUserAgent;
@@ -222,32 +226,51 @@ namespace FeedCenter
 
                 return Tuple.Create(FeedReadResult.ConnectionFailed, string.Empty);
             }
+            catch (AggregateException aggregateException)
+            {
+                Log.Logger.Error(aggregateException, "Exception");
+
+                var innerException = aggregateException.InnerException;
+
+                if (innerException is not HttpRequestException httpRequestException)
+                    return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
+
+                switch (httpRequestException.StatusCode)
+                {
+                    case HttpStatusCode.InternalServerError:
+                        return Tuple.Create(FeedReadResult.ServerError, string.Empty);
+
+                    case HttpStatusCode.NotModified:
+                        return Tuple.Create(FeedReadResult.NotModified, string.Empty);
+
+                    case HttpStatusCode.NotFound:
+                        return Tuple.Create(FeedReadResult.NotFound, string.Empty);
+
+                    case HttpStatusCode.Unauthorized:
+                    case HttpStatusCode.Forbidden:
+                        return Tuple.Create(FeedReadResult.Unauthorized, string.Empty);
+
+                    case HttpStatusCode.Moved:
+                        return Tuple.Create(FeedReadResult.Moved, string.Empty);
+                }
+
+                if (httpRequestException.InnerException is not SocketException socketException)
+                    return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
+
+                switch (socketException.SocketErrorCode)
+                {
+                    case SocketError.NoData:
+                        return Tuple.Create(FeedReadResult.NoResponse, string.Empty);
+
+                    case SocketError.HostNotFound:
+                        return Tuple.Create(FeedReadResult.NotFound, string.Empty);
+                }
+
+                return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
+            }
             catch (WebException webException)
             {
                 var result = FeedReadResult.UnknownError;
-
-                if (webException.Response is HttpWebResponse errorResponse)
-                {
-                    switch (errorResponse.StatusCode)
-                    {
-                        case HttpStatusCode.InternalServerError:
-
-                            return Tuple.Create(FeedReadResult.ServerError, string.Empty);
-
-                        case HttpStatusCode.NotModified:
-
-                            return Tuple.Create(FeedReadResult.NotModified, string.Empty);
-
-                        case HttpStatusCode.NotFound:
-
-                            return Tuple.Create(FeedReadResult.NotFound, string.Empty);
-
-                        case HttpStatusCode.Unauthorized:
-                        case HttpStatusCode.Forbidden:
-
-                            return Tuple.Create(FeedReadResult.Unauthorized, string.Empty);
-                    }
-                }
 
                 switch (webException.Status)
                 {
@@ -336,6 +359,12 @@ namespace FeedCenter
                 }
 
                 return FeedReadResult.Success;
+            }
+            catch (FeedParseException feedParseException)
+            {
+                Log.Logger.Error(feedParseException, "Exception");
+
+                return FeedReadResult.InvalidXml;
             }
             catch (InvalidFeedFormatException exception)
             {

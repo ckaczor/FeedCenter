@@ -35,6 +35,8 @@ namespace FeedCenter.Options
 
         private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
         {
+            var transaction = Database.Entities.BeginTransaction();
+
             var feed = (Feed) DataContext;
 
             // Get a list of all framework elements and explicit binding expressions
@@ -73,11 +75,16 @@ namespace FeedCenter.Options
                 // Set focus
                 firstErrorElement.Focus();
 
+                transaction.Rollback();
+
                 return;
             }
 
             if (RequiresAuthenticationCheckBox.IsChecked.GetValueOrDefault(false))
                 feed.Password = AuthenticationPasswordTextBox.Password;
+
+            transaction.Commit();
+            Database.Entities.Refresh();
 
             // Dialog is good
             DialogResult = true;

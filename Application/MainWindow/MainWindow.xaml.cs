@@ -146,7 +146,7 @@ namespace FeedCenter
         private void ResetDatabase()
         {
             // Get the ID of the current feed
-            var currentId = _currentFeed?.Id ?? Guid.Empty;
+            var currentId = _currentFeed?.IsValid ?? false ? _currentFeed.Id : Guid.Empty;
 
             // Create a new database object
             _database.Refresh();

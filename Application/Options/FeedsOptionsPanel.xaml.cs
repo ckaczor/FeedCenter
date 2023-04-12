@@ -57,7 +57,7 @@ namespace FeedCenter.Options
             if (!result.HasValue || !result.Value)
                 return;
 
-            Database.Entities.Feeds.Add(feed);
+            Database.Entities.SaveChanges(() => Database.Entities.Feeds.Add(feed));
 
             FeedListBox.SelectedItem = feed;
 

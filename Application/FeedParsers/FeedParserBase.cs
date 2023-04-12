@@ -142,11 +142,17 @@ namespace FeedCenter.FeedParsers
                 // No clue!
                 return FeedType.Unknown;
             }
+            catch (XmlException xmlException)
+            {
+                Log.Logger.Error(xmlException, "Exception: {0}", feedText);
+
+                throw new FeedParseException(FeedParseError.InvalidXml);
+            }
             catch (Exception exception)
             {
                 Log.Logger.Error(exception, "Exception: {0}", feedText);
 
-                return FeedType.Unknown;
+                throw new FeedParseException(FeedParseError.InvalidXml);
             }
         }
 

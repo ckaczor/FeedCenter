@@ -88,17 +88,10 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Content="{x:Static my:Resources.OkayButton}"
-                    Height="23"
-                    IsDefault="True"
-                    Width="75"
-                    Grid.Column="1"
-                    Click="HandleOkayButtonClick" />
-            <Button Content="{x:Static my:Resources.CancelButton}"
+            <Button Content="{x:Static my:Resources.CloseButton}"
                     Height="23"
                     IsCancel="True"
                     Width="75"
-                    Margin="6,0,0,0"
                     Grid.Column="2" />
         </Grid>
     </Grid>

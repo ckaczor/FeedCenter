@@ -1,12 +1,12 @@
-﻿using ChrisKaczor.InstalledBrowsers;
-using FeedCenter.Options;
-using FeedCenter.Properties;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web.UI;
 using System.Windows;
 using System.Windows.Controls;
+using ChrisKaczor.InstalledBrowsers;
+using FeedCenter.Options;
+using FeedCenter.Properties;
 
 namespace FeedCenter
 {
@@ -59,18 +59,16 @@ namespace FeedCenter
             // Create the options form
             var optionsWindow = new OptionsWindow { Owner = this };
 
-            // Show the options form and get the result
-            var result = optionsWindow.ShowDialog();
+            // Show the options window
+            optionsWindow.ShowDialog();
 
-            // If okay was selected
-            if (result.HasValue && result.Value)
-            {
-                // Refresh the database to current settings
-                ResetDatabase();
+            // Refresh the database to current settings
+            ResetDatabase();
 
-                // Re-initialize the feed display
-                DisplayFeed();
-            }
+            // Re-initialize the feed display
+            DisplayFeed();
+
+            UpdateErrorLink();
         }
 
         private void HandleMarkReadToolbarButtonClick(object sender, RoutedEventArgs e)
@@ -84,19 +82,15 @@ namespace FeedCenter
             var feedErrorWindow = new FeedErrorWindow();
 
             // Display the window
-            var result = feedErrorWindow.Display(this);
+            feedErrorWindow.Display(this);
 
-            // If okay was selected
-            if (result.GetValueOrDefault())
-            {
-                // Refresh the database to current settings
-                ResetDatabase();
+            // Refresh the database to current settings
+            ResetDatabase();
 
-                // Re-initialize the feed display
-                DisplayFeed();
+            // Re-initialize the feed display
+            DisplayFeed();
 
-                UpdateErrorLink();
-            }
+            UpdateErrorLink();
         }
 
         private void HandleRefreshMenuItemClick(object sender, RoutedEventArgs e)

@@ -1,30 +1,29 @@
-﻿using ChrisKaczor.InstalledBrowsers;
-using FeedCenter.Data;
-using FeedCenter.Options;
-using FeedCenter.Properties;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using ChrisKaczor.InstalledBrowsers;
+using FeedCenter.Data;
+using FeedCenter.Options;
+using FeedCenter.Properties;
 
 namespace FeedCenter
 {
     public partial class FeedErrorWindow
     {
+        private CollectionViewSource _collectionViewSource;
+
         public FeedErrorWindow()
         {
             InitializeComponent();
         }
 
-        private FeedCenterEntities _database;
-        private CollectionViewSource _collectionViewSource;
-
-        public bool? Display(Window owner)
+        public void Display(Window owner)
         {
-            _database = Database.Entities;
-
             // Create a view and sort it by name
-            _collectionViewSource = new CollectionViewSource { Source = _database.Feeds };
+            _collectionViewSource = new CollectionViewSource { Source = Database.Entities.Feeds };
             _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
             _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
@@ -36,10 +35,10 @@ namespace FeedCenter
             Owner = owner;
 
             // Show the dialog and result the result
-            return ShowDialog();
+            ShowDialog();
         }
 
-        private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
+        private static void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
         {
             var feed = (Feed) e.Item;
 
@@ -70,9 +69,12 @@ namespace FeedCenter
 
         private void DeleteSelectedFeed()
         {
+            if (MessageBox.Show(this, Properties.Resources.ConfirmDeleteFeed, Properties.Resources.ConfirmDeleteTitle, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
+                return;
+
             var feed = (Feed) FeedDataGrid.SelectedItem;
 
-            _database.Feeds.Remove(feed);
+            Database.Entities.SaveChanges(() => Database.Entities.Feeds.Remove(feed));
 
             SetFeedButtonStates();
         }
@@ -98,24 +100,23 @@ namespace FeedCenter
             InstalledBrowser.OpenLink(Settings.Default.Browser, feed.Source);
         }
 
-        private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
-        {
-            // Save the actual settings
-            _database.SaveChanges(() => { });
-
-            DialogResult = true;
-
-            Close();
-        }
-
-        private void HandleRefreshCurrentButtonClick(object sender, RoutedEventArgs e)
+        private async void HandleRefreshCurrentButtonClick(object sender, RoutedEventArgs e)
         {
             IsEnabled = false;
             Mouse.OverrideCursor = Cursors.Wait;
 
-            var feed = (Feed) FeedDataGrid.SelectedItem;
+            var feedId = ((Feed) FeedDataGrid.SelectedItem).Id;
 
-            _database.SaveChanges(() => feed.Read(true));
+            await Task.Run(() =>
+            {
+                var entities = new FeedCenterEntities();
+
+                var feed = entities.Feeds.First(f => f.Id == feedId);
+
+                entities.SaveChanges(() => feed.Read(true));
+            });
+
+            Database.Entities.Refresh();
 
             var selectedIndex = FeedDataGrid.SelectedIndex;
 

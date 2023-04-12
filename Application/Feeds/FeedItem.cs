@@ -1,29 +1,29 @@
-﻿using FeedCenter.Options;
-using Realms;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
+using FeedCenter.Options;
+using Realms;
 
 namespace FeedCenter
 {
     public partial class FeedItem : RealmObject
     {
-        [PrimaryKey]
-        [MapTo("ID")]
-        public Guid Id { get; set; }
-
-        [MapTo("FeedID")]
-        public Guid FeedId { get; set; }
-
-        public string Title { get; set; }
-        public string Link { get; set; }
-        public string Description { get; set; }
         public bool BeenRead { get; set; }
-        public DateTimeOffset LastFound { get; set; }
-        public bool New { get; set; }
-        public string Guid { get; set; }
-        public int Sequence { get; set; }
+        public string Description { get; set; }
 
         public Feed Feed { get; set; }
+
+        public Guid FeedId { get; set; }
+        public string Guid { get; set; }
+
+        [PrimaryKey]
+        public Guid Id { get; set; }
+
+        public DateTimeOffset LastFound { get; set; }
+        public string Link { get; set; }
+        public bool New { get; set; }
+        public int Sequence { get; set; }
+
+        public string Title { get; set; }
 
         public static FeedItem Create()
         {
@@ -58,6 +58,8 @@ namespace FeedCenter
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            title ??= string.Empty;
 
             // Condense multiple spaces to one space
             title = MultipleSpaceRegex().Replace(title, " ");
