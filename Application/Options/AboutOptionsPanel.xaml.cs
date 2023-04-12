@@ -1,14 +1,17 @@
-﻿using ChrisKaczor.ApplicationUpdate;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Windows;
+using ChrisKaczor.ApplicationUpdate;
 
 namespace FeedCenter.Options;
 
 public partial class AboutOptionsPanel
 {
-    public AboutOptionsPanel()
+    public AboutOptionsPanel(Window parentWindow) : base(parentWindow)
     {
         InitializeComponent();
     }
+
+    public override string CategoryName => Properties.Resources.optionCategoryAbout;
 
     public override void LoadPanel()
     {
@@ -21,6 +24,4 @@ public partial class AboutOptionsPanel
 
         CompanyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;
     }
-
-    public override string CategoryName => Properties.Resources.optionCategoryAbout;
 }

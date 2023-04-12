@@ -1,5 +1,4 @@
-﻿using FeedCenter.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace FeedCenter.Options
@@ -21,11 +20,11 @@ namespace FeedCenter.Options
 
         private void AddCategories()
         {
-            _optionPanels.Add(new GeneralOptionsPanel());
-            _optionPanels.Add(new DisplayOptionsPanel());
-            _optionPanels.Add(new FeedsOptionsPanel());
-            _optionPanels.Add(new UpdateOptionsPanel());
-            _optionPanels.Add(new AboutOptionsPanel());
+            _optionPanels.Add(new GeneralOptionsPanel(this));
+            _optionPanels.Add(new DisplayOptionsPanel(this));
+            _optionPanels.Add(new FeedsOptionsPanel(this));
+            _optionPanels.Add(new UpdateOptionsPanel(this));
+            _optionPanels.Add(new AboutOptionsPanel(this));
         }
 
         private void LoadCategories()
@@ -61,12 +60,12 @@ namespace FeedCenter.Options
 
         private class CategoryListItem
         {
-            public OptionsPanelBase Panel { get; }
-
             public CategoryListItem(OptionsPanelBase panel)
             {
                 Panel = panel;
             }
+
+            public OptionsPanelBase Panel { get; }
 
             public override string ToString()
             {

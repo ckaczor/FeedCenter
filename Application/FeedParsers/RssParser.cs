@@ -100,7 +100,7 @@ namespace FeedCenter.FeedParsers
                         if (childNode.Attributes != null)
                         {
                             var permaLinkNode = childNode.Attributes.GetNamedItem("isPermaLink");
-                            permaLink = (permaLinkNode == null || permaLinkNode.Value == "true");
+                            permaLink = permaLinkNode == null || permaLinkNode.Value == "true";
                         }
 
                         if (permaLink && Uri.IsWellFormedUriString(feedItem.Guid, UriKind.Absolute))

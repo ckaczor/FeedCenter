@@ -1,19 +1,27 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace FeedCenter.Options;
 
 public class OptionsPanelBase : UserControl
 {
-    public bool HasLoaded { get; private set; }
+    protected readonly Window ParentWindow;
+
+    protected OptionsPanelBase(Window parentWindow)
+    {
+        ParentWindow = parentWindow;
+    }
+
+    public virtual string CategoryName => null;
+
+    protected bool HasLoaded { get; private set; }
 
     public virtual void LoadPanel()
     {
     }
 
-    public void MarkLoaded()
+    protected void MarkLoaded()
     {
         HasLoaded = true;
     }
-
-    public virtual string CategoryName => null;
 }

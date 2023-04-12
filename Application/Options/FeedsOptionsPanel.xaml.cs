@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -8,15 +7,20 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using FeedCenter.Data;
+using Microsoft.Win32;
 
 namespace FeedCenter.Options
 {
     public partial class FeedsOptionsPanel
     {
-        public FeedsOptionsPanel()
+        private CollectionViewSource _collectionViewSource;
+
+        public FeedsOptionsPanel(Window parentWindow) : base(parentWindow)
         {
             InitializeComponent();
         }
+
+        public override string CategoryName => Properties.Resources.optionCategoryFeeds;
 
         public override void LoadPanel()
         {
@@ -31,13 +35,11 @@ namespace FeedCenter.Options
             CategoryListBox.SelectedIndex = 0;
         }
 
-        public override string CategoryName => Properties.Resources.optionCategoryFeeds;
-
         private void SetFeedButtonStates()
         {
             AddFeedButton.IsEnabled = true;
-            EditFeedButton.IsEnabled = FeedListBox.SelectedItem != null;
-            DeleteFeedButton.IsEnabled = FeedListBox.SelectedItem != null;
+            EditFeedButton.IsEnabled = FeedListBox.SelectedItems.Count == 1;
+            DeleteFeedButton.IsEnabled = FeedListBox.SelectedItems.Count > 0;
         }
 
         private void AddFeed()
@@ -46,13 +48,13 @@ namespace FeedCenter.Options
 
             var category = (Category) CategoryListBox.SelectedItem;
 
-            feed.Category = category;
+            feed.CategoryId = category.Id;
 
             var feedWindow = new FeedWindow();
 
             var result = feedWindow.Display(feed, Window.GetWindow(this));
 
-            if (!result.HasValue || !result.Value) 
+            if (!result.HasValue || !result.Value)
                 return;
 
             Database.Entities.Feeds.Add(feed);
@@ -74,11 +76,17 @@ namespace FeedCenter.Options
             feedWindow.Display(feed, Window.GetWindow(this));
         }
 
-        private void DeleteSelectedFeed()
+        private void DeleteSelectedFeeds()
         {
-            var feed = (Feed) FeedListBox.SelectedItem;
+            if (MessageBox.Show(ParentWindow, Properties.Resources.ConfirmDeleteFeeds, Properties.Resources.ConfirmDeleteTitle, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
+                return;
 
-            Database.Entities.Feeds.Remove(feed);
+            var selectedItems = new Feed[FeedListBox.SelectedItems.Count];
+
+            FeedListBox.SelectedItems.CopyTo(selectedItems, 0);
+
+            foreach (var feed in selectedItems)
+                Database.Entities.SaveChanges(() => Database.Entities.Feeds.Remove(feed));
 
             SetFeedButtonStates();
         }
@@ -95,7 +103,7 @@ namespace FeedCenter.Options
 
         private void HandleDeleteFeedButtonClick(object sender, RoutedEventArgs e)
         {
-            DeleteSelectedFeed();
+            DeleteSelectedFeeds();
         }
 
         private void HandleImportButtonClick(object sender, RoutedEventArgs e)
@@ -181,7 +189,7 @@ namespace FeedCenter.Options
                 while (xmlReader.NodeType != XmlNodeType.EndElement)
                 {
                     var feed = Feed.Create();
-                    feed.Category = Database.Entities.Categories.First(c => c.IsDefault);
+                    feed.CategoryId = Database.Entities.Categories.First(c => c.IsDefault).Id;
 
                     while (xmlReader.MoveToNextAttribute())
                     {
@@ -233,8 +241,10 @@ namespace FeedCenter.Options
 
             var selectedId = ((Category) CategoryListBox.SelectedItem).Id;
 
-            EditCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null && selectedId != Database.Entities.DefaultCategory.Id;
-            DeleteCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null && selectedId != Database.Entities.DefaultCategory.Id;
+            EditCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null &&
+                                           selectedId != Database.Entities.DefaultCategory.Id;
+            DeleteCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null &&
+                                             selectedId != Database.Entities.DefaultCategory.Id;
         }
 
         private void AddCategory()
@@ -269,11 +279,15 @@ namespace FeedCenter.Options
 
         private void DeleteSelectedCategory()
         {
-            var defaultCategory = Database.Entities.DefaultCategory;
-
             var category = (Category) CategoryListBox.SelectedItem;
 
-            category.Feeds?.ToList().ForEach(feed => feed.Category = defaultCategory);
+            if (MessageBox.Show(ParentWindow, string.Format(Properties.Resources.ConfirmDeleteCategory, category.Name), Properties.Resources.ConfirmDeleteTitle, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
+                return;
+
+            var defaultCategory = Database.Entities.DefaultCategory;
+
+            foreach (var feed in Database.Entities.Feeds.Where(f => f.CategoryId == category.Id))
+                Database.Entities.SaveChanges(() => feed.CategoryId = defaultCategory.Id);
 
             var index = CategoryListBox.SelectedIndex;
 
@@ -302,8 +316,6 @@ namespace FeedCenter.Options
             DeleteSelectedCategory();
         }
 
-        private CollectionViewSource _collectionViewSource;
-
         private void HandleCategoryListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_collectionViewSource == null)
@@ -330,7 +342,7 @@ namespace FeedCenter.Options
 
             var feed = (Feed) e.Item;
 
-            e.Accepted = feed.Category.Id == selectedCategory.Id;
+            e.Accepted = feed.CategoryId == selectedCategory.Id;
         }
 
         private void CategoryListBox_Drop(object sender, DragEventArgs e)
@@ -340,7 +352,7 @@ namespace FeedCenter.Options
             var category = (Category) ((DataGridRow) sender).Item;
 
             foreach (var feed in feedList!)
-                feed.Category = category;
+                Database.Entities.SaveChanges(() => feed.CategoryId = category.Id);
 
             _collectionViewSource.View.Refresh();
 
@@ -403,6 +415,11 @@ namespace FeedCenter.Options
                 return;
 
             EditSelectedCategory();
+        }
+
+        private void FeedListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetFeedButtonStates();
         }
     }
 }

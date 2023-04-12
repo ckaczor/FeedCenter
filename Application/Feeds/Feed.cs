@@ -93,8 +93,6 @@ namespace FeedCenter
             set => MultipleOpenActionRaw = value.ToString();
         }
 
-        public Category Category { get; set; }
-
         [UsedImplicitly]
         public IList<FeedItem> Items { get; }
 

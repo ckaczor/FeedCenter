@@ -1,15 +1,18 @@
-﻿using FeedCenter.Properties;
-using System.Linq;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using FeedCenter.Properties;
 
 namespace FeedCenter.Options;
 
 public partial class DisplayOptionsPanel
 {
-    public DisplayOptionsPanel()
+    public DisplayOptionsPanel(Window parentWindow) : base(parentWindow)
     {
         InitializeComponent();
     }
+
+    public override string CategoryName => Properties.Resources.optionCategoryDisplay;
 
     public override void LoadPanel()
     {
@@ -22,8 +25,6 @@ public partial class DisplayOptionsPanel
 
         MarkLoaded();
     }
-
-    public override string CategoryName => Properties.Resources.optionCategoryDisplay;
 
     private void LockWindowCheckBox_Click(object sender, System.Windows.RoutedEventArgs e)
     {

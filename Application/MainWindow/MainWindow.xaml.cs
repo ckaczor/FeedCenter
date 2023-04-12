@@ -53,7 +53,7 @@ namespace FeedCenter
             LoadWindowSettings();
 
             // Set the foreground color to something that can be seen
-            LinkTextList.Foreground = (System.Drawing.SystemColors.Desktop.GetBrightness() < 0.5)
+            LinkTextList.Foreground = System.Drawing.SystemColors.Desktop.GetBrightness() < 0.5
                 ? Brushes.White
                 : Brushes.Black;
             HeaderLabel.Foreground = LinkTextList.Foreground;
@@ -153,7 +153,7 @@ namespace FeedCenter
 
             _feedList = _currentCategory == null
                 ? _database.Feeds.ToList()
-                : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id).ToList();
+                : _database.Feeds.Where(feed => feed.CategoryId == _currentCategory.Id).ToList();
 
             UpdateToolbarButtonState();
 
@@ -178,9 +178,9 @@ namespace FeedCenter
             _feedIndex = newIndex;
 
             // Re-get the current feed
-            _currentFeed = (_feedIndex == -1
+            _currentFeed = _feedIndex == -1
                 ? null
-                : _feedList.OrderBy(feed => feed.Name).AsEnumerable().ElementAt(_feedIndex));
+                : _feedList.OrderBy(feed => feed.Name).AsEnumerable().ElementAt(_feedIndex);
         }
 
         #endregion
@@ -215,7 +215,7 @@ namespace FeedCenter
             // Get the current feed list to match the category
             _feedList = _currentCategory == null
                 ? _database.Feeds
-                : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
+                : _database.Feeds.Where(feed => feed.CategoryId == _currentCategory.Id);
 
             UpdateToolbarButtonState();
 
@@ -257,7 +257,7 @@ namespace FeedCenter
                 var found = false;
 
                 // Remember our starting position
-                var startIndex = (_feedIndex == -1 ? 0 : _feedIndex);
+                var startIndex = _feedIndex == -1 ? 0 : _feedIndex;
 
                 // Increment the index and adjust if we've gone around the end
                 _feedIndex = (_feedIndex + 1) % feedCount;
@@ -319,7 +319,7 @@ namespace FeedCenter
                 var found = false;
 
                 // Remember our starting position
-                var startIndex = (_feedIndex == -1 ? 0 : _feedIndex);
+                var startIndex = _feedIndex == -1 ? 0 : _feedIndex;
 
                 // Decrement the feed index
                 _feedIndex--;
@@ -392,7 +392,7 @@ namespace FeedCenter
             }
 
             // Set the header to the feed title
-            FeedLabel.Text = (_currentFeed.Name.Length > 0 ? _currentFeed.Name : _currentFeed.Title);
+            FeedLabel.Text = _currentFeed.Name.Length > 0 ? _currentFeed.Name : _currentFeed.Title;
             FeedButton.Visibility = _feedList.Count() > 1 ? Visibility.Visible : Visibility.Hidden;
 
             // Clear the current list

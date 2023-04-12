@@ -400,7 +400,7 @@
   <data name="EditMenu" xml:space="preserve">
     <value>Edit...</value>
   </data>
-  <data name="ConfirmDelete" xml:space="preserve">
+  <data name="ConfirmDeleteFeed" xml:space="preserve">
     <value>Are you sure you want to delete this feed?</value>
   </data>
   <data name="optionCategoryReading" xml:space="preserve">
@@ -537,5 +537,16 @@
   </data>
   <data name="categoryNameLabel" xml:space="preserve">
     <value>_Name:</value>
+  </data>
+  <data name="ConfirmDeleteCategory" xml:space="preserve">
+    <value>Are you sure you want to delete this category?
+
+All feeds currently in category "{0}" will be moved to the default category.</value>
+  </data>
+  <data name="ConfirmDeleteTitle" xml:space="preserve">
+    <value>Confirm Delete</value>
+  </data>
+  <data name="ConfirmDeleteFeeds" xml:space="preserve">
+    <value>Are you sure you want to delete the selected feeds?</value>
   </data>
 </root>

@@ -269,11 +269,40 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this category?
+        ///
+        ///All feeds currently in category &quot;{0}&quot; will be moved to the default category..
+        /// </summary>
+        public static string ConfirmDeleteCategory {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this feed?.
         /// </summary>
-        public static string ConfirmDelete {
+        public static string ConfirmDeleteFeed {
             get {
-                return ResourceManager.GetString("ConfirmDelete", resourceCulture);
+                return ResourceManager.GetString("ConfirmDeleteFeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected feeds?.
+        /// </summary>
+        public static string ConfirmDeleteFeeds {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteFeeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Delete.
+        /// </summary>
+        public static string ConfirmDeleteTitle {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteTitle", resourceCulture);
             }
         }
         

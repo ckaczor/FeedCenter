@@ -1,5 +1,6 @@
 ﻿using ChrisKaczor.InstalledBrowsers;
 using ChrisKaczor.Wpf.Application;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
@@ -7,7 +8,7 @@ namespace FeedCenter.Options;
 
 public partial class GeneralOptionsPanel
 {
-    public GeneralOptionsPanel()
+    public GeneralOptionsPanel(Window parentWindow) : base(parentWindow)
     {
         InitializeComponent();
     }

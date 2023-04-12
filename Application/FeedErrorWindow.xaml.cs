@@ -43,7 +43,7 @@ namespace FeedCenter
         {
             var feed = (Feed) e.Item;
 
-            e.Accepted = (feed.LastReadResult != FeedReadResult.Success);
+            e.Accepted = feed.LastReadResult != FeedReadResult.Success;
         }
 
         private void HandleEditFeedButtonClick(object sender, RoutedEventArgs e)
@@ -79,11 +79,11 @@ namespace FeedCenter
 
         private void SetFeedButtonStates()
         {
-            EditFeedButton.IsEnabled = (FeedDataGrid.SelectedItem != null);
-            DeleteFeedButton.IsEnabled = (FeedDataGrid.SelectedItem != null);
-            RefreshCurrent.IsEnabled = (FeedDataGrid.SelectedItem != null);
-            OpenPage.IsEnabled = (FeedDataGrid.SelectedItem != null);
-            OpenFeed.IsEnabled = (FeedDataGrid.SelectedItem != null);
+            EditFeedButton.IsEnabled = FeedDataGrid.SelectedItem != null;
+            DeleteFeedButton.IsEnabled = FeedDataGrid.SelectedItem != null;
+            RefreshCurrent.IsEnabled = FeedDataGrid.SelectedItem != null;
+            OpenPage.IsEnabled = FeedDataGrid.SelectedItem != null;
+            OpenFeed.IsEnabled = FeedDataGrid.SelectedItem != null;
         }
 
         private void HandleOpenPageButtonClick(object sender, RoutedEventArgs e)

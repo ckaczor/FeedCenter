@@ -161,7 +161,7 @@ namespace FeedCenter
         private void HandleDeleteCurrentFeedMenuItemClick(object sender, RoutedEventArgs e)
         {
             // Confirm this delete since it is for real
-            if (MessageBox.Show(this, Properties.Resources.ConfirmDelete, string.Empty, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
+            if (MessageBox.Show(this, Properties.Resources.ConfirmDeleteFeed, string.Empty, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
                 return;
 
             // Get the current feed

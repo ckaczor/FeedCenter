@@ -193,7 +193,7 @@ public static class LegacyDatabase
 
             foreach (var feed in feeds)
             {
-                feed.Category = categories.FirstOrDefault(c => c.Id == feed.CategoryId);
+                feed.CategoryId = categories.First(c => c.Id == feed.CategoryId).Id;
             }
 
             foreach (var feedItem in feedItems)

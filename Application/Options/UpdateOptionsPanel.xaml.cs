@@ -1,13 +1,16 @@
-﻿using ChrisKaczor.ApplicationUpdate;
+﻿using System.Windows;
+using ChrisKaczor.ApplicationUpdate;
 
 namespace FeedCenter.Options;
 
 public partial class UpdateOptionsPanel
 {
-    public UpdateOptionsPanel()
+    public UpdateOptionsPanel(Window parentWindow) : base(parentWindow)
     {
         InitializeComponent();
     }
+
+    public override string CategoryName => Properties.Resources.optionCategoryUpdate;
 
     public override void LoadPanel()
     {
@@ -17,8 +20,6 @@ public partial class UpdateOptionsPanel
 
         MarkLoaded();
     }
-
-    public override string CategoryName => Properties.Resources.optionCategoryUpdate;
 
     private void HandleCheckVersionNowButtonClick(object sender, System.Windows.RoutedEventArgs e)
     {

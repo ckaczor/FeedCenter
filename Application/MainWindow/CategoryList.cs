@@ -79,7 +79,7 @@ namespace FeedCenter
             _currentCategory = category;
 
             // Get the current feed list to match the category
-            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.Category.Id == _currentCategory.Id);
+            _feedList = _currentCategory == null ? _database.Feeds : _database.Feeds.Where(feed => feed.CategoryId == _currentCategory.Id);
 
             // Refresh the feed index
             _feedIndex = -1;
