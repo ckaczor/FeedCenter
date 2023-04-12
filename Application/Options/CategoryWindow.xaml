@@ -34,7 +34,7 @@
                    Target="{Binding ElementName=NameTextBox}" />
             <TextBox Name="NameTextBox"
                      VerticalAlignment="Center"
-                     Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}">
+                     Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}">
             </TextBox>
         </StackPanel>
         <StackPanel

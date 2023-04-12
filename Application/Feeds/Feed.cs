@@ -1,5 +1,15 @@
-﻿using System;
+﻿using ChrisKaczor.ApplicationUpdate;
+using FeedCenter.Data;
+using FeedCenter.FeedParsers;
+using FeedCenter.Properties;
+using FeedCenter.Xml;
+using JetBrains.Annotations;
+using Realms;
+using Serilog;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,14 +19,6 @@ using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using ChrisKaczor.ApplicationUpdate;
-using FeedCenter.Data;
-using FeedCenter.FeedParsers;
-using FeedCenter.Properties;
-using FeedCenter.Xml;
-using JetBrains.Annotations;
-using Realms;
-using Serilog;
 
 namespace FeedCenter
 {
@@ -55,9 +57,18 @@ namespace FeedCenter
 
     #endregion
 
-    public partial class Feed : RealmObject
+    public partial class Feed : RealmObject, INotifyDataErrorInfo
     {
         private static HttpClient _httpClient;
+
+        private readonly DataErrorDictionary _dataErrorDictionary;
+
+        public Feed()
+        {
+            _dataErrorDictionary = new DataErrorDictionary();
+            _dataErrorDictionary.ErrorsChanged += DataErrorDictionaryErrorsChanged;
+        }
+
         public bool Authenticate { get; set; }
 
         public Guid CategoryId { get; set; }
@@ -112,15 +123,66 @@ namespace FeedCenter
 
         private string MultipleOpenActionRaw { get; set; }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => RawName;
+            set
+            {
+                RawName = value;
+
+                ValidateString(nameof(Name), RawName);
+                RaisePropertyChanged();
+            }
+        }
+
         public string Password { get; set; }
-        public string Source { get; set; }
+
+        [MapTo("Name")]
+        private string RawName { get; set; } = string.Empty;
+
+        [MapTo("Source")]
+        private string RawSource { get; set; } = string.Empty;
+
+        public string Source
+        {
+            get => RawSource;
+            set
+            {
+                RawSource = value;
+
+                ValidateString(nameof(Source), RawSource);
+                RaisePropertyChanged();
+            }
+        }
+
         public string Title { get; set; }
         public string Username { get; set; }
+
+        public bool HasErrors => _dataErrorDictionary.Any();
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return _dataErrorDictionary.GetErrors(propertyName);
+        }
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public static Feed Create()
         {
             return new Feed { Id = Guid.NewGuid(), CategoryId = Database.Entities.DefaultCategory.Id };
+        }
+
+        private void DataErrorDictionaryErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(e.PropertyName));
+        }
+
+        private void ValidateString(string propertyName, string value)
+        {
+            _dataErrorDictionary.ClearErrors(propertyName);
+
+            if (string.IsNullOrWhiteSpace(value))
+                _dataErrorDictionary.AddError(propertyName, $"{propertyName} cannot be empty");
         }
 
         #region Reading

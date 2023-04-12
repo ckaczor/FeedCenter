@@ -1,10 +1,10 @@
-﻿using ChrisKaczor.Wpf.Validation;
-using FeedCenter.Data;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using ChrisKaczor.Wpf.Validation;
+using FeedCenter.Data;
 
 namespace FeedCenter.Options
 {

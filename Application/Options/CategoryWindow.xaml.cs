@@ -1,5 +1,5 @@
-﻿using ChrisKaczor.Wpf.Validation;
-using System.Windows;
+﻿using System.Windows;
+using ChrisKaczor.Wpf.Validation;
 using FeedCenter.Data;
 
 namespace FeedCenter.Options
