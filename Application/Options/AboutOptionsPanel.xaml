@@ -4,21 +4,18 @@
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:options="clr-namespace:FeedCenter.Options"
+                          xmlns:properties="clr-namespace:FeedCenter.Properties"
+                          xmlns:applicationUpdate="clr-namespace:ChrisKaczor.ApplicationUpdate;assembly=ChrisKaczor.ApplicationUpdate"
                           mc:Ignorable="d"
-                          d:DesignHeight="300"
+                          d:DesignHeight="150"
                           d:DesignWidth="300">
     <Grid>
-        <TextBlock Text="Label"
-                   Name="ApplicationNameLabel"
-                   VerticalAlignment="Top"
-                   FontWeight="Bold" />
-        <TextBlock Text="Label"
-                   Margin="0,22,0,0"
-                   Name="VersionLabel"
-                   VerticalAlignment="Top" />
-        <TextBlock Text="Label"
-                   Margin="0,44,0,0"
-                   Name="CompanyLabel"
-                   VerticalAlignment="Top" />
+        <StackPanel options:Spacing.Vertical="10">
+            <TextBlock Text="{x:Static properties:Resources.ApplicationDisplayName}"
+                       FontWeight="Bold" />
+            <TextBlock Text="{Binding Source={x:Static applicationUpdate:UpdateCheck.LocalVersion}, StringFormat={x:Static properties:Resources.Version}}"
+                       Name="VersionLabel" />
+            <TextBlock Text="Chris Kaczor" />
+        </StackPanel>
     </Grid>
 </options:OptionsPanelBase>

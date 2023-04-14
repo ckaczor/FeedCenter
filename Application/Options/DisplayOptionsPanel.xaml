@@ -5,61 +5,38 @@
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:options="clr-namespace:FeedCenter.Options"
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
+                          xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                           mc:Ignorable="d"
-                          d:DesignHeight="300"
-                          d:DesignWidth="300">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+                          d:DesignHeight="150"
+                          d:DesignWidth="400">
+    <StackPanel options:Spacing.Vertical="8">
         <CheckBox Content="{x:Static properties:Resources.lockWindowCheckBox}"
-                  Height="16"
-                  HorizontalAlignment="Left"
                   Name="LockWindowCheckBox"
-                  VerticalAlignment="Top"
-                  Width="300"
-                  Grid.ColumnSpan="2"
-                  Click="LockWindowCheckBox_Click" />
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=WindowLocked}"
+                  Click="OnSaveSettings" />
         <CheckBox Content="{x:Static properties:Resources.displayEmptyFeedsCheckBox}"
-                  Height="16"
-                  HorizontalAlignment="Left"
-                  Margin="0,22,0,0"
                   Name="DisplayEmptyFeedsCheckBox"
-                  VerticalAlignment="Top"
-                  Width="300"
-                  Grid.ColumnSpan="2"
-                  Grid.Column="0"
-                  Click="DisplayEmptyFeedsCheckBox_Click" />
-        <Label Grid.Column="0"
-               Content="{x:Static properties:Resources.toolbarLocationLabel}"
-               VerticalAlignment="Top"
-               Margin="0,50,0,0"
-               Padding="0,5,5,5"
-               Target="{Binding ElementName=ToolbarLocationComboBox}"
-               Width="97" />
-        <ComboBox Margin="8,53,0,0"
-                  Name="ToolbarLocationComboBox"
-                  VerticalAlignment="Top"
-                  Grid.Column="1"
-                  SelectionChanged="ToolbarLocationComboBox_SelectionChanged">
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=DisplayEmptyFeeds}"
+                  Click="OnSaveSettings" />
+        <ComboBox
+            Name="ToolbarLocationComboBox"
+            mah:TextBoxHelper.UseFloatingWatermark="True"
+            mah:TextBoxHelper.Watermark="{x:Static properties:Resources.toolbarLocationLabel}"
+            SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=ToolbarLocation}"
+            SelectedValuePath="Tag"
+            SelectionChanged="OnSaveSettings">
             <ComboBoxItem Content="{x:Static properties:Resources.Top}"
                           Tag="{x:Static Dock.Top}" />
             <ComboBoxItem Content="{x:Static properties:Resources.Bottom}"
                           Tag="{x:Static Dock.Bottom}" />
         </ComboBox>
-        <Label Grid.Column="0"
-               Content="{x:Static properties:Resources.multipleLineDisplayLabel}"
-               VerticalAlignment="Top"
-               Margin="0,82,0,0"
-               Padding="0,5,5,5"
-               Target="{Binding ElementName=MultipleLineDisplayComboBox}"
-               Width="97" />
-        <ComboBox Margin="8,86,0,0"
-                  Name="MultipleLineDisplayComboBox"
-                  VerticalAlignment="Top"
-                  Grid.Column="1"
-                  SelectionChanged="MultipleLineDisplayComboBox_SelectionChanged">
+        <ComboBox
+            Name="MultipleLineDisplayComboBox"
+            mah:TextBoxHelper.UseFloatingWatermark="True"
+            mah:TextBoxHelper.Watermark="{x:Static properties:Resources.multipleLineDisplayLabel}"
+            SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=MultipleLineDisplay}"
+            SelectedValuePath="Tag"
+            SelectionChanged="OnSaveSettings">
             <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplayNormal}"
                           Tag="{x:Static options:MultipleLineDisplay.Normal}" />
             <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplaySingleLine}"
@@ -67,5 +44,5 @@
             <ComboBoxItem Content="{x:Static properties:Resources.multipleLineDisplayFirstLine}"
                           Tag="{x:Static options:MultipleLineDisplay.FirstLine}" />
         </ComboBox>
-    </Grid>
+    </StackPanel>
 </options:OptionsPanelBase>

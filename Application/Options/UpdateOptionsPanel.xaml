@@ -6,19 +6,15 @@
                           xmlns:options="clr-namespace:FeedCenter.Options"
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
                           mc:Ignorable="d"
-                          d:DesignHeight="300"
-                          d:DesignWidth="300">
-    <Grid>
+                          d:DesignHeight="150"
+                          d:DesignWidth="250">
+    <StackPanel options:Spacing.Vertical="10">
         <CheckBox Content="{x:Static properties:Resources.checkVersionOnStartupCheckBox}"
                   Name="CheckVersionOnStartupCheckBox"
-                  VerticalAlignment="Top"
-                  Click="CheckVersionOnStartupCheckBox_Click" />
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=CheckVersionAtStartup}"
+                  Click="OnSaveSettings" />
         <Button Content="{x:Static properties:Resources.checkVersionNowButton}"
-                Height="23"
                 HorizontalAlignment="Left"
-                Margin="0,22,0,0"
-                VerticalAlignment="Top"
-                Width="75"
                 Click="HandleCheckVersionNowButtonClick" />
-    </Grid>
+    </StackPanel>
 </options:OptionsPanelBase>

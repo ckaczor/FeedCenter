@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Windows;
-using ChrisKaczor.ApplicationUpdate;
+﻿using System.Windows;
 
 namespace FeedCenter.Options;
 
@@ -12,16 +10,4 @@ public partial class AboutOptionsPanel
     }
 
     public override string CategoryName => Properties.Resources.optionCategoryAbout;
-
-    public override void LoadPanel()
-    {
-        base.LoadPanel();
-
-        ApplicationNameLabel.Text = Properties.Resources.ApplicationDisplayName;
-
-        var version = UpdateCheck.LocalVersion.ToString();
-        VersionLabel.Text = string.Format(Properties.Resources.Version, version);
-
-        CompanyLabel.Text = ((AssemblyCompanyAttribute) Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0]).Company;
-    }
 }

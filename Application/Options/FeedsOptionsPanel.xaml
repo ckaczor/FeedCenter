@@ -29,6 +29,8 @@
                   CanUserResizeRows="False"
                   IsReadOnly="True"
                   HeadersVisibility="Column"
+                  BorderThickness="1,1,1,1"
+                  BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                   Background="{x:Null}"
                   PreviewMouseLeftButtonDown="HandleFeedListPreviewMouseLeftButtonDown" SelectionChanged="FeedListBox_SelectionChanged">
             <DataGrid.Columns>
@@ -48,12 +50,6 @@
                                  Handler="HandleListBoxItemPreviewMouseMove" />
                 </Style>
             </DataGrid.ItemContainerStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness"
-                            Value="0" />
-                </Style>
-            </DataGrid.CellStyle>
         </DataGrid>
         <DataGrid Name="CategoryListBox"
                   SelectionChanged="HandleCategoryListBoxSelectionChanged"
@@ -65,6 +61,8 @@
                   CanUserResizeRows="False"
                   IsReadOnly="True"
                   HeadersVisibility="Column"
+                  BorderThickness="1,1,1,1"
+                  BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                   AllowDrop="True"
                   Background="{x:Null}" 
                   d:DataContext="{d:DesignInstance Type=feedCenter:Category }">
@@ -86,12 +84,6 @@
                                  Handler="CategoryListBox_MouseDoubleClick" />
                 </Style>
             </DataGrid.ItemContainerStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness"
-                            Value="0" />
-                </Style>
-            </DataGrid.CellStyle>
         </DataGrid>
         <Border Grid.Column="2"
                 Grid.Row="1"

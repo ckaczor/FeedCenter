@@ -215,7 +215,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Name:.
+        ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string categoryNameLabel {
             get {
@@ -508,7 +508,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default _browser:.
+        ///   Looks up a localized string similar to Default browser.
         /// </summary>
         public static string defaultBrowserLabel {
             get {
@@ -526,7 +526,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default _user agent:.
+        ///   Looks up a localized string similar to Default user agent.
         /// </summary>
         public static string defaultUserAgentLabel {
             get {
@@ -994,7 +994,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Multi-line items:.
+        ///   Looks up a localized string similar to Multiline titles.
         /// </summary>
         public static string multipleLineDisplayLabel {
             get {
@@ -1444,7 +1444,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Tool bar location:.
+        ///   Looks up a localized string similar to Toolbar location.
         /// </summary>
         public static string toolbarLocationLabel {
             get {
@@ -1462,7 +1462,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version: {0}.
+        ///   Looks up a localized string similar to Version {0}.
         /// </summary>
         public static string Version {
             get {

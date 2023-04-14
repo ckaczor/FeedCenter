@@ -2,38 +2,33 @@
 
 namespace FeedCenter.Options
 {
-    internal class UserAgentItem
+    public class UserAgentItem
     {
-        internal string Caption { get; set; }
-        internal string UserAgent { get; set; }
+        public string Caption { get; set; }
+        public string UserAgent { get; set; }
 
-        internal static List<UserAgentItem> GetUserAgents()
+        public static List<UserAgentItem> UserAgents => new()
         {
-            var userAgents = new List<UserAgentItem>
+            new UserAgentItem
             {
-                new()
-                {
-                    Caption = Properties.Resources.DefaultUserAgentCaption,
-                    UserAgent = string.Empty
-                },
-                new()
-                {
-                    Caption = "Windows RSS Platform 2.0",
-                    UserAgent = "Windows-RSS-Platform/2.0 (MSIE 9.0; Windows NT 6.1)"
-                },
-                new()
-                {
-                    Caption = "Feedly 1.0",
-                    UserAgent = "Feedly/1.0"
-                },
-                new()
-                {
-                    Caption = "curl",
-                    UserAgent = "curl/7.47.0"
-                }
-            };
-
-            return userAgents;
-        }
+                Caption = Properties.Resources.DefaultUserAgentCaption,
+                UserAgent = string.Empty
+            },
+            new UserAgentItem
+            {
+                Caption = "Windows RSS Platform 2.0",
+                UserAgent = "Windows-RSS-Platform/2.0 (MSIE 9.0; Windows NT 6.1)"
+            },
+            new UserAgentItem
+            {
+                Caption = "Feedly 1.0",
+                UserAgent = "Feedly/1.0"
+            },
+            new UserAgentItem
+            {
+                Caption = "curl",
+                UserAgent = "curl/7.47.0"
+            }
+        };
     }
 }

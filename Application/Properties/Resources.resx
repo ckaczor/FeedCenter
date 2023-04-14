@@ -149,7 +149,7 @@
     <value>&lt; no title &gt;</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version: {0}</value>
+    <value>Version {0}</value>
   </data>
   <data name="SplashCheckingForUpdate" xml:space="preserve">
     <value>Checking for update...</value>
@@ -320,7 +320,7 @@
     <value>Right</value>
   </data>
   <data name="toolbarLocationLabel" xml:space="preserve">
-    <value>_Tool bar location:</value>
+    <value>Toolbar location</value>
   </data>
   <data name="Top" xml:space="preserve">
     <value>Top</value>
@@ -347,7 +347,7 @@
     <value>_Register as default feed reader</value>
   </data>
   <data name="defaultBrowserLabel" xml:space="preserve">
-    <value>Default _browser:</value>
+    <value>Default browser</value>
   </data>
   <data name="DefaultBrowserCaption" xml:space="preserve">
     <value>&lt; Windows Default &gt;</value>
@@ -365,7 +365,7 @@
     <value>Edit Category</value>
   </data>
   <data name="multipleLineDisplayLabel" xml:space="preserve">
-    <value>_Multi-line items:</value>
+    <value>Multiline titles</value>
   </data>
   <data name="multipleLineDisplayFirstLine" xml:space="preserve">
     <value>Show only first line</value>
@@ -527,7 +527,7 @@
     <value>Feed Center</value>
   </data>
   <data name="defaultUserAgentLabel" xml:space="preserve">
-    <value>Default _user agent:</value>
+    <value>Default user agent</value>
   </data>
   <data name="SplashLoadingDatabase" xml:space="preserve">
     <value>Loading database...</value>
@@ -536,7 +536,7 @@
     <value>Migrating legacy database...</value>
   </data>
   <data name="categoryNameLabel" xml:space="preserve">
-    <value>_Name:</value>
+    <value>Name</value>
   </data>
   <data name="ConfirmDeleteCategory" xml:space="preserve">
     <value>Are you sure you want to delete this category?

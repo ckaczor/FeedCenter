@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.ControlBox"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         d:DataContext="{d:DesignInstance Type=feedCenter:Category}"
         Title="CategoryWindow"
         Width="300"
@@ -17,7 +18,17 @@
         FocusManager.FocusedElement="{Binding ElementName=NameTextBox}"
         controls:ControlBox.HasMinimizeButton="False"
         controls:ControlBox.HasMaximizeButton="False">
-    <Grid Margin="6,3,6,6">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.cobalt.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="6">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -25,15 +36,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel 
-            Grid.Row="0" 
+        <StackPanel
+            Grid.Row="0"
             Grid.Column="0">
-            <Label Content="{x:Static properties:Resources.categoryNameLabel}"
-                   Padding="0"
-                   Margin="0,0,0,1"
-                   Target="{Binding ElementName=NameTextBox}" />
             <TextBox Name="NameTextBox"
                      VerticalAlignment="Center"
+                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                     mah:TextBoxHelper.Watermark="{x:Static properties:Resources.categoryNameLabel}"
                      Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}">
             </TextBox>
         </StackPanel>
@@ -44,7 +53,6 @@
             Margin="0,5,0,0"
             HorizontalAlignment="Right">
             <Button Content="{x:Static properties:Resources.OkayButton}"
-                    Height="23"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Width="75"
@@ -52,7 +60,6 @@
                     IsDefault="True"
                     Click="HandleOkayButtonClick" />
             <Button Content="{x:Static properties:Resources.CancelButton}"
-                    Height="23"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Width="75"

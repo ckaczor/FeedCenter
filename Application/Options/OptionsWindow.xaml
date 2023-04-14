@@ -8,21 +8,44 @@
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Icon="/FeedCenter;component/Resources/Application.ico">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.cobalt.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
-        <ListBox HorizontalAlignment="Left"
-                 Name="CategoryListBox"
-                 Width="126"
-                 SelectionChanged="HandleSelectedCategoryChanged"
-                 Margin="12,12,0,41" />
-        <ContentControl Margin="144,12,12,41"
-                        Name="ContentControl"
-                        IsTabStop="False" />
-        <Button Content="{x:Static properties:Resources.CloseButton}"
-                Margin="0,0,12,12"
-                Height="23"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
-                Width="75"
-                IsCancel="True" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ListBox
+            Grid.Column="0"
+            Grid.Row="0"
+            Name="CategoryListBox"
+            SelectionChanged="HandleSelectedCategoryChanged" />
+        <ContentControl
+            Grid.Column="2"
+            Grid.Row="0"
+            Margin="0,6,6,6"
+            Name="ContentControl"
+            IsTabStop="False" />
+        <Button
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Margin="0,6,6,6"
+            Content="{x:Static properties:Resources.CloseButton}"
+            HorizontalAlignment="Right"
+            IsCancel="True" />
     </Grid>
 </Window>

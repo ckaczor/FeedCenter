@@ -5,54 +5,33 @@
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:options="clr-namespace:FeedCenter.Options"
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
+                          xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                          xmlns:installedBrowsers="clr-namespace:ChrisKaczor.InstalledBrowsers;assembly=ChrisKaczor.InstalledBrowsers"
                           mc:Ignorable="d"
                           d:DesignHeight="300"
                           d:DesignWidth="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="15" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <StackPanel options:Spacing.Vertical="10">
         <CheckBox Content="{x:Static properties:Resources.startWithWindowsCheckBox}"
                   Name="StartWithWindowsCheckBox"
-                  VerticalAlignment="Top"
-                  VerticalContentAlignment="Center"
-                  Margin="0,5"
-                  Grid.ColumnSpan="2"
-                  Click="StartWithWindowsCheckBox_Click" />
-        <Label Content="{x:Static properties:Resources.defaultBrowserLabel}"
-               Target="{Binding ElementName=BrowserComboBox}"
-               Grid.Column="0"
-               Grid.Row="2"
-               Padding="0"
-               VerticalContentAlignment="Center"
-               Margin="0,0,5,0" />
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=StartWithWindows}"
+                  Click="OnSaveSettings" />
         <ComboBox Name="BrowserComboBox"
-                  Grid.Row="2"
-                  Grid.Column="1"
-                  VerticalContentAlignment="Center"
-                  SelectionChanged="BrowserComboBox_SelectionChanged">
-        </ComboBox>
-        <Label Content="{x:Static properties:Resources.defaultUserAgentLabel}"
-               Target="{Binding ElementName=BrowserComboBox}"
-               Grid.Column="0"
-               Grid.Row="4"
-               Padding="0"
-               VerticalContentAlignment="Center"
-               Margin="0,0,5,0" />
+                  mah:TextBoxHelper.UseFloatingWatermark="True"
+                  mah:TextBoxHelper.Watermark="{x:Static properties:Resources.defaultBrowserLabel}"
+                  d:DataContext="{d:DesignInstance Type=installedBrowsers:InstalledBrowser}"
+                  DisplayMemberPath="Name"
+                  ItemsSource="{Binding Source={x:Static installedBrowsers:InstalledBrowser.InstalledBrowsers}}"
+                  SelectedValuePath="Key"
+                  SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=Browser}"
+                  SelectionChanged="OnSaveSettings" />
         <ComboBox Name="UserAgentComboBox"
-                  Grid.Row="4"
-                  Grid.Column="1"
-                  VerticalContentAlignment="Center"
-                  SelectionChanged="UserAgentComboBox_SelectionChanged">
-        </ComboBox>
-    </Grid>
+                  mah:TextBoxHelper.UseFloatingWatermark="True"
+                  mah:TextBoxHelper.Watermark="{x:Static properties:Resources.defaultUserAgentLabel}"
+                  d:DataContext="{d:DesignInstance Type=options:UserAgentItem}"
+                  DisplayMemberPath="Caption"
+                  ItemsSource="{Binding Source={x:Static options:UserAgentItem.UserAgents}}"
+                  SelectedValuePath="UserAgent"
+                  SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=DefaultUserAgent}"
+                  SelectionChanged="OnSaveSettings" />
+    </StackPanel>
 </options:OptionsPanelBase>
