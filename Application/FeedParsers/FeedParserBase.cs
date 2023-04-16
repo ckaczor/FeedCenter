@@ -3,159 +3,158 @@ using System;
 using System.Linq;
 using System.Xml;
 
-namespace FeedCenter.FeedParsers
+namespace FeedCenter.FeedParsers;
+
+[Serializable]
+internal class InvalidFeedFormatException : ApplicationException
 {
-    [Serializable]
-    internal class InvalidFeedFormatException : ApplicationException
+    internal InvalidFeedFormatException(Exception exception)
+        : base(string.Empty, exception)
     {
-        internal InvalidFeedFormatException(Exception exception)
-            : base(string.Empty, exception)
-        {
-        }
+    }
+}
+
+internal abstract class FeedParserBase
+{
+    #region Member variables
+
+    protected readonly Feed Feed;
+
+    #endregion
+
+    #region Constructor
+
+    protected FeedParserBase(Feed feed)
+    {
+        Feed = feed;
     }
 
-    internal abstract class FeedParserBase
+    #endregion
+
+    #region Methods
+
+    public abstract FeedReadResult ParseFeed(string feedText);
+
+    protected abstract FeedItem ParseFeedItem(XmlNode node);
+
+    protected void HandleFeedItem(XmlNode node, ref int sequence)
     {
-        #region Member variables
+        // Build a feed item from the node
+        var newFeedItem = ParseFeedItem(node);
 
-        protected readonly Feed Feed;
+        if (newFeedItem == null)
+            return;
 
-        #endregion
+        // Check for feed items with no guid or link
+        if (string.IsNullOrWhiteSpace(newFeedItem.Guid) && string.IsNullOrWhiteSpace(newFeedItem.Link))
+            return;
 
-        #region Constructor
+        // Look for an item that has the same guid
+        var existingFeedItem = Feed.Items.FirstOrDefault(item => item.Guid == newFeedItem.Guid && item.Id != newFeedItem.Id);
 
-        protected FeedParserBase(Feed feed)
+        // Check to see if we already have this feed item
+        if (existingFeedItem == null)
         {
-            Feed = feed;
+            Log.Logger.Information("New link: " + newFeedItem.Link);
+
+            // Associate the new item with the right feed
+            newFeedItem.Feed = Feed;
+
+            // Set the item as new
+            newFeedItem.New = true;
+
+            // Add the item to the list
+            Feed.Items.Add(newFeedItem);
+
+            // Feed was updated
+            Feed.LastUpdated = DateTime.Now;
+        }
+        else
+        {
+            Log.Logger.Information("Existing link: " + newFeedItem.Link);
+
+            // Update the fields in the existing item
+            existingFeedItem.Link = newFeedItem.Link;
+            existingFeedItem.Title = newFeedItem.Title;
+            existingFeedItem.Guid = newFeedItem.Guid;
+            existingFeedItem.Description = newFeedItem.Description;
+
+            // Item is no longer new
+            existingFeedItem.New = false;
+
+            // Switch over to the existing item for the rest
+            newFeedItem = existingFeedItem;
         }
 
-        #endregion
+        // Item was last seen now
+        newFeedItem.LastFound = Feed.LastChecked;
 
-        #region Methods
+        // Set the sequence
+        newFeedItem.Sequence = sequence;
 
-        public abstract FeedReadResult ParseFeed(string feedText);
+        // Increment the sequence
+        sequence++;
+    }
 
-        protected abstract FeedItem ParseFeedItem(XmlNode node);
+    #endregion
 
-        protected void HandleFeedItem(XmlNode node, ref int sequence)
+    #region Parser creation and detection
+
+    public static FeedParserBase CreateFeedParser(Feed feed, string feedText)
+    {
+        var feedType = DetectFeedType(feedText);
+
+        return feedType switch
         {
-            // Build a feed item from the node
-            var newFeedItem = ParseFeedItem(node);
+            FeedType.Rss => new RssParser(feed),
+            FeedType.Rdf => new RdfParser(feed),
+            FeedType.Atom => new AtomParser(feed),
+            _ => throw new ArgumentException($"Feed type {feedType} is not supported")
+        };
+    }
 
-            if (newFeedItem == null)
-                return;
-
-            // Check for feed items with no guid or link
-            if (string.IsNullOrWhiteSpace(newFeedItem.Guid) && string.IsNullOrWhiteSpace(newFeedItem.Link))
-                return;
-
-            // Look for an item that has the same guid
-            var existingFeedItem = Feed.Items.FirstOrDefault(item => item.Guid == newFeedItem.Guid && item.Id != newFeedItem.Id);
-
-            // Check to see if we already have this feed item
-            if (existingFeedItem == null)
-            {
-                Log.Logger.Information("New link: " + newFeedItem.Link);
-
-                // Associate the new item with the right feed
-                newFeedItem.Feed = Feed;
-
-                // Set the item as new
-                newFeedItem.New = true;
-
-                // Add the item to the list
-                Feed.Items.Add(newFeedItem);
-
-                // Feed was updated
-                Feed.LastUpdated = DateTime.Now;
-            }
-            else
-            {
-                Log.Logger.Information("Existing link: " + newFeedItem.Link);
-
-                // Update the fields in the existing item
-                existingFeedItem.Link = newFeedItem.Link;
-                existingFeedItem.Title = newFeedItem.Title;
-                existingFeedItem.Guid = newFeedItem.Guid;
-                existingFeedItem.Description = newFeedItem.Description;
-
-                // Item is no longer new
-                existingFeedItem.New = false;
-
-                // Switch over to the existing item for the rest
-                newFeedItem = existingFeedItem;
-            }
-
-            // Item was last seen now
-            newFeedItem.LastFound = Feed.LastChecked;
-
-            // Set the sequence
-            newFeedItem.Sequence = sequence;
-
-            // Increment the sequence
-            sequence++;
-        }
-
-        #endregion
-
-        #region Parser creation and detection
-
-        public static FeedParserBase CreateFeedParser(Feed feed, string feedText)
+    public static FeedType DetectFeedType(string feedText)
+    {
+        try
         {
-            var feedType = DetectFeedType(feedText);
+            // Create the XML document
+            var document = new XmlDocument { XmlResolver = null };
 
-            return feedType switch
+            // Load the XML document from the text
+            document.LoadXml(feedText);
+
+            // Loop over all child nodes
+            foreach (XmlNode node in document.ChildNodes)
             {
-                FeedType.Rss => new RssParser(feed),
-                FeedType.Rdf => new RdfParser(feed),
-                FeedType.Atom => new AtomParser(feed),
-                _ => throw new ArgumentException($"Feed type {feedType} is not supported")
-            };
-        }
-
-        public static FeedType DetectFeedType(string feedText)
-        {
-            try
-            {
-                // Create the XML document
-                var document = new XmlDocument { XmlResolver = null };
-
-                // Load the XML document from the text
-                document.LoadXml(feedText);
-
-                // Loop over all child nodes
-                foreach (XmlNode node in document.ChildNodes)
+                switch (node.Name)
                 {
-                    switch (node.Name)
-                    {
-                        case "rss":
-                            return FeedType.Rss;
+                    case "rss":
+                        return FeedType.Rss;
 
-                        case "rdf:RDF":
-                            return FeedType.Rdf;
+                    case "rdf:RDF":
+                        return FeedType.Rdf;
 
-                        case "feed":
-                            return FeedType.Atom;
-                    }
+                    case "feed":
+                        return FeedType.Atom;
                 }
-
-                // No clue!
-                return FeedType.Unknown;
             }
-            catch (XmlException xmlException)
-            {
-                Log.Logger.Error(xmlException, "Exception: {0}", feedText);
 
-                throw new FeedParseException(FeedParseError.InvalidXml);
-            }
-            catch (Exception exception)
-            {
-                Log.Logger.Error(exception, "Exception: {0}", feedText);
-
-                throw new FeedParseException(FeedParseError.InvalidXml);
-            }
+            // No clue!
+            return FeedType.Unknown;
         }
+        catch (XmlException xmlException)
+        {
+            Log.Logger.Error(xmlException, "Exception: {0}", feedText);
 
-        #endregion
+            throw new FeedParseException(FeedParseError.InvalidXml);
+        }
+        catch (Exception exception)
+        {
+            Log.Logger.Error(exception, "Exception: {0}", feedText);
+
+            throw new FeedParseException(FeedParseError.InvalidXml);
+        }
     }
+
+    #endregion
 }

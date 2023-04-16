@@ -1,25 +1,24 @@
 ﻿using System.IO;
 
-namespace FeedCenter.Data
+namespace FeedCenter.Data;
+
+public static class Database
 {
-    public static class Database
+    public static string DatabaseFile { get; set; }
+    public static string DatabasePath { get; set; }
+
+    public static FeedCenterEntities Entities { get; set; }
+
+    public static bool Exists => File.Exists(DatabaseFile);
+
+    public static bool Loaded { get; set; }
+
+    public static void Load()
     {
-        public static string DatabaseFile { get; set; }
-        public static string DatabasePath { get; set; }
+        if (Loaded) return;
 
-        public static FeedCenterEntities Entities { get; set; }
+        Entities = new FeedCenterEntities();
 
-        public static bool Exists => File.Exists(DatabaseFile);
-
-        public static bool Loaded { get; set; }
-
-        public static void Load()
-        {
-            if (Loaded) return;
-
-            Entities = new FeedCenterEntities();
-
-            Loaded = true;
-        }
+        Loaded = true;
     }
 }

@@ -1,96 +1,44 @@
-﻿using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
-using ChrisKaczor.Wpf.Validation;
+﻿using ChrisKaczor.Wpf.Validation;
 using FeedCenter.Data;
+using System.Windows;
 
-namespace FeedCenter.Options
+namespace FeedCenter.Options;
+
+public partial class FeedWindow
 {
-    public partial class FeedWindow
+    public FeedWindow()
     {
-        public FeedWindow()
+        InitializeComponent();
+    }
+
+    public bool? Display(Feed feed, Window owner)
+    {
+        CategoryComboBox.ItemsSource = Database.Entities.Categories;
+
+        DataContext = feed;
+
+        Title = string.IsNullOrWhiteSpace(feed.Link) ? Properties.Resources.FeedWindowAdd : Properties.Resources.FeedWindowEdit;
+
+        Owner = owner;
+
+        return ShowDialog();
+    }
+
+    private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
+    {
+        var transaction = Database.Entities.BeginTransaction();
+
+        if (!this.IsValid(OptionsTabControl))
         {
-            InitializeComponent();
+            transaction.Rollback();
+            return;
         }
 
-        public bool? Display(Feed feed, Window owner)
-        {
-            // Bind the category combo box
-            CategoryComboBox.ItemsSource = Database.Entities.Categories;
+        transaction.Commit();
+        Database.Entities.Refresh();
 
-            // Set the data context
-            DataContext = feed;
+        DialogResult = true;
 
-            // Set the title based on the state of the feed
-            Title = string.IsNullOrWhiteSpace(feed.Link) ? Properties.Resources.FeedWindowAdd : Properties.Resources.FeedWindowEdit;
-
-            // Set the window owner
-            Owner = owner;
-
-            // Show the dialog and result the result
-            return ShowDialog();
-        }
-
-        private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
-        {
-            var transaction = Database.Entities.BeginTransaction();
-
-            var feed = (Feed) DataContext;
-
-            // Get a list of all framework elements and explicit binding expressions
-            var bindingExpressions = this.GetBindingExpressions(new[] { UpdateSourceTrigger.Explicit });
-
-            // Loop over each binding expression and clear any existing error
-            this.ClearAllValidationErrors(bindingExpressions);
-
-            // Force all explicit bindings to update the source
-            this.UpdateAllSources(bindingExpressions);
-
-            // See if there are any errors
-            var hasError = bindingExpressions.Any(b => b.BindingExpression.HasError);
-
-            // If there was an error then set focus to the bad controls
-            if (hasError)
-            {
-                // Get the first framework element with an error
-                var firstErrorElement = bindingExpressions.First(b => b.BindingExpression.HasError).FrameworkElement;
-
-                // Loop over each tab item
-                foreach (TabItem tabItem in OptionsTabControl.Items)
-                {
-                    // Cast the content as visual
-                    var content = (Visual) tabItem.Content;
-
-                    // See if the control with the error is a descendant 
-                    if (firstErrorElement.IsDescendantOf(content))
-                    {
-                        // Select the tab
-                        tabItem.IsSelected = true;
-                        break;
-                    }
-                }
-
-                // Set focus
-                firstErrorElement.Focus();
-
-                transaction.Rollback();
-
-                return;
-            }
-
-            if (RequiresAuthenticationCheckBox.IsChecked.GetValueOrDefault(false))
-                feed.Password = AuthenticationPasswordTextBox.Password;
-
-            transaction.Commit();
-            Database.Entities.Refresh();
-
-            // Dialog is good
-            DialogResult = true;
-
-            // Close the dialog
-            Close();
-        }
+        Close();
     }
 }

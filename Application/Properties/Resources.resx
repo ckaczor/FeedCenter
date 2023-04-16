@@ -266,7 +266,7 @@
     <value>Authentication</value>
   </data>
   <data name="feedNameLabel" xml:space="preserve">
-    <value>Feed _name:</value>
+    <value>Name</value>
   </data>
   <data name="feedReadIntervalPrefix" xml:space="preserve">
     <value>_Refresh feed every</value>
@@ -275,7 +275,7 @@
     <value>minutes</value>
   </data>
   <data name="feedUrlLabel" xml:space="preserve">
-    <value>Feed _URL:</value>
+    <value>URL</value>
   </data>
   <data name="FeedWindowAdd" xml:space="preserve">
     <value>Add Feed</value>
@@ -293,10 +293,10 @@
     <value>_Check for a new version on startup</value>
   </data>
   <data name="authenticationPasswordLabel" xml:space="preserve">
-    <value>_Password:</value>
+    <value>Password</value>
   </data>
   <data name="authenticationUserNameLabel" xml:space="preserve">
-    <value>_User name:</value>
+    <value>User name</value>
   </data>
   <data name="requiresAuthenticationCheckBox" xml:space="preserve">
     <value>_Feed requires authentication</value>
@@ -353,7 +353,7 @@
     <value>&lt; Windows Default &gt;</value>
   </data>
   <data name="feedCategoryLabel" xml:space="preserve">
-    <value>_Category:</value>
+    <value>Category</value>
   </data>
   <data name="optionCategoryCategories" xml:space="preserve">
     <value>Categories</value>
@@ -407,7 +407,7 @@
     <value>Reading</value>
   </data>
   <data name="openLabel" xml:space="preserve">
-    <value>"Open all" _action:</value>
+    <value>"Open all" action</value>
   </data>
   <data name="DatabaseUpdate_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scripts\DatabaseUpdate_5.sqlce;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

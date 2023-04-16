@@ -134,7 +134,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Password:.
+        ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string authenticationPasswordLabel {
             get {
@@ -152,7 +152,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _User name:.
+        ///   Looks up a localized string similar to User name.
         /// </summary>
         public static string authenticationUserNameLabel {
             get {
@@ -679,7 +679,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Category:.
+        ///   Looks up a localized string similar to Category.
         /// </summary>
         public static string feedCategoryLabel {
             get {
@@ -760,7 +760,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feed _name:.
+        ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string feedNameLabel {
             get {
@@ -868,7 +868,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feed _URL:.
+        ///   Looks up a localized string similar to URL.
         /// </summary>
         public static string feedUrlLabel {
             get {
@@ -1102,7 +1102,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Open all&quot; _action:.
+        ///   Looks up a localized string similar to &quot;Open all&quot; action.
         /// </summary>
         public static string openLabel {
             get {

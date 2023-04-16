@@ -2,51 +2,50 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace FeedCenter
+namespace FeedCenter;
+
+public partial class FeedChooserWindow
 {
-    public partial class FeedChooserWindow
+    private string _returnLink;
+
+    public FeedChooserWindow()
     {
-        private string _returnLink;
+        InitializeComponent();
+    }
 
-        public FeedChooserWindow()
-        {
-            InitializeComponent();
-        }
+    public string Display(Window owner, List<Tuple<string, string>> rssLinks)
+    {
+        // Bind to the list
+        FeedDataGrid.ItemsSource = rssLinks;
+        FeedDataGrid.SelectedIndex = 0;
 
-        public string Display(Window owner, List<Tuple<string, string>> rssLinks)
-        {
-            // Bind to the list
-            FeedDataGrid.ItemsSource = rssLinks;
-            FeedDataGrid.SelectedIndex = 0;
+        // Set the window owner
+        Owner = owner;
 
-            // Set the window owner
-            Owner = owner;
+        ShowDialog();
 
-            ShowDialog();
+        return _returnLink;
+    }
 
-            return _returnLink;
-        }
+    private void Save()
+    {
+        var selectedItem = (Tuple<string, string>) FeedDataGrid.SelectedItem;
 
-        private void Save()
-        {
-            var selectedItem = (Tuple<string, string>) FeedDataGrid.SelectedItem;
+        _returnLink = selectedItem.Item1;
 
-            _returnLink = selectedItem.Item1;
+        Close();
+    }
 
-            Close();
-        }
+    private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
+    {
+        Save();
+    }
 
-        private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
+    private void HandleMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (FeedDataGrid.SelectedItem != null)
         {
             Save();
-        }
-
-        private void HandleMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (FeedDataGrid.SelectedItem != null)
-            {
-                Save();
-            }
         }
     }
 }

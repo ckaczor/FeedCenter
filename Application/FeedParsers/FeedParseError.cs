@@ -1,8 +1,7 @@
-﻿namespace FeedCenter.FeedParsers
+﻿namespace FeedCenter.FeedParsers;
+
+internal enum FeedParseError
 {
-    internal enum FeedParseError
-    {
-        Unknown = 0,
-        InvalidXml = 1
-    }
+    Unknown = 0,
+    InvalidXml = 1
 }

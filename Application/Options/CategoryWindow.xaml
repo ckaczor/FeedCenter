@@ -8,6 +8,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.ControlBox"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:options="clr-namespace:FeedCenter.Options"
         d:DataContext="{d:DesignInstance Type=feedCenter:Category}"
         Title="CategoryWindow"
         Width="300"
@@ -28,42 +29,23 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="6">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <StackPanel Margin="6"
+                options:Spacing.Vertical="5">
+        <TextBox mah:TextBoxHelper.UseFloatingWatermark="True"
+                 mah:TextBoxHelper.Watermark="{x:Static properties:Resources.categoryNameLabel}"
+                 mah:TextBoxHelper.SelectAllOnFocus="True"
+                 Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}" />
         <StackPanel
-            Grid.Row="0"
-            Grid.Column="0">
-            <TextBox Name="NameTextBox"
-                     VerticalAlignment="Center"
-                     mah:TextBoxHelper.UseFloatingWatermark="True"
-                     mah:TextBoxHelper.Watermark="{x:Static properties:Resources.categoryNameLabel}"
-                     Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}">
-            </TextBox>
-        </StackPanel>
-        <StackPanel
-            Grid.Column="0"
-            Grid.Row="1"
+            options:Spacing.Horizontal="5"
             Orientation="Horizontal"
-            Margin="0,5,0,0"
             HorizontalAlignment="Right">
             <Button Content="{x:Static properties:Resources.OkayButton}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
                     Width="75"
-                    Margin="0,0,5,0"
                     IsDefault="True"
                     Click="HandleOkayButtonClick" />
             <Button Content="{x:Static properties:Resources.CancelButton}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
                     Width="75"
                     IsCancel="True" />
         </StackPanel>
-    </Grid>
+    </StackPanel>
 </Window>

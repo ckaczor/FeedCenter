@@ -6,96 +6,95 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using FeedCenter.Data;
 
-namespace FeedCenter.Options
+namespace FeedCenter.Options;
+
+public partial class BulkFeedWindow
 {
-    public partial class BulkFeedWindow
+    private List<CheckedListItem<Feed>> _checkedListBoxItems;
+    private CollectionViewSource _collectionViewSource;
+
+    public BulkFeedWindow()
     {
-        private List<CheckedListItem<Feed>> _checkedListBoxItems;
-        private CollectionViewSource _collectionViewSource;
+        InitializeComponent();
+    }
 
-        public BulkFeedWindow()
+    public void Display(Window window)
+    {
+        _checkedListBoxItems = new List<CheckedListItem<Feed>>();
+
+        foreach (var feed in Database.Entities.Feeds)
+            _checkedListBoxItems.Add(new CheckedListItem<Feed> { Item = feed });
+
+        _collectionViewSource = new CollectionViewSource { Source = _checkedListBoxItems };
+        _collectionViewSource.SortDescriptions.Add(new SortDescription("Item.Name", ListSortDirection.Ascending));
+        _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
+
+        FilteredFeedsList.ItemsSource = _collectionViewSource.View;
+
+        Owner = window;
+
+        ShowDialog();
+    }
+
+    private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
+    {
+        var checkedListBoxItem = (CheckedListItem<Feed>) e.Item;
+
+        var feed = checkedListBoxItem.Item;
+
+        e.Accepted = feed.Link.Contains(FeedLinkFilterText.Text);
+    }
+
+    private void HandleFilterTextChanged(object sender, TextChangedEventArgs e)
+    {
+        _collectionViewSource.View.Refresh();
+    }
+
+    private void HandleOkButtonClick(object sender, RoutedEventArgs e)
+    {
+        foreach (var item in _checkedListBoxItems.Where(i => i.IsChecked))
         {
-            InitializeComponent();
+            if (OpenComboBox.IsEnabled)
+                item.Item.MultipleOpenAction = (MultipleOpenAction) ((ComboBoxItem) OpenComboBox.SelectedItem).Tag;
         }
 
-        public void Display(Window window)
+        DialogResult = true;
+        Close();
+    }
+
+    private void HandleSelectAll(object sender, RoutedEventArgs e)
+    {
+        foreach (var viewItem in _collectionViewSource.View)
         {
-            _checkedListBoxItems = new List<CheckedListItem<Feed>>();
+            var checkedListItem = (CheckedListItem<Feed>) viewItem;
 
-            foreach (var feed in Database.Entities.Feeds)
-                _checkedListBoxItems.Add(new CheckedListItem<Feed> { Item = feed });
-
-            _collectionViewSource = new CollectionViewSource { Source = _checkedListBoxItems };
-            _collectionViewSource.SortDescriptions.Add(new SortDescription("Item.Name", ListSortDirection.Ascending));
-            _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
-
-            FilteredFeedsList.ItemsSource = _collectionViewSource.View;
-
-            Owner = window;
-
-            ShowDialog();
+            checkedListItem.IsChecked = true;
         }
+    }
 
-        private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
+    private void HandleSelectNone(object sender, RoutedEventArgs e)
+    {
+        foreach (var viewItem in _collectionViewSource.View)
         {
-            var checkedListBoxItem = (CheckedListItem<Feed>) e.Item;
+            var checkedListItem = (CheckedListItem<Feed>) viewItem;
 
-            var feed = checkedListBoxItem.Item;
-
-            e.Accepted = feed.Link.Contains(FeedLinkFilterText.Text);
+            checkedListItem.IsChecked = false;
         }
+    }
 
-        private void HandleFilterTextChanged(object sender, TextChangedEventArgs e)
+    private void HandleSelectInvert(object sender, RoutedEventArgs e)
+    {
+        foreach (var viewItem in _collectionViewSource.View)
         {
-            _collectionViewSource.View.Refresh();
+            var checkedListItem = (CheckedListItem<Feed>) viewItem;
+
+            checkedListItem.IsChecked = !checkedListItem.IsChecked;
         }
+    }
 
-        private void HandleOkButtonClick(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in _checkedListBoxItems.Where(i => i.IsChecked))
-            {
-                if (OpenComboBox.IsEnabled)
-                    item.Item.MultipleOpenAction = (MultipleOpenAction) ((ComboBoxItem) OpenComboBox.SelectedItem).Tag;
-            }
-
-            DialogResult = true;
-            Close();
-        }
-
-        private void HandleSelectAll(object sender, RoutedEventArgs e)
-        {
-            foreach (var viewItem in _collectionViewSource.View)
-            {
-                var checkedListItem = (CheckedListItem<Feed>) viewItem;
-
-                checkedListItem.IsChecked = true;
-            }
-        }
-
-        private void HandleSelectNone(object sender, RoutedEventArgs e)
-        {
-            foreach (var viewItem in _collectionViewSource.View)
-            {
-                var checkedListItem = (CheckedListItem<Feed>) viewItem;
-
-                checkedListItem.IsChecked = false;
-            }
-        }
-
-        private void HandleSelectInvert(object sender, RoutedEventArgs e)
-        {
-            foreach (var viewItem in _collectionViewSource.View)
-            {
-                var checkedListItem = (CheckedListItem<Feed>) viewItem;
-
-                checkedListItem.IsChecked = !checkedListItem.IsChecked;
-            }
-        }
-
-        private void HandleGridMouseRightButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            OpenLabel.IsEnabled = !OpenLabel.IsEnabled;
-            OpenComboBox.IsEnabled = !OpenComboBox.IsEnabled;
-        }
+    private void HandleGridMouseRightButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        OpenLabel.IsEnabled = !OpenLabel.IsEnabled;
+        OpenComboBox.IsEnabled = !OpenComboBox.IsEnabled;
     }
 }

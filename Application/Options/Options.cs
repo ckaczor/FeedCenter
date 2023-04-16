@@ -1,9 +1,8 @@
-﻿namespace FeedCenter.Options
+﻿namespace FeedCenter.Options;
+
+public enum MultipleLineDisplay
 {
-    public enum MultipleLineDisplay
-    {
-        Normal,
-        SingleLine,
-        FirstLine
-    }
+    Normal,
+    SingleLine,
+    FirstLine
 }
