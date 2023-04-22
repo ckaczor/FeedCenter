@@ -106,9 +106,6 @@ public partial class App
             if (!IsDebugBuild)
                 Current.SetStartWithWindows(Settings.Default.StartWithWindows);
 
-            // Initialize the window
-            mainWindow.Initialize();
-
             // Run the app
             app.Run(mainWindow);
         }

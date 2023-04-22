@@ -86,7 +86,7 @@ public partial class MainWindow
             _database.SaveChanges(() => _database.Feeds.Add(feed));
 
             // Show a tip
-            NotificationIcon.ShowBalloonTip(string.Format(Properties.Resources.FeedAddedNotification, feed.Name), System.Windows.Forms.ToolTipIcon.Info);
+            NotificationIcon.ShowBalloonTip(string.Format(Properties.Resources.FeedAddedNotification, feed.Name), H.NotifyIcon.Core.NotificationIcon.Info);
 
             _currentFeed = feed;
 
@@ -104,7 +104,7 @@ public partial class MainWindow
             var dialogResult = feedForm.Display(feed, this);
 
             // Display the new feed form
-            if (!dialogResult.HasValue || !dialogResult.Value) 
+            if (!dialogResult.HasValue || !dialogResult.Value)
                 return;
 
             // Add the feed to the feed table

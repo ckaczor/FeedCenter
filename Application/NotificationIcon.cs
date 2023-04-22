@@ -1,49 +1,61 @@
 ﻿using FeedCenter.Properties;
-using System.Windows.Forms;
+using H.NotifyIcon;
+using System.Windows.Controls;
 
 namespace FeedCenter;
 
 internal static class NotificationIcon
 {
-    private static MainWindow _mainForm;
-    private static NotifyIcon _notificationIcon;
+    private static MainWindow _mainWindow;
+    private static TaskbarIcon _notificationIcon;
+    private static MenuItem _lockMenuItem;
 
-    public static void Initialize(MainWindow mainForm)
+    public static void Initialize(MainWindow mainWindow)
     {
         // Store the main window
-        _mainForm = mainForm;
+        _mainWindow = mainWindow;
 
         // Create the notification icon
-        _notificationIcon = new NotifyIcon { Icon = Resources.Application };
-        _notificationIcon.DoubleClick += HandleNotificationIconDoubleClick;
+        _notificationIcon = new TaskbarIcon { Icon = Resources.Application };
+        _notificationIcon.TrayMouseDoubleClick += HandleNotificationIconDoubleClick;
 
         // Setup the menu
-        var contextMenuStrip = new ContextMenuStrip();
+        var contextMenu = new ContextMenu();
 
-        var toolStripMenuItem = new ToolStripMenuItem(Resources.NotificationIconContextMenuLocked, null, HandleLockWindowClicked) { Checked = Settings.Default.WindowLocked };
-        contextMenuStrip.Items.Add(toolStripMenuItem);
+        _lockMenuItem = new MenuItem()
+        {
+            Header = Resources.NotificationIconContextMenuLocked,
+            IsChecked = Settings.Default.WindowLocked
+        };
+        _lockMenuItem.Click += HandleLockWindowClicked;
+        contextMenu.Items.Add(_lockMenuItem);
 
-        contextMenuStrip.Items.Add(new ToolStripSeparator());
+        contextMenu.Items.Add(new Separator());
 
-        contextMenuStrip.Items.Add(Resources.NotificationIconContextMenuExit, null, HandleContextMenuExitClick);
+        var menuItem = new MenuItem()
+        {
+            Header = Resources.NotificationIconContextMenuExit
+        };
+        menuItem.Click += HandleContextMenuExitClick;
+        contextMenu.Items.Add(menuItem);
 
         // Set the menu into the icon
-        _notificationIcon.ContextMenuStrip = contextMenuStrip;
+        _notificationIcon.ContextMenu = contextMenu;
 
         // Show the icon
-        _notificationIcon.Visible = true;
+        _notificationIcon.ForceCreate(false);
     }
 
     private static void HandleNotificationIconDoubleClick(object sender, System.EventArgs e)
     {
         // Bring the main form to the front
-        _mainForm.Activate();
+        _mainWindow.Activate();
     }
 
     private static void HandleContextMenuExitClick(object sender, System.EventArgs e)
     {
         // Close the main form
-        _mainForm.Close();
+        _mainWindow.Close();
     }
 
     private static void HandleLockWindowClicked(object sender, System.EventArgs e)
@@ -52,26 +64,20 @@ internal static class NotificationIcon
         Settings.Default.WindowLocked = !Settings.Default.WindowLocked;
 
         // Refresh the menu choice
-        ((ToolStripMenuItem) sender).Checked = Settings.Default.WindowLocked;
+        _lockMenuItem.IsChecked = Settings.Default.WindowLocked;
     }
 
     public static void Dispose()
     {
         // Get rid of the icon
-        _notificationIcon.Visible = false;
         _notificationIcon.Dispose();
         _notificationIcon = null;
 
-        _mainForm = null;
+        _mainWindow = null;
     }
 
-    public static void ShowBalloonTip(string text, ToolTipIcon icon)
+    public static void ShowBalloonTip(string text, H.NotifyIcon.Core.NotificationIcon icon)
     {
-        ShowBalloonTip(text, icon, Settings.Default.BalloonTipTimeout);
-    }
-
-    private static void ShowBalloonTip(string text, ToolTipIcon icon, int timeout)
-    {
-        _notificationIcon.ShowBalloonTip(timeout, Resources.ApplicationDisplayName, text, icon);
+        _notificationIcon.ShowNotification(Resources.ApplicationDisplayName, text, icon);
     }
 }

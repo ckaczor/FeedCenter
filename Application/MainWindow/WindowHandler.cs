@@ -112,28 +112,28 @@ public partial class MainWindow
     {
         var windowInteropHelper = new WindowInteropHelper(this);
 
-        var screen = System.Windows.Forms.Screen.FromHandle(windowInteropHelper.Handle);
+        var screen = WpfScreenHelper.Screen.FromHandle(windowInteropHelper.Handle);
 
-        var rectangle = new System.Drawing.Rectangle
+        var rectangle = new Rect
         {
-            X = (int) Left,
-            Y = (int) Top,
-            Width = (int) Width,
-            Height = (int) Height
+            X = Left,
+            Y = Top,
+            Width = Width,
+            Height = Height
         };
 
         var borderThickness = new Thickness();
 
-        if (rectangle.Right != screen.WorkingArea.Right)
+        if (!rectangle.Right.Equals(screen.WorkingArea.Right))
             borderThickness.Right = 1;
 
-        if (rectangle.Left != screen.WorkingArea.Left)
+        if (!rectangle.Left.Equals(screen.WorkingArea.Left))
             borderThickness.Left = 1;
 
-        if (rectangle.Top != screen.WorkingArea.Top)
+        if (!rectangle.Top.Equals(screen.WorkingArea.Top))
             borderThickness.Top = 1;
 
-        if (rectangle.Bottom != screen.WorkingArea.Bottom)
+        if (!rectangle.Bottom.Equals(screen.WorkingArea.Bottom))
             borderThickness.Bottom = 1;
 
         WindowBorder.BorderThickness = borderThickness;

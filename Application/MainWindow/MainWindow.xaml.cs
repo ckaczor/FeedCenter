@@ -34,6 +34,14 @@ public partial class MainWindow : IDisposable
         GC.SuppressFinalize(this);
     }
 
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+
+        // Initialize the window
+        Initialize();
+    }
+
     protected override async void OnClosed(EventArgs e)
     {
         base.OnClosed(e);
@@ -207,9 +215,7 @@ public partial class MainWindow : IDisposable
     private void InitializeDisplay()
     {
         // Get the last category (defaulting to none)
-        _currentCategory =
-            _database.Categories.FirstOrDefault(category =>
-                category.Id.ToString() == Settings.Default.LastCategoryID);
+        _currentCategory = _database.Categories.FirstOrDefault(category => category.Id.ToString() == Settings.Default.LastCategoryID);
         DisplayCategory();
 
         // Get the current feed list to match the category

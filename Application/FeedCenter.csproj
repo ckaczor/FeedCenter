@@ -1,192 +1,108 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net70-windows</TargetFramework>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>WinExe</OutputType>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <SccProjectName></SccProjectName>
-    <SccLocalPath></SccLocalPath>
-    <SccAuxPath></SccAuxPath>
-    <SccProvider></SccProvider>
-    <PublishUrl>\\server\d\FeedCenter\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Unc</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>Feed Center</ProductName>
-    <PublisherName>Feed Center</PublisherName>
-    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
-    <WebPage>Publish.html</WebPage>
-    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>215</ApplicationRevision>
-    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject></StartupObject>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net70-windows</TargetFramework>
+		<OutputType>WinExe</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>false</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+	</PropertyGroup>
 	<PropertyGroup>
 		<EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
 	</PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\Application.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <CodeAnalysisLogFile>bin\Debug\FeedCenter.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <CodeAnalysisLogFile>bin\Release\FeedCenter.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup>
-    <EntityDeploy Include="Model.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Application.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 4.5</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Rss-Download.ico" />
-    <Resource Include="Resources\Comments-edit.ico" />
-    <Resource Include="Resources\Warning.ico" />
-    <Resource Include="Resources\News.ico" />
-    <Resource Include="Resources\Compile.ico" />
-    <Resource Include="Resources\Left.ico" />
-    <Resource Include="Resources\Right.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.2" />
-    <PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.3" />
-    <PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.3" />
-    <PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.4" />
-    <PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.2" />
-    <PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.2" />
-    <PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.3" />
-    <PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.2" />
-    <PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.3" />
-    <PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.2" />
-    <PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.2" />
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="DebounceThrottle" Version="2.0.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="HtmlTextWriter" Version="2.1.1" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" GeneratePathProperty="true">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.1" />
-    <PackageReference Include="NameBasedGrid" Version="0.10.1">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
-    <PackageReference Include="Realm" Version="10.21.0" />
-    <PackageReference Include="Serilog" Version="2.12.0" />
-    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="SqlSettingsProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-		if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-		xcopy /s /y "$(PkgMicrosoft_SqlServer_Compact)\NativeBinaries\x86\*.*" "$(TargetDir)x86"
-		if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
-		xcopy /s /y "$(PkgMicrosoft_SqlServer_Compact)\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"
-	</PostBuildEvent>
-  </PropertyGroup>
+	<PropertyGroup>
+		<GenerateManifests>false</GenerateManifests>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Resources\Application.ico" />
+	  <None Remove="Resources\Comments-edit.ico" />
+	  <None Remove="Resources\Compile.ico" />
+	  <None Remove="Resources\Left.ico" />
+	  <None Remove="Resources\News.ico" />
+	  <None Remove="Resources\Right.ico" />
+	  <None Remove="Resources\Rss-Download.ico" />
+	  <None Remove="Resources\Warning.ico" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="Resources\Application.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.2" />
+		<PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.4" />
+		<PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.2" />
+		<PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.2" />
+		<PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.2" />
+		<PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.2" />
+		<PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.2" />
+		<PackageReference Include="Dapper" Version="2.0.123" />
+		<PackageReference Include="DebounceThrottle" Version="2.0.0" />
+		<PackageReference Include="H.NotifyIcon.Wpf" Version="2.0.108" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+		<PackageReference Include="HtmlTextWriter" Version="2.1.1" />
+		<PackageReference Include="MahApps.Metro" Version="2.4.9" />
+		<PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" GeneratePathProperty="true">
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.1" />
+		<PackageReference Include="NameBasedGrid" Version="0.10.1">
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
+		<PackageReference Include="Realm" Version="10.21.0" />
+		<PackageReference Include="Serilog" Version="2.12.0" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Resource Include="Resources\Application.ico" />
+	  <Resource Include="Resources\Comments-edit.ico" />
+	  <Resource Include="Resources\Compile.ico" />
+	  <Resource Include="Resources\Left.ico" />
+	  <Resource Include="Resources\News.ico" />
+	  <Resource Include="Resources\Right.ico" />
+	  <Resource Include="Resources\Rss-Download.ico" />
+	  <Resource Include="Resources\Warning.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+	<Target Name="AddSqlServerCompact_x86" AfterTargets="Publish" Condition="'$(RuntimeIdentifier)' == 'win-x86'">
+		<Exec Command="xcopy /s /y /i &quot;$(PkgMicrosoft_SqlServer_Compact)\NativeBinaries\x86\*.*&quot; &quot;$(PublishDir)x86&quot;" />
+	</Target>
+	<Target Name="AddSqlServerCompact_x64" AfterTargets="Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+		<Exec Command="xcopy /s /y /i &quot;$(PkgMicrosoft_SqlServer_Compact)\NativeBinaries\amd64\*.*&quot; &quot;$(PublishDir)amd64&quot;" />
+	</Target>
+	<PropertyGroup>
+		<PostBuildEvent>
+			xcopy /s /y /i "$(PkgMicrosoft_SqlServer_Compact)\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+			xcopy /s /y /i "$(PkgMicrosoft_SqlServer_Compact)\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"
+		</PostBuildEvent>
+		<ApplicationIcon>Resources\Application.ico</ApplicationIcon>
+	</PropertyGroup>
 </Project>
