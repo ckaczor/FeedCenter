@@ -1,17 +1,23 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+<?xml version="1.0" encoding="UTF-8"?>
 
-	<?define ProductName="Feed Center" ?>
-	<?define CompanyName="Chris Kaczor" ?>
-	<?define ProductVersion="!(bind.fileVersion.FeedCenter.exe)" ?>
-	<?define FileDescription="" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
+	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
+	<?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
+	<?define FileDescription="$(fileVersion.FileDescription($(var.FeedCenter.TargetPath)))" ?>
 
-	<Package Name="$(var.ProductName)"
+	<Product Id="*"
+	         Name="$(var.ProductName)"
 	         Language="1033"
 	         Version="$(var.ProductVersion)"
 	         Manufacturer="$(var.CompanyName)"
-	         UpgradeCode="47f30e4a-a861-47ac-b82d-35e4b886992a"
-	         Scope="perUser">
+	         UpgradeCode="47f30e4a-a861-47ac-b82d-35e4b886992a">
+		<Package InstallerVersion="405"
+		         Compressed="yes"
+		         InstallScope="perUser" />
+
 		<util:CloseApplication Id="CloseApplication"
 		                       Target="FeedCenter.exe"
 		                       CloseMessage="yes"
@@ -22,37 +28,45 @@
 		              AllowSameVersionUpgrades="no"
 		              DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
+		<MediaTemplate />
+
 		<Feature Id="ProductFeature"
 		         Title="$(var.ProductName)"
 		         Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 		</Feature>
-	</Package>
+	</Product>
 
 	<Fragment>
-		<StandardDirectory Id="LocalAppDataFolder">
-			<Directory Id="INSTALLFOLDER"
-			           Name="$(var.ProductName)">
-				<Directory Id="SqlServerCe_32"
-				           Name="x86" />
-				<Directory Id="SqlServerCe_64"
-				           Name="amd64" />
-				<Directory Name="runtimes">
-					<Directory Name="win-x32">
-						<Directory Id="Runtimes_Win_x32_Native"
-						           Name="native" />
-					</Directory>
-					<Directory Name="win-x64">
-						<Directory Id="Runtimes_Win_x64_Native"
-						           Name="native" />
+		<Directory Id="TARGETDIR"
+		           Name="SourceDir">
+			<Directory Id="LocalAppDataFolder">
+				<Directory Id="INSTALLFOLDER"
+				           Name="$(var.ProductName)">
+					<Directory Id="SqlServerCe_32"
+					           Name="x86" />
+					<Directory Id="SqlServerCe_64"
+					           Name="amd64" />
+					<Directory Id="Runtimes"
+					           Name="runtimes">
+						<Directory Id="Runtimes_Win_x32"
+						           Name="win-x32">
+							<Directory Id="Runtimes_Win_x32_Native"
+							           Name="native" />
+						</Directory>
+						<Directory Id="Runtimes_Win_x64"
+						           Name="win-x64">
+							<Directory Id="Runtimes_Win_x64_Native"
+							           Name="native" />
+						</Directory>
 					</Directory>
 				</Directory>
 			</Directory>
-		</StandardDirectory>
-		<StandardDirectory Id="ProgramMenuFolder">
-			<Directory Id="ApplicationProgramsFolder"
-			           Name="$(var.ProductName)" />
-		</StandardDirectory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder"
+				           Name="$(var.ProductName)" />
+			</Directory>
+		</Directory>
 	</Fragment>
 
 	<Fragment>
@@ -60,12 +74,13 @@
 			<Component Id="SqlServerCe_32"
 			           Guid="{800607E9-65ED-489F-83A2-C73AA36A9D1D}"
 			           Directory="SqlServerCe_32">
-				<RegistryValue Root="HKCU"
-				               Key="Software\Feed Center\Setup"
-				               Type="integer"
-				               Name="SqlServerCe_32"
-				               Value="1"
-				               KeyPath="yes" />
+
+				<RegistryValue Root='HKCU'
+				               Key='Software\Feed Center\Setup'
+				               Type='integer'
+				               Name='SqlServerCe_32'
+				               Value='1'
+				               KeyPath='yes' />
 
 				<File Id="sqlceca40_32"
 				      Source="$(var.FeedCenter.TargetDir)\x86\sqlceca40.dll" />
@@ -80,18 +95,19 @@
 				<File Id="sqlcese40_32"
 				      Source="$(var.FeedCenter.TargetDir)\x86\sqlcese40.dll" />
 
-				<RemoveFolder Id="SqlServerCe_32"
-				              On="uninstall" />
+				<RemoveFolder Id='SqlServerCe_32'
+				              On='uninstall' />
 			</Component>
 			<Component Id="SqlServerCe_64"
 			           Guid="{67DB1CF4-23F2-4252-896C-714438959C9A}"
 			           Directory="SqlServerCe_64">
-				<RegistryValue Root="HKCU"
-				               Key="Software\Feed Center\Setup"
-				               Type="integer"
-				               Name="SqlServerCe_64"
-				               Value="1"
-				               KeyPath="yes" />
+
+				<RegistryValue Root='HKCU'
+				               Key='Software\Feed Center\Setup'
+				               Type='integer'
+				               Name='SqlServerCe_64'
+				               Value='1'
+				               KeyPath='yes' />
 
 				<File Id="sqlceca40_64"
 				      Source="$(var.FeedCenter.TargetDir)\amd64\sqlceca40.dll" />
@@ -106,8 +122,8 @@
 				<File Id="sqlcese40_64"
 				      Source="$(var.FeedCenter.TargetDir)\amd64\sqlcese40.dll" />
 
-				<RemoveFolder Id="SqlServerCe_64"
-				              On="uninstall" />
+				<RemoveFolder Id='SqlServerCe_64'
+				              On='uninstall' />
 			</Component>
 			<Component Id="Runtimes_Win_x32_Native"
 			           Guid="{E07B7F53-9FA0-426D-8ADF-A9FFF4E1ED02}"
@@ -120,9 +136,9 @@
 				               KeyPath="yes" />
 
 				<File Id="realm_wrappers.dll_x32"
-				      Source="$(var.FeedCenter.TargetDir)\runtimes\win-x64\native\realm-wrappers.dll" />
+				      Source="$(var.FeedCenter.TargetDir)\runtimes\win-x86\native\realm-wrappers.dll" />
 				<File Id="sni.dll_x32"
-				      Source="$(var.FeedCenter.TargetDir)\runtimes\win-x64\native\sni.dll" />
+				      Source="$(var.FeedCenter.TargetDir)\runtimes\win-x86\native\sni.dll" />
 			</Component>
 			<Component Id="Runtimes_Win_x64_Native"
 			           Guid="{566D640B-F34D-4400-9B86-10EFD669A8B7}"
@@ -142,12 +158,13 @@
 			<Component Id="FeedCenter"
 			           Guid="{9B2B9C65-8E68-4F82-9AC5-16EBCAC34B9E}"
 			           Directory="INSTALLFOLDER">
-				<RegistryValue Root="HKCU"
-				               Key="Software\Feed Center\Setup"
-				               Type="integer"
-				               Name="FeedCenter"
-				               Value="1"
-				               KeyPath="yes" />
+
+				<RegistryValue Root='HKCU'
+				               Key='Software\Feed Center\Setup'
+				               Type='integer'
+				               Name='FeedCenter'
+				               Value='1'
+				               KeyPath='yes' />
 
 				<!-- Capabilities keys for Vista/7 "Set Program Access and Defaults" -->
 				<RegistryValue Root="HKCU"
@@ -331,17 +348,18 @@
 				<File Id="WpfScreenHelper.dll"
 				      Source="$(var.FeedCenter.TargetDir)\WpfScreenHelper.dll" />
 
-				<RemoveFolder Id="INSTALLFOLDER"
-				              On="uninstall" />
+				<RemoveFolder Id='INSTALLFOLDER'
+				              On='uninstall' />
 			</Component>
 			<Component Id="ApplicationShortcut"
 			           Guid="{63CF0995-E117-4BB9-9077-76F570FDFAA9}"
 			           Directory="ApplicationProgramsFolder">
+
 				<Shortcut Id="StartMenuShortcut"
 				          Directory="ApplicationProgramsFolder"
 				          Advertise="no"
 				          Name="$(var.ProductName)"
-				          Target="[INSTALLFOLDER]\FeedCenter.exe"
+				          Target="[INSTALLFOLDER]\$(var.FeedCenter.TargetName)"
 				          WorkingDirectory="INSTALLFOLDER" />
 
 				<RemoveFolder Id="ApplicationProgramsFolder"

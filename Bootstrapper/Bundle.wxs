@@ -1,10 +1,11 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-     xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+<?xml version="1.0" encoding="UTF-8"?>
 
-	<?define ProductName="Feed Center" ?>
-	<?define CompanyName="Chris Kaczor" ?>
-	<?define ProductVersion="!(bind.packageVersion.FeedCenter)" ?>
-	<?define FileDescription="" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+
+	<?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
+	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
+	<?define ProductVersion="$(fileVersion.ProductVersion($(var.FeedCenter.TargetPath)))" ?>
 
 	<Bundle Name="$(var.ProductName)"
 	        Version="$(var.ProductVersion)"
@@ -12,41 +13,43 @@
 	        UpgradeCode="5e5c13a5-635e-4310-a653-0f9760f46935"
 	        Compressed="no">
 
-		<BootstrapperApplication Id="WixExtendedBootstrapperApplication.HyperlinkLicense">
-			<!--<bal:WixStandardBootstrapperApplication LaunchPassive="yes" LaunchQuiet="yes" />-->
-			<bal:WixStandardBootstrapperApplication LicenseUrl=""
+		<BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.HyperlinkLicense">
+			<bal:WixExtendedBootstrapperApplication LicenseUrl=""
 			                                        SuppressOptionsUI="yes"
 			                                        ShowVersion="yes"
-			                                        LaunchTarget="[LocalAppDataFolder]$(var.ProductName)\FeedCenter.exe"
-			                                        Theme="hyperlinkLargeLicense" />
-		</BootstrapperApplication>
+			                                        LaunchPassive="yes"
+			                                        LaunchQuiet="yes"
+			                                        LaunchTarget="[LocalAppDataFolder]$(var.ProductName)\FeedCenter.exe" />
+		</BootstrapperApplicationRef>
 
 		<Chain>
 			<ExePackage Id="runtime_desktop_x64"
 			            DisplayName=".NET 7.0 Desktop Runtime (x64)"
-			            InstallArguments="/install /quiet"
+			            InstallCommand="/install /quiet"
 			            Permanent="yes"
+						Compressed="no"
+			            DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/dffb1939-cef1-4db3-a579-5475a3061cdd/578b208733c914c7b7357f6baa4ecfd6/windowsdesktop-runtime-7.0.5-win-x64.exe"
+			            Name="windowsdesktop-runtime-7.0.5-win-x64.exe"
 			            InstallCondition='VersionNT64'>
-				<ArpEntry Id="runtime_desktop_x64_arp"
-				          Version="7.0.5.32327"
-				          Win64="yes" />
-				<ExePackagePayload Hash="8907aa0e934a31c63f0a840bf9e734c2f5ba109b766c1a775f8adbb169049753664790c0a15b216f02a942392819a3500e4a33918df10fb967341dc167f82d11"
-				                   DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/dffb1939-cef1-4db3-a579-5475a3061cdd/578b208733c914c7b7357f6baa4ecfd6/windowsdesktop-runtime-7.0.5-win-x64.exe"
-				                   Name="windowsdesktop-runtime-7.0.5-win-x64.exe"
-				                   Size="57609944" />
+				<RemotePayload ProductName="Microsoft Windows Desktop Runtime - 7.0.5 (x64)"
+				               Description="Microsoft Windows Desktop Runtime - 7.0.5 (x64)"
+				               Version="7.0.5.32327"
+				               Hash="5B4232EED009E6B66C64A6096B1277995DE63F57"
+				               Size="57609944" />
 			</ExePackage>
 			<ExePackage Id="runtime_desktop_x32"
 			            DisplayName=".NET 7.0 Desktop Runtime (x86)"
-			            InstallArguments="/install /quiet"
+			            InstallCommand="/install /quiet"
 			            Permanent="yes"
+						Compressed="no"
+			            DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/eb64dcd1-d277-4798-ada1-600805c9e2dc/fc73c843d66f3996e7ef22468f4902e6/windowsdesktop-runtime-7.0.5-win-x86.exe"
+			            Name="windowsdesktop-runtime-7.0.5-win-x86.exe"
 			            InstallCondition='NOT VersionNT64'>
-				<ArpEntry Id="runtime_desktop_x64_arp"
-				          Version="7.0.5.32327"
-				          Win64="no" />
-				<ExePackagePayload Hash="a2f776cfabcfbd4b9278198301d289ed1c56febd47259520c50b8b8d130a79d0ea99c857aec96865cc635ddf078fd575368c030ce11d61bb9991d296df87a4a7"
-				                   DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/eb64dcd1-d277-4798-ada1-600805c9e2dc/fc73c843d66f3996e7ef22468f4902e6/windowsdesktop-runtime-7.0.5-win-x86.exe"
-				                   Name="windowsdesktop-runtime-7.0.5-win-x86.exe"
-				                   Size="52816632" />
+				<RemotePayload ProductName="Microsoft Windows Desktop Runtime - 7.0.5 (x86)"
+				               Description="Microsoft Windows Desktop Runtime - 7.0.5 (x86)"
+				               Version="7.0.5.32327"
+				               Hash="3987657473EA907DEC2FA48F492A5FC2B83B5060"
+				               Size="52816632" />
 			</ExePackage>
 			<MsiPackage Id="FeedCenter"
 			            SourceFile="$(var.Setup.TargetPath)"
