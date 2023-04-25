@@ -17,6 +17,7 @@
 			<bal:WixExtendedBootstrapperApplication LicenseUrl=""
 			                                        SuppressOptionsUI="yes"
 			                                        ShowVersion="yes"
+			                                        LocalizationFile="Bundle.wxl"
 			                                        LaunchPassive="yes"
 			                                        LaunchQuiet="yes"
 			                                        LaunchTarget="[LocalAppDataFolder]$(var.ProductName)\FeedCenter.exe" />
