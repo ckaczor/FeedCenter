@@ -21,6 +21,7 @@ internal static class NotificationIcon
 
         // Setup the menu
         var contextMenu = new ContextMenu();
+        contextMenu.Opened += HandleContextMenuOpened;
 
         _lockMenuItem = new MenuItem()
         {
@@ -44,6 +45,11 @@ internal static class NotificationIcon
 
         // Show the icon
         _notificationIcon.ForceCreate(false);
+    }
+
+    private static void HandleContextMenuOpened(object sender, System.Windows.RoutedEventArgs e)
+    {
+        _lockMenuItem.IsChecked = Settings.Default.WindowLocked;
     }
 
     private static void HandleNotificationIconDoubleClick(object sender, System.EventArgs e)
