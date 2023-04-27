@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Chris Kaczor")]
 [assembly: AssemblyProduct("Feed Center")]
-[assembly: AssemblyCopyright("Copyright © Chris Kaczor 2010")]
+[assembly: AssemblyCopyright("Copyright © Chris Kaczor 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -24,5 +24,5 @@ using System.Windows;
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
