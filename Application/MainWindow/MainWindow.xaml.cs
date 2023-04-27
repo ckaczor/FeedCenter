@@ -188,7 +188,7 @@ public partial class MainWindow : IDisposable
     private void UpdateToolbarButtonState()
     {
         // Cache the feed count to save (a little) time
-        var feedCount = _feedList?.Count() ?? 0;
+        var feedCount = Settings.Default.DisplayEmptyFeeds ? _feedList.Count() : _feedList.Count(x => x.Items.Any(y => !y.BeenRead));
 
         // Set button states
         PreviousToolbarButton.IsEnabled = feedCount > 1;
@@ -198,7 +198,7 @@ public partial class MainWindow : IDisposable
         OpenAllToolbarButton.IsEnabled = feedCount > 0;
         MarkReadToolbarButton.IsEnabled = feedCount > 0;
         FeedLabel.Visibility = feedCount == 0 ? Visibility.Hidden : Visibility.Visible;
-        FeedButton.Visibility = feedCount > 1 ? Visibility.Hidden : Visibility.Visible;
+        FeedButton.Visibility = feedCount == 0 ? Visibility.Hidden : Visibility.Visible;
         CategoryGrid.Visibility = _database.Categories.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
     }
 

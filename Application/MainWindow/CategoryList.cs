@@ -93,6 +93,7 @@ public partial class MainWindow
         // Update the display
         DisplayCategory();
         DisplayFeed();
+        UpdateToolbarButtonState();
 
         Settings.Default.LastCategoryID = _currentCategory?.Id.ToString() ?? string.Empty;
     }

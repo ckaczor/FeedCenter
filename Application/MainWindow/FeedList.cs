@@ -16,12 +16,16 @@ public partial class MainWindow
         {
             case MouseButton.XButton1:
 
-                PreviousFeed();
+                if (PreviousToolbarButton.IsEnabled)
+                    PreviousFeed();
+
                 break;
 
             case MouseButton.XButton2:
 
-                NextFeed();
+                if (NextToolbarButton.IsEnabled)
+                    NextFeed();
+
                 break;
         }
     }
