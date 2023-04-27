@@ -10,6 +10,16 @@
                           mc:Ignorable="d"
                           d:DesignHeight="311"
                           d:DesignWidth="425">
+    <options:OptionsPanelBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.cobalt.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </options:OptionsPanelBase.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -20,41 +30,11 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <DataGrid Name="FeedListBox"
-                  SelectionMode="Extended"
-                  Grid.Column="2"
-                  Grid.Row="0"
-                  AutoGenerateColumns="False"
-                  GridLinesVisibility="None"
-                  CanUserResizeRows="False"
-                  IsReadOnly="True"
-                  HeadersVisibility="Column"
-                  BorderThickness="1,1,1,1"
-                  BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                  Background="{x:Null}"
-                  PreviewMouseLeftButtonDown="HandleFeedListPreviewMouseLeftButtonDown" SelectionChanged="FeedListBox_SelectionChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}"
-                                    Header="{x:Static properties:Resources.FeedNameColumnHeader}"
-                                    SortDirection="Ascending"
-                                    Width="*" />
-                <DataGridTextColumn Binding="{Binding LastUpdated, StringFormat=d}"
-                                    Header="{x:Static properties:Resources.LastUpdatedColumnHeader}"
-                                    Width="Auto" />
-            </DataGrid.Columns>
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick"
-                                 Handler="HandleListBoxItemMouseDoubleClick" />
-                    <EventSetter Event="PreviewMouseMove"
-                                 Handler="HandleListBoxItemPreviewMouseMove" />
-                </Style>
-            </DataGrid.ItemContainerStyle>
-        </DataGrid>
-        <DataGrid Name="CategoryListBox"
-                  SelectionChanged="HandleCategoryListBoxSelectionChanged"
+        <DataGrid Name="CategoryDataGrid"
+                  SelectionChanged="HandleCategoryDataGridSelectionChanged"
                   Grid.Row="0"
                   SelectionMode="Single"
+                  SelectionUnit="FullRow"
                   Grid.Column="0"
                   AutoGenerateColumns="False"
                   GridLinesVisibility="None"
@@ -64,26 +44,61 @@
                   BorderThickness="1,1,1,1"
                   BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                   AllowDrop="True"
-                  Background="{x:Null}" 
-                  d:DataContext="{d:DesignInstance Type=feedCenter:Category }">
+                  Background="{x:Null}"
+                  d:DataContext="{d:DesignInstance feedCenter:Category }">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}"
                                     Header="{x:Static properties:Resources.CategoryNameColumnHeader}"
                                     SortDirection="Ascending"
                                     Width="*" />
             </DataGrid.Columns>
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow"
+                       BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
                     <EventSetter Event="Drop"
-                                 Handler="CategoryListBox_Drop" />
+                                 Handler="HandleCategoryDataGridRowDrop" />
                     <EventSetter Event="DragEnter"
-                                 Handler="CategoryListBox_DragEnter" />
+                                 Handler="HandleCategoryDataGridRowDragEnter" />
                     <EventSetter Event="DragLeave"
-                                 Handler="CategoryListBox_DragLeave" />
+                                 Handler="HandleCategoryDataGridRowDragLeave" />
                     <EventSetter Event="MouseDoubleClick"
-                                 Handler="CategoryListBox_MouseDoubleClick" />
+                                 Handler="HandleCategoryDataGridRowMouseDoubleClick" />
                 </Style>
-            </DataGrid.ItemContainerStyle>
+            </DataGrid.RowStyle>
+        </DataGrid>
+        <DataGrid Name="FeedDataGrid"
+                  SelectionMode="Extended"
+                  Grid.Column="2"
+                  Grid.Row="0"
+                  AutoGenerateColumns="False"
+                  GridLinesVisibility="None"
+                  CanUserResizeRows="False"
+                  IsReadOnly="True"
+                  SelectionUnit="FullRow"
+                  HeadersVisibility="Column"
+                  BorderThickness="1,1,1,1"
+                  BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                  Background="{x:Null}"
+                  SelectionChanged="HandleFeedDataGridSelectionChanged"
+                  d:DataContext="{d:DesignInstance feedCenter:Feed }">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}"
+                                    Header="{x:Static properties:Resources.FeedNameColumnHeader}"
+                                    SortDirection="Ascending"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding LastUpdated, StringFormat=d}"
+                                    Header="{x:Static properties:Resources.LastUpdatedColumnHeader}"
+                                    Width="Auto" />
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow"
+                       BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
+                    <EventSetter Event="MouseDoubleClick"
+                                 Handler="HandleFeedDataGridRowMouseDoubleClick" />
+                    <EventSetter Event="PreviewMouseLeftButtonDown"
+                                 Handler="HandleFeedDataGridRowPreviewMouseLeftButtonDown" />
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
         <Border Grid.Column="2"
                 Grid.Row="1"

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using FeedCenter.Data;
+using Microsoft.Win32;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -6,8 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using FeedCenter.Data;
-using Microsoft.Win32;
 
 namespace FeedCenter.Options;
 
@@ -31,22 +31,22 @@ public partial class FeedsOptionsPanel
         collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
         collectionViewSource.IsLiveSortingRequested = true;
 
-        CategoryListBox.ItemsSource = collectionViewSource.View;
-        CategoryListBox.SelectedIndex = 0;
+        CategoryDataGrid.ItemsSource = collectionViewSource.View;
+        CategoryDataGrid.SelectedIndex = 0;
     }
 
     private void SetFeedButtonStates()
     {
         AddFeedButton.IsEnabled = true;
-        EditFeedButton.IsEnabled = FeedListBox.SelectedItems.Count == 1;
-        DeleteFeedButton.IsEnabled = FeedListBox.SelectedItems.Count > 0;
+        EditFeedButton.IsEnabled = FeedDataGrid.SelectedItems.Count == 1;
+        DeleteFeedButton.IsEnabled = FeedDataGrid.SelectedItems.Count > 0;
     }
 
     private void AddFeed()
     {
         var feed = Feed.Create();
 
-        var category = (Category) CategoryListBox.SelectedItem;
+        var category = (Category) CategoryDataGrid.SelectedItem;
 
         feed.CategoryId = category.Id;
 
@@ -59,17 +59,17 @@ public partial class FeedsOptionsPanel
 
         Database.Entities.SaveChanges(() => Database.Entities.Feeds.Add(feed));
 
-        FeedListBox.SelectedItem = feed;
+        FeedDataGrid.SelectedItem = feed;
 
         SetFeedButtonStates();
     }
 
     private void EditSelectedFeed()
     {
-        if (FeedListBox.SelectedItem == null)
+        if (FeedDataGrid.SelectedItem == null)
             return;
 
-        var feed = (Feed) FeedListBox.SelectedItem;
+        var feed = (Feed) FeedDataGrid.SelectedItem;
 
         var feedWindow = new FeedWindow();
 
@@ -81,9 +81,9 @@ public partial class FeedsOptionsPanel
         if (MessageBox.Show(ParentWindow, Properties.Resources.ConfirmDeleteFeeds, Properties.Resources.ConfirmDeleteTitle, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
             return;
 
-        var selectedItems = new Feed[FeedListBox.SelectedItems.Count];
+        var selectedItems = new Feed[FeedDataGrid.SelectedItems.Count];
 
-        FeedListBox.SelectedItems.CopyTo(selectedItems, 0);
+        FeedDataGrid.SelectedItems.CopyTo(selectedItems, 0);
 
         foreach (var feed in selectedItems)
             Database.Entities.SaveChanges(() => Database.Entities.Feeds.Remove(feed));
@@ -239,11 +239,11 @@ public partial class FeedsOptionsPanel
     {
         AddCategoryButton.IsEnabled = true;
 
-        var selectedId = ((Category) CategoryListBox.SelectedItem).Id;
+        var selectedId = ((Category) CategoryDataGrid.SelectedItem).Id;
 
-        EditCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null &&
+        EditCategoryButton.IsEnabled = CategoryDataGrid.SelectedItem != null &&
                                        selectedId != Database.Entities.DefaultCategory.Id;
-        DeleteCategoryButton.IsEnabled = CategoryListBox.SelectedItem != null &&
+        DeleteCategoryButton.IsEnabled = CategoryDataGrid.SelectedItem != null &&
                                          selectedId != Database.Entities.DefaultCategory.Id;
     }
 
@@ -260,17 +260,17 @@ public partial class FeedsOptionsPanel
 
         Database.Entities.SaveChanges(() => Database.Entities.Categories.Add(category));
 
-        CategoryListBox.SelectedItem = category;
+        CategoryDataGrid.SelectedItem = category;
 
         SetCategoryButtonStates();
     }
 
     private void EditSelectedCategory()
     {
-        if (CategoryListBox.SelectedItem == null)
+        if (CategoryDataGrid.SelectedItem == null)
             return;
 
-        var category = (Category) CategoryListBox.SelectedItem;
+        var category = (Category) CategoryDataGrid.SelectedItem;
 
         var categoryWindow = new CategoryWindow();
 
@@ -279,7 +279,7 @@ public partial class FeedsOptionsPanel
 
     private void DeleteSelectedCategory()
     {
-        var category = (Category) CategoryListBox.SelectedItem;
+        var category = (Category) CategoryDataGrid.SelectedItem;
 
         if (MessageBox.Show(ParentWindow, string.Format(Properties.Resources.ConfirmDeleteCategory, category.Name), Properties.Resources.ConfirmDeleteTitle, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
             return;
@@ -289,12 +289,12 @@ public partial class FeedsOptionsPanel
         foreach (var feed in Database.Entities.Feeds.Where(f => f.CategoryId == category.Id))
             Database.Entities.SaveChanges(() => feed.CategoryId = defaultCategory.Id);
 
-        var index = CategoryListBox.SelectedIndex;
+        var index = CategoryDataGrid.SelectedIndex;
 
-        if (index == CategoryListBox.Items.Count - 1)
-            CategoryListBox.SelectedIndex = index - 1;
+        if (index == CategoryDataGrid.Items.Count - 1)
+            CategoryDataGrid.SelectedIndex = index - 1;
         else
-            CategoryListBox.SelectedIndex = index + 1;
+            CategoryDataGrid.SelectedIndex = index + 1;
 
         Database.Entities.SaveChanges(() => Database.Entities.Categories.Remove(category));
 
@@ -316,7 +316,7 @@ public partial class FeedsOptionsPanel
         DeleteSelectedCategory();
     }
 
-    private void HandleCategoryListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void HandleCategoryDataGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_collectionViewSource == null)
         {
@@ -324,13 +324,13 @@ public partial class FeedsOptionsPanel
             _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
             _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
 
-            FeedListBox.ItemsSource = _collectionViewSource.View;
+            FeedDataGrid.ItemsSource = _collectionViewSource.View;
         }
 
         _collectionViewSource.View.Refresh();
 
-        if (FeedListBox.Items.Count > 0)
-            FeedListBox.SelectedIndex = 0;
+        if (FeedDataGrid.Items.Count > 0)
+            FeedDataGrid.SelectedIndex = 0;
 
         SetFeedButtonStates();
         SetCategoryButtonStates();
@@ -338,14 +338,14 @@ public partial class FeedsOptionsPanel
 
     private void HandleCollectionViewSourceFilter(object sender, FilterEventArgs e)
     {
-        var selectedCategory = (Category) CategoryListBox.SelectedItem;
+        var selectedCategory = (Category) CategoryDataGrid.SelectedItem;
 
         var feed = (Feed) e.Item;
 
         e.Accepted = feed.CategoryId == selectedCategory.Id;
     }
 
-    private void CategoryListBox_Drop(object sender, DragEventArgs e)
+    private void HandleCategoryDataGridRowDrop(object sender, DragEventArgs e)
     {
         var feedList = (List<Feed>) e.Data.GetData(typeof(List<Feed>));
 
@@ -361,31 +361,21 @@ public partial class FeedsOptionsPanel
         dataGridRow.FontWeight = FontWeights.Normal;
     }
 
-    private void HandleListBoxItemPreviewMouseMove(object sender, MouseEventArgs e)
-    {
-        if (e.LeftButton != MouseButtonState.Pressed)
-            return;
-
-        var selectedItems = FeedListBox.SelectedItems.Cast<Feed>().ToList();
-
-        DragDrop.DoDragDrop(FeedListBox, selectedItems, DragDropEffects.Move);
-    }
-
-    private void CategoryListBox_DragEnter(object sender, DragEventArgs e)
+    private void HandleCategoryDataGridRowDragEnter(object sender, DragEventArgs e)
     {
         var dataGridRow = (DataGridRow) sender;
 
         dataGridRow.FontWeight = FontWeights.Bold;
     }
 
-    private void CategoryListBox_DragLeave(object sender, DragEventArgs e)
+    private void HandleCategoryDataGridRowDragLeave(object sender, DragEventArgs e)
     {
         var dataGridRow = (DataGridRow) sender;
 
         dataGridRow.FontWeight = FontWeights.Normal;
     }
 
-    private void HandleListBoxItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void HandleFeedDataGridRowMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         EditSelectedFeed();
     }
@@ -396,20 +386,14 @@ public partial class FeedsOptionsPanel
         bulkFeedWindow.Display(Window.GetWindow(this));
     }
 
-    private void HandleFeedListPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void HandleFeedDataGridRowPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        // Get the object that was clicked on
-        var originalSource = (DependencyObject) e.OriginalSource;
+        var selectedItems = FeedDataGrid.SelectedItems.Cast<Feed>().ToList();
 
-        // Look for a row that contains the object
-        var dataGridRow = (DataGridRow) FeedListBox.ContainerFromElement(originalSource);
-
-        // If the selection already contains this row then ignore it
-        if (dataGridRow != null && FeedListBox.SelectedItems.Contains(dataGridRow.Item))
-            e.Handled = true;
+        DragDrop.DoDragDrop(FeedDataGrid, selectedItems, DragDropEffects.Move);
     }
 
-    private void CategoryListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void HandleCategoryDataGridRowMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (!EditCategoryButton.IsEnabled)
             return;
@@ -417,7 +401,7 @@ public partial class FeedsOptionsPanel
         EditSelectedCategory();
     }
 
-    private void FeedListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void HandleFeedDataGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         SetFeedButtonStates();
     }

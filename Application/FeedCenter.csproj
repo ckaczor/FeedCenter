@@ -101,5 +101,6 @@
 			xcopy /s /y /i "$(PkgMicrosoft_SqlServer_Compact)\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"
 		</PostBuildEvent>
 		<ApplicationIcon>Resources\Application.ico</ApplicationIcon>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 </Project>

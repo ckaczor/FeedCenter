@@ -128,8 +128,6 @@ public class XmlSanitizingStream : StreamReader
         return nextCharacter;
     } // method
 
-    #region Read*() method overrides
-
     // The following methods are exact copies of the methods in TextReader, 
     // extracting by disassembling it in Reflector
 
@@ -219,6 +217,4 @@ public class XmlSanitizingStream : StreamReader
 
         return builder.ToString();
     }
-
-    #endregion
 } // class

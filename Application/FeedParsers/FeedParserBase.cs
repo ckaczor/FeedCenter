@@ -5,33 +5,14 @@ using System.Xml;
 
 namespace FeedCenter.FeedParsers;
 
-[Serializable]
-internal class InvalidFeedFormatException : ApplicationException
-{
-    internal InvalidFeedFormatException(Exception exception)
-        : base(string.Empty, exception)
-    {
-    }
-}
-
 internal abstract class FeedParserBase
 {
-    #region Member variables
-
     protected readonly Feed Feed;
-
-    #endregion
-
-    #region Constructor
 
     protected FeedParserBase(Feed feed)
     {
         Feed = feed;
     }
-
-    #endregion
-
-    #region Methods
 
     public abstract FeedReadResult ParseFeed(string feedText);
 
@@ -56,9 +37,6 @@ internal abstract class FeedParserBase
         if (existingFeedItem == null)
         {
             Log.Logger.Information("New link: " + newFeedItem.Link);
-
-            // Associate the new item with the right feed
-            newFeedItem.Feed = Feed;
 
             // Set the item as new
             newFeedItem.New = true;
@@ -95,10 +73,6 @@ internal abstract class FeedParserBase
         // Increment the sequence
         sequence++;
     }
-
-    #endregion
-
-    #region Parser creation and detection
 
     public static FeedParserBase CreateFeedParser(Feed feed, string feedText)
     {
@@ -155,6 +129,4 @@ internal abstract class FeedParserBase
             throw new FeedParseException(FeedParseError.InvalidXml);
         }
     }
-
-    #endregion
 }

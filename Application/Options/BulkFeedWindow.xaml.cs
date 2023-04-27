@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using FeedCenter.Data;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using FeedCenter.Data;
 
 namespace FeedCenter.Options;
 
@@ -52,11 +52,14 @@ public partial class BulkFeedWindow
 
     private void HandleOkButtonClick(object sender, RoutedEventArgs e)
     {
-        foreach (var item in _checkedListBoxItems.Where(i => i.IsChecked))
+        Database.Entities.SaveChanges(() =>
         {
-            if (OpenComboBox.IsEnabled)
-                item.Item.MultipleOpenAction = (MultipleOpenAction) ((ComboBoxItem) OpenComboBox.SelectedItem).Tag;
-        }
+            foreach (var item in _checkedListBoxItems.Where(i => i.IsChecked))
+            {
+                if (OpenComboBox.IsEnabled)
+                    item.Item.MultipleOpenAction = (MultipleOpenAction) ((ComboBoxItem) OpenComboBox.SelectedItem).Tag;
+            }
+        });
 
         DialogResult = true;
         Close();
@@ -90,11 +93,5 @@ public partial class BulkFeedWindow
 
             checkedListItem.IsChecked = !checkedListItem.IsChecked;
         }
-    }
-
-    private void HandleGridMouseRightButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-        OpenLabel.IsEnabled = !OpenLabel.IsEnabled;
-        OpenComboBox.IsEnabled = !OpenComboBox.IsEnabled;
     }
 }

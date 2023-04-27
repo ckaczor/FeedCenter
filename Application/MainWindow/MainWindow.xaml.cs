@@ -104,8 +104,6 @@ public partial class MainWindow : IDisposable
         HandleCommandLine(commandLine);
     }
 
-    #region Setting events
-
     private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         // Make sure we're on the right thread
@@ -147,10 +145,6 @@ public partial class MainWindow : IDisposable
         }
     }
 
-    #endregion
-
-    #region Database helpers
-
     private void ResetDatabase()
     {
         // Get the ID of the current feed
@@ -190,10 +184,6 @@ public partial class MainWindow : IDisposable
             ? null
             : _feedList.OrderBy(feed => feed.Name).AsEnumerable().ElementAt(_feedIndex);
     }
-
-    #endregion
-
-    #region Feed display
 
     private void UpdateToolbarButtonState()
     {
@@ -429,6 +419,4 @@ public partial class MainWindow : IDisposable
         // Clear the list
         LinkTextList.Items.Clear();
     }
-
-    #endregion
 }

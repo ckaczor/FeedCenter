@@ -22,42 +22,6 @@ using System.Text.RegularExpressions;
 
 namespace FeedCenter;
 
-#region Enumerations
-
-public enum MultipleOpenAction
-{
-    IndividualPages,
-    SinglePage
-}
-
-public enum FeedType
-{
-    Unknown,
-    Rss,
-    Rdf,
-    Atom
-}
-
-public enum FeedReadResult
-{
-    Success,
-    NotModified,
-    NotDue,
-    UnknownError,
-    InvalidXml,
-    NotEnabled,
-    Unauthorized,
-    NoResponse,
-    NotFound,
-    Timeout,
-    ConnectionFailed,
-    ServerError,
-    Moved,
-    TemporarilyUnavailable
-}
-
-#endregion
-
 public partial class Feed : RealmObject, INotifyDataErrorInfo
 {
     private static HttpClient _httpClient;
@@ -71,9 +35,7 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
     }
 
     public bool Authenticate { get; set; }
-
     public Guid CategoryId { get; set; }
-
     public int CheckInterval { get; set; } = 60;
     public string Description { get; set; }
     public bool Enabled { get; set; } = true;
@@ -224,8 +186,6 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
         if (string.IsNullOrWhiteSpace(value))
             _dataErrorDictionary.AddError(propertyName, $"{propertyName} cannot be empty");
     }
-
-    #region Reading
 
     public FeedReadResult Read(bool forceRead = false)
     {
@@ -494,6 +454,4 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
 
     [GeneratedRegex("&(?!(?:[a-z]+|#[0-9]+|#x[0-9a-f]+);)")]
     private static partial Regex UnescapedAmpersandRegex();
-
-    #endregion
 }

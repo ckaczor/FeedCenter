@@ -733,7 +733,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feed _link contains:.
+        ///   Looks up a localized string similar to Feed link contains.
         /// </summary>
         public static string FeedLinkFilterLabel {
             get {

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using Realms;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using JetBrains.Annotations;
-using Realms;
 
 namespace FeedCenter;
 
@@ -19,9 +18,6 @@ public class Category : RealmObject, INotifyDataErrorInfo
         _dataErrorDictionary = new DataErrorDictionary();
         _dataErrorDictionary.ErrorsChanged += DataErrorDictionaryErrorsChanged;
     }
-
-    [Ignored]
-    public ICollection<Feed> Feeds { get; set; }
 
     [PrimaryKey]
     public Guid Id { get; set; } = Guid.NewGuid();

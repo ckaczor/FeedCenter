@@ -72,7 +72,7 @@ public partial class MainWindow
         // If the category changed then reset the current feed to the first in the category
         if (_currentCategory?.Id != category?.Id)
         {
-            _currentFeed = category == null ? _database.Feeds.FirstOrDefault() : category.Feeds.FirstOrDefault();
+            _currentFeed = category == null ? _database.Feeds.FirstOrDefault() : _database.Feeds.FirstOrDefault(f => f.CategoryId == category.Id);
         }
 
         // Set the current category

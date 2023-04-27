@@ -9,9 +9,6 @@ public partial class FeedItem : RealmObject
 {
     public bool BeenRead { get; set; }
     public string Description { get; set; }
-
-    public Feed Feed { get; set; }
-
     public Guid FeedId { get; set; }
     public string Guid { get; set; }
 
@@ -22,7 +19,6 @@ public partial class FeedItem : RealmObject
     public string Link { get; set; }
     public bool New { get; set; }
     public int Sequence { get; set; }
-
     public string Title { get; set; }
 
     public static FeedItem Create()

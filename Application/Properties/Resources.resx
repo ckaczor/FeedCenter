@@ -419,7 +419,7 @@
     <value>Edit Multiple Feeds</value>
   </data>
   <data name="FeedLinkFilterLabel" xml:space="preserve">
-    <value>Feed _link contains:</value>
+    <value>Feed link contains</value>
   </data>
   <data name="SelectAllLabel" xml:space="preserve">
     <value>All</value>
