@@ -4,6 +4,7 @@ pull_requests:
 skip_tags: true
 image: Visual Studio 2022
 configuration: Release - With Setup
+platform: x86  
 assembly_info:
   patch: true
   file: 'Properties\AssemblyInfo.cs'
