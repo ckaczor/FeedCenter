@@ -24,17 +24,17 @@
 	  <None Remove="Resources\Warning.ico" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.2" />
-		<PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.3" />
-		<PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.3" />
-		<PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.4" />
-		<PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.3" />
-		<PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.2" />
-		<PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.3" />
-		<PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.2" />
-		<PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.3" />
-		<PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.2" />
-		<PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.2" />
+		<PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.5" />
+		<PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.4" />
+		<PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.4" />
+		<PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.5" />
+		<PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.5" />
+		<PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.4" />
+		<PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.4" />
+		<PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.3" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="DebounceThrottle" Version="2.0.0" />
 		<PackageReference Include="H.NotifyIcon.Wpf" Version="2.0.108" />
