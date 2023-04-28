@@ -1,5 +1,4 @@
-﻿using System;
-using FeedCenter.Properties;
+﻿using FeedCenter.Properties;
 using H.NotifyIcon;
 using System.Windows.Controls;
 
@@ -17,7 +16,7 @@ internal static class NotificationIcon
         _mainWindow = mainWindow;
 
         // Create the notification icon
-        _notificationIcon = new TaskbarIcon { Icon = Resources.Application, Id = Guid.Parse("2F4CE5CA-BC20-4D0D-80D0-45F13C6F4905") };
+        _notificationIcon = new TaskbarIcon { Icon = Resources.Application };
         _notificationIcon.TrayMouseDoubleClick += HandleNotificationIconDoubleClick;
 
         // Setup the menu
