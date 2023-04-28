@@ -10,7 +10,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,6 +18,7 @@ using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FeedCenter;
 
@@ -270,7 +270,11 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
             _httpClient.DefaultRequestHeaders.Authorization = Authenticate ? new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{Username}:{Password}"))) : null;
 
             // Attempt to get the response
-            var feedStream = _httpClient.GetStreamAsync(Source).Result;
+            var response = _httpClient.GetAsync(Source).Result;
+
+            response.EnsureSuccessStatusCode();
+
+            var feedStream = response.Content.ReadAsStream();
 
             // Create the text reader
             using StreamReader textReader = new XmlSanitizingStream(feedStream, Encoding.UTF8);
@@ -293,77 +297,22 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
 
             return Tuple.Create(FeedReadResult.Success, feedText);
         }
-        catch (IOException ioException)
+        catch (HttpRequestException httpRequestException)
         {
-            Log.Logger.Error(ioException, "Exception");
+            Log.Logger.Error(httpRequestException, "Exception");
 
-            return Tuple.Create(FeedReadResult.ConnectionFailed, string.Empty);
+            return HandleHttpRequestException(httpRequestException);
         }
         catch (AggregateException aggregateException)
         {
             Log.Logger.Error(aggregateException, "Exception");
 
-            var innerException = aggregateException.InnerException;
-
-            if (innerException is not HttpRequestException httpRequestException)
-                return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
-
-            switch (httpRequestException.StatusCode)
+            return aggregateException.InnerException switch
             {
-                case HttpStatusCode.ServiceUnavailable:
-                    return Tuple.Create(FeedReadResult.TemporarilyUnavailable, string.Empty);
-
-                case HttpStatusCode.InternalServerError:
-                    return Tuple.Create(FeedReadResult.ServerError, string.Empty);
-
-                case HttpStatusCode.NotModified:
-                    return Tuple.Create(FeedReadResult.NotModified, string.Empty);
-
-                case HttpStatusCode.NotFound:
-                    return Tuple.Create(FeedReadResult.NotFound, string.Empty);
-
-                case HttpStatusCode.Unauthorized:
-                case HttpStatusCode.Forbidden:
-                    return Tuple.Create(FeedReadResult.Unauthorized, string.Empty);
-
-                case HttpStatusCode.Moved:
-                    return Tuple.Create(FeedReadResult.Moved, string.Empty);
-            }
-
-            if (httpRequestException.InnerException is not SocketException socketException)
-                return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
-
-            return socketException.SocketErrorCode switch
-            {
-                SocketError.NoData => Tuple.Create(FeedReadResult.NoResponse, string.Empty),
-                SocketError.HostNotFound => Tuple.Create(FeedReadResult.NotFound, string.Empty),
+                TaskCanceledException => Tuple.Create(FeedReadResult.Timeout, string.Empty),
+                HttpRequestException httpRequestException => HandleHttpRequestException(httpRequestException),
                 _ => Tuple.Create(FeedReadResult.UnknownError, string.Empty)
             };
-        }
-        catch (WebException webException)
-        {
-            var result = FeedReadResult.UnknownError;
-
-            switch (webException.Status)
-            {
-                case WebExceptionStatus.ConnectFailure:
-                case WebExceptionStatus.NameResolutionFailure:
-                    result = FeedReadResult.ConnectionFailed;
-
-                    break;
-
-                case WebExceptionStatus.Timeout:
-                    result = FeedReadResult.Timeout;
-
-                    break;
-            }
-
-            Log.Logger.Error(webException, "Exception");
-
-            if (result == FeedReadResult.UnknownError)
-                Debug.Print("Unknown error");
-
-            return Tuple.Create(result, string.Empty);
         }
         catch (Exception exception)
         {
@@ -371,6 +320,42 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
 
             return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
         }
+    }
+
+    private static Tuple<FeedReadResult, string> HandleHttpRequestException(HttpRequestException httpRequestException)
+    {
+        switch (httpRequestException.StatusCode)
+        {
+            case HttpStatusCode.ServiceUnavailable:
+                return Tuple.Create(FeedReadResult.TemporarilyUnavailable, string.Empty);
+
+            case HttpStatusCode.InternalServerError:
+                return Tuple.Create(FeedReadResult.ServerError, string.Empty);
+
+            case HttpStatusCode.NotModified:
+                return Tuple.Create(FeedReadResult.NotModified, string.Empty);
+
+            case HttpStatusCode.NotFound:
+                return Tuple.Create(FeedReadResult.NotFound, string.Empty);
+
+            case HttpStatusCode.Unauthorized:
+            case HttpStatusCode.Forbidden:
+                return Tuple.Create(FeedReadResult.Unauthorized, string.Empty);
+
+            case HttpStatusCode.Moved:
+            case HttpStatusCode.Redirect:
+                return Tuple.Create(FeedReadResult.Moved, string.Empty);
+        }
+
+        if (httpRequestException.InnerException is not SocketException socketException)
+            return Tuple.Create(FeedReadResult.UnknownError, string.Empty);
+
+        return socketException.SocketErrorCode switch
+        {
+            SocketError.NoData => Tuple.Create(FeedReadResult.NoResponse, string.Empty),
+            SocketError.HostNotFound => Tuple.Create(FeedReadResult.NotFound, string.Empty),
+            _ => Tuple.Create(FeedReadResult.UnknownError, string.Empty)
+        };
     }
 
     private FeedReadResult ReadFeed(bool forceRead)
