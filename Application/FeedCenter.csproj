@@ -28,7 +28,7 @@
 		<PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.4" />
-		<PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.2" />
+		<PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.2" />
 		<PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.2" />
@@ -48,7 +48,7 @@
 		<PackageReference Include="NameBasedGrid" Version="0.10.1">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
-		<PackageReference Include="Realm" Version="10.21.0" />
+		<PackageReference Include="Realm" Version="10.21.1" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
