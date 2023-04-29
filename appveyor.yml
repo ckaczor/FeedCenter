@@ -24,4 +24,3 @@ deploy:
   name: GitHub
 before_build:
 - cmd: nuget restore
-- cmd: nuget restore Application\FeedCenter.csproj
