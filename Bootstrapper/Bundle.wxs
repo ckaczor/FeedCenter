@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
 	<?define ProductName="$(fileVersion.ProductName($(var.FeedCenter.TargetPath)))" ?>
 	<?define CompanyName="$(fileVersion.CompanyName($(var.FeedCenter.TargetPath)))" ?>
@@ -12,6 +13,18 @@
 	        Manufacturer="$(var.CompanyName)"
 	        UpgradeCode="5e5c13a5-635e-4310-a653-0f9760f46935"
 	        Compressed="no">
+
+		<util:DirectorySearch Id="DotnetDesktopRuntimeSearch_x86"
+		                      Path="[ProgramFilesFolder]dotnet\shared\Microsoft.WindowsDesktop.App\7.0.5"
+		                      Result="exists"
+		                      Variable="DotnetDesktopRuntimeExists_x86"
+		                      Condition="NOT VersionNT64" />
+
+		<util:DirectorySearch Id="DotnetDesktopRuntimeSearch_x64"
+		                      Path="[ProgramFiles64Folder]dotnet\shared\Microsoft.WindowsDesktop.App\7.0.5"
+		                      Result="exists"
+		                      Variable="DotnetDesktopRuntimeExists_x64"
+		                      Condition="VersionNT64" />
 
 		<BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.HyperlinkLicense">
 			<bal:WixExtendedBootstrapperApplication LicenseUrl=""
@@ -28,9 +41,10 @@
 			            DisplayName=".NET 7.0 Desktop Runtime (x64)"
 			            InstallCommand="/install /quiet"
 			            Permanent="yes"
-						Compressed="no"
+			            Compressed="no"
 			            DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/dffb1939-cef1-4db3-a579-5475a3061cdd/578b208733c914c7b7357f6baa4ecfd6/windowsdesktop-runtime-7.0.5-win-x64.exe"
 			            Name="windowsdesktop-runtime-7.0.5-win-x64.exe"
+			            DetectCondition="DotnetDesktopRuntimeExists_x64 = 1"
 			            InstallCondition='VersionNT64'>
 				<RemotePayload ProductName="Microsoft Windows Desktop Runtime - 7.0.5 (x64)"
 				               Description="Microsoft Windows Desktop Runtime - 7.0.5 (x64)"
@@ -42,9 +56,10 @@
 			            DisplayName=".NET 7.0 Desktop Runtime (x86)"
 			            InstallCommand="/install /quiet"
 			            Permanent="yes"
-						Compressed="no"
+			            Compressed="no"
 			            DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/eb64dcd1-d277-4798-ada1-600805c9e2dc/fc73c843d66f3996e7ef22468f4902e6/windowsdesktop-runtime-7.0.5-win-x86.exe"
 			            Name="windowsdesktop-runtime-7.0.5-win-x86.exe"
+			            DetectCondition="DotnetDesktopRuntimeExists_x86 = 1"
 			            InstallCondition='NOT VersionNT64'>
 				<RemotePayload ProductName="Microsoft Windows Desktop Runtime - 7.0.5 (x86)"
 				               Description="Microsoft Windows Desktop Runtime - 7.0.5 (x86)"
