@@ -1,12 +1,4 @@
-﻿using ChrisKaczor.ApplicationUpdate;
-using FeedCenter.Data;
-using FeedCenter.FeedParsers;
-using FeedCenter.Properties;
-using FeedCenter.Xml;
-using JetBrains.Annotations;
-using Realms;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +11,14 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ChrisKaczor.ApplicationUpdate;
+using FeedCenter.Data;
+using FeedCenter.FeedParsers;
+using FeedCenter.Properties;
+using FeedCenter.Xml;
+using JetBrains.Annotations;
+using Realms;
+using Serilog;
 
 namespace FeedCenter;
 
@@ -98,9 +98,6 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
         }
     }
 
-    [MapTo("Password")]
-    public string RawPassword { get; set; }
-
     public string Password
     {
         get => RawPassword;
@@ -122,8 +119,14 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
     [MapTo("Name")]
     private string RawName { get; set; } = string.Empty;
 
+    [MapTo("Password")]
+    public string RawPassword { get; set; }
+
     [MapTo("Source")]
     private string RawSource { get; set; } = string.Empty;
+
+    [MapTo("Username")]
+    public string RawUsername { get; set; }
 
     public string Source
     {
@@ -139,8 +142,7 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
 
     public string Title { get; set; }
 
-    [MapTo("Username")]
-    public string RawUsername { get; set; }
+    public string UserAgent { get; set; }
 
     public string Username
     {
@@ -242,6 +244,17 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
         return new Tuple<FeedType, string>(feedType, retrieveResult.Item2);
     }
 
+    private string GetUserAgent()
+    {
+        if (!string.IsNullOrWhiteSpace(UserAgent))
+            return UserAgent;
+
+        if (!string.IsNullOrWhiteSpace(Settings.Default.DefaultUserAgent))
+            return Settings.Default.DefaultUserAgent;
+
+        return "FeedCenter/" + UpdateCheck.LocalVersion;
+    }
+
     private Tuple<FeedReadResult, string> RetrieveFeed()
     {
         try
@@ -258,13 +271,14 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
 
                 _httpClient = new HttpClient(clientHandler);
 
-                // Set a user agent string
-                var userAgent = string.IsNullOrWhiteSpace(Settings.Default.DefaultUserAgent) ? "FeedCenter/" + UpdateCheck.LocalVersion : Settings.Default.DefaultUserAgent;
-                _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
-
                 // Set a timeout
                 _httpClient.Timeout = TimeSpan.FromSeconds(10);
             }
+
+            // Set a user agent string
+            var userAgent = GetUserAgent();
+            _httpClient.DefaultRequestHeaders.UserAgent.Clear();
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
 
             // If we need to authenticate then set the credentials
             _httpClient.DefaultRequestHeaders.Authorization = Authenticate ? new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{Username}:{Password}"))) : null;

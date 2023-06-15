@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using FeedCenter.Properties;
 
 namespace FeedCenter.Options;
 
 public class UserAgentItem
 {
     public string Caption { get; set; }
-    public string UserAgent { get; set; }
 
-    public static List<UserAgentItem> UserAgents => new()
+    public static List<UserAgentItem> DefaultUserAgents => new()
     {
         new UserAgentItem
         {
-            Caption = Properties.Resources.DefaultUserAgentCaption,
+            Caption = Properties.Resources.ApplicationUserAgentCaption,
             UserAgent = string.Empty
         },
         new UserAgentItem
@@ -30,4 +31,29 @@ public class UserAgentItem
             UserAgent = "curl/7.47.0"
         }
     };
+
+    public string UserAgent { get; set; }
+
+    public static List<UserAgentItem> UserAgents
+    {
+        get
+        {
+            var defaultUserAgents = DefaultUserAgents;
+
+            var applicationDefaultUserAgent = defaultUserAgents.First(dua => dua.UserAgent == Settings.Default.DefaultUserAgent);
+
+            var userAgents = new List<UserAgentItem>
+            {
+                new()
+                {
+                    Caption = string.Format(Resources.DefaultUserAgentCaption, applicationDefaultUserAgent.Caption),
+                    UserAgent = null
+                }
+            };
+
+            userAgents.AddRange(defaultUserAgents);
+
+            return userAgents;
+        }
+    }
 }

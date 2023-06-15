@@ -1,22 +1,31 @@
-﻿using FeedCenter.Data;
+﻿using System;
+using System.Linq;
+using FeedCenter.Data;
 using FeedCenter.Options;
 using Realms;
-using System;
-using System.Linq;
 
 namespace FeedCenter;
 
 public class FeedCenterEntities
 {
-    public Realm RealmInstance { get; }
-
-    public RealmObservableCollection<Category> Categories { get; }
-    public RealmObservableCollection<Feed> Feeds { get; private set; }
-    public RealmObservableCollection<Setting> Settings { get; private set; }
-
     public FeedCenterEntities()
     {
-        var realmConfiguration = new RealmConfiguration($"{Database.DatabaseFile}");
+        var realmConfiguration = new RealmConfiguration($"{Database.DatabaseFile}")
+        {
+            SchemaVersion = 1,
+            MigrationCallback = (migration, oldSchemaVersion) =>
+            {
+                var newVersionFeeds = migration.NewRealm.All<Feed>();
+
+                foreach (var newVersionFeed in newVersionFeeds)
+                {
+                    if (oldSchemaVersion == 0)
+                    {
+                        newVersionFeed.UserAgent = null;
+                    }
+                }
+            }
+        };
 
         RealmInstance = Realm.GetInstance(realmConfiguration);
 
@@ -29,6 +38,17 @@ public class FeedCenterEntities
             RealmInstance.Write(() => Categories.Add(Category.CreateDefault()));
         }
     }
+
+    public RealmObservableCollection<Category> Categories { get; }
+
+    public Category DefaultCategory
+    {
+        get { return Categories.First(c => c.IsDefault); }
+    }
+
+    public RealmObservableCollection<Feed> Feeds { get; private set; }
+    private Realm RealmInstance { get; }
+    public RealmObservableCollection<Setting> Settings { get; private set; }
 
     public void Refresh()
     {
@@ -43,10 +63,5 @@ public class FeedCenterEntities
     public Transaction BeginTransaction()
     {
         return RealmInstance.BeginWrite();
-    }
-
-    public Category DefaultCategory
-    {
-        get { return Categories.First(c => c.IsDefault); }
     }
 }

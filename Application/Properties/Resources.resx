@@ -524,6 +524,9 @@
     <value>Category: {0}</value>
   </data>
   <data name="DefaultUserAgentCaption" xml:space="preserve">
+    <value>Default ({0})</value>
+  </data>
+  <data name="ApplicationUserAgentCaption" xml:space="preserve">
     <value>Feed Center</value>
   </data>
   <data name="defaultUserAgentLabel" xml:space="preserve">
@@ -548,5 +551,8 @@ All feeds currently in category "{0}" will be moved to the default category.</va
   </data>
   <data name="ConfirmDeleteFeeds" xml:space="preserve">
     <value>Are you sure you want to delete the selected feeds?</value>
+  </data>
+  <data name="userAgentLabel" xml:space="preserve">
+    <value>User agent</value>
   </data>
 </root>

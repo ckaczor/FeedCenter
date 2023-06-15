@@ -134,6 +134,15 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Feed Center.
+        /// </summary>
+        public static string ApplicationUserAgentCaption {
+            get {
+                return ResourceManager.GetString("ApplicationUserAgentCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string authenticationPasswordLabel {
@@ -517,7 +526,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feed Center.
+        ///   Looks up a localized string similar to Default ({0}).
         /// </summary>
         public static string DefaultUserAgentCaption {
             get {
@@ -1458,6 +1467,15 @@ namespace FeedCenter.Properties {
         public static string Top {
             get {
                 return ResourceManager.GetString("Top", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User agent.
+        /// </summary>
+        public static string userAgentLabel {
+            get {
+                return ResourceManager.GetString("userAgentLabel", resourceCulture);
             }
         }
         

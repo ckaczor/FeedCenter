@@ -94,6 +94,13 @@
                         <ComboBoxItem Content="{x:Static properties:Resources.openAllMultipleToolbarButton}"
                                       Tag="{x:Static feedCenter:MultipleOpenAction.IndividualPages}" />
                     </ComboBox>
+                    <ComboBox Name="UserAgentComboBox"
+                              mah:TextBoxHelper.UseFloatingWatermark="True"
+                              mah:TextBoxHelper.Watermark="{x:Static properties:Resources.userAgentLabel}"
+                              DisplayMemberPath="Caption"
+                              ItemsSource="{Binding Source={x:Static options:UserAgentItem.UserAgents}}"
+                              SelectedValuePath="UserAgent"
+                              SelectedValue="{Binding Path=UserAgent, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=true}" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="{x:Static properties:Resources.authenticationTab}">
