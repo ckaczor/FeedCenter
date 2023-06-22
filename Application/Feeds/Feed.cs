@@ -265,14 +265,20 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
                 var clientHandler = new HttpClientHandler
                 {
                     // Set that we'll accept compressed data
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.Brotli,
                     AllowAutoRedirect = true
                 };
 
-                _httpClient = new HttpClient(clientHandler);
+                _httpClient = new HttpClient(clientHandler)
+                {
+                    // Set a timeout
+                    Timeout = TimeSpan.FromSeconds(10)
+                };
 
-                // Set a timeout
-                _httpClient.Timeout = TimeSpan.FromSeconds(10);
+                _httpClient.DefaultRequestHeaders.Accept.ParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                _httpClient.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate, br");
+                _httpClient.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US,en;q=0.9");
+                _httpClient.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("max-age=0");
             }
 
             // Set a user agent string
@@ -282,6 +288,8 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
 
             // If we need to authenticate then set the credentials
             _httpClient.DefaultRequestHeaders.Authorization = Authenticate ? new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{Username}:{Password}"))) : null;
+
+            _httpClient.DefaultRequestHeaders.IfModifiedSince = LastChecked;
 
             // Attempt to get the response
             var response = _httpClient.GetAsync(Source).Result;
@@ -313,6 +321,11 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
         }
         catch (HttpRequestException httpRequestException)
         {
+            if (httpRequestException.StatusCode == HttpStatusCode.NotModified)
+            {
+                return Tuple.Create(FeedReadResult.NotModified, string.Empty);
+            }
+
             Log.Logger.Error(httpRequestException, "Exception");
 
             return HandleHttpRequestException(httpRequestException);
@@ -391,11 +404,11 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
                     return FeedReadResult.NotDue;
             }
 
-            // We're checking it now so update the time
-            LastChecked = DateTimeOffset.Now;
-
             // Read the feed text
             var retrieveResult = RetrieveFeed();
+
+            // We're checking it now so update the time
+            LastChecked = DateTimeOffset.Now;
 
             // Get the information out of the async result
             var result = retrieveResult.Item1;
