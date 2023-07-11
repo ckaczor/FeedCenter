@@ -121,7 +121,7 @@ public partial class MainWindow
 
     private void UpdateErrorLink()
     {
-        var feedErrorCount = _database.Feeds.Count(f => f.LastReadResult != FeedReadResult.Success);
+        var feedErrorCount = _database.Feeds.Count(f => f.LastReadResult != FeedReadResult.Success && f.LastReadResult != FeedReadResult.NotModified);
 
         // Set the visibility of the error link
         FeedErrorsLink.Visibility = feedErrorCount == 0 ? Visibility.Collapsed : Visibility.Visible;
