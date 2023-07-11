@@ -202,6 +202,9 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
             case FeedReadResult.NotEnabled:
             case FeedReadResult.NotModified:
 
+                // Reset status to success
+                LastReadResult = FeedReadResult.Success;
+
                 // Ignore
                 break;
 
