@@ -24,17 +24,18 @@ public partial class MainWindow
     {
         StopTimer();
 
-        _mainTimer.Dispose();
+        _mainTimer?.Dispose();
+        _mainTimer = null;
     }
 
     private void StartTimer()
     {
-        _mainTimer.Start();
+        _mainTimer?.Start();
     }
 
     private void StopTimer()
     {
-        _mainTimer.Stop();
+        _mainTimer?.Stop();
     }
 
     private void HandleMainTimerElapsed(object sender, EventArgs e)

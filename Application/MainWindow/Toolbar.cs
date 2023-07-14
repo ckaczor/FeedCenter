@@ -166,6 +166,12 @@ public partial class MainWindow
 
         // Delete the feed
         _database.SaveChanges(() => _database.Feeds.Remove(feedToDelete));
+
+        // Refresh the database to current settings
+        ResetDatabase();
+
+        // Re-initialize the feed display
+        DisplayFeed();
     }
 
     private void OpenAllFeedItemsOnSinglePage()
