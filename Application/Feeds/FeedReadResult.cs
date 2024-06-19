@@ -15,5 +15,6 @@ public enum FeedReadResult
     ConnectionFailed,
     ServerError,
     Moved,
-    TemporarilyUnavailable
+    TemporarilyUnavailable,
+    TooManyRequests
 }

@@ -356,6 +356,9 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
     {
         switch (httpRequestException.StatusCode)
         {
+            case HttpStatusCode.TooManyRequests:
+                return Tuple.Create(FeedReadResult.TooManyRequests, string.Empty);
+
             case HttpStatusCode.ServiceUnavailable:
                 return Tuple.Create(FeedReadResult.TemporarilyUnavailable, string.Empty);
 

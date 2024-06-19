@@ -841,11 +841,29 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Temporarily unavailable.
+        /// </summary>
+        public static string FeedReadResult_TemporarilyUnavailable {
+            get {
+                return ResourceManager.GetString("FeedReadResult_TemporarilyUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Timeout.
         /// </summary>
         public static string FeedReadResult_Timeout {
             get {
                 return ResourceManager.GetString("FeedReadResult_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many requests.
+        /// </summary>
+        public static string FeedReadResult_TooManyRequests {
+            get {
+                return ResourceManager.GetString("FeedReadResult_TooManyRequests", resourceCulture);
             }
         }
         

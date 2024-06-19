@@ -555,4 +555,10 @@ All feeds currently in category "{0}" will be moved to the default category.</va
   <data name="userAgentLabel" xml:space="preserve">
     <value>User agent</value>
   </data>
+  <data name="FeedReadResult_TemporarilyUnavailable" xml:space="preserve">
+    <value>Temporarily unavailable</value>
+  </data>
+  <data name="FeedReadResult_TooManyRequests" xml:space="preserve">
+    <value>Too many requests</value>
+  </data>
 </root>

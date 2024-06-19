@@ -34,7 +34,7 @@
 		<PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.3" />
-		<PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.4" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="DebounceThrottle" Version="2.0.0" />
 		<PackageReference Include="H.NotifyIcon.Wpf" Version="2.0.108" />
@@ -44,7 +44,7 @@
 		<PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" GeneratePathProperty="true">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.6" />
 		<PackageReference Include="NameBasedGrid" Version="0.10.1">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
