@@ -1,13 +1,11 @@
 version: 1.1.0.{build}
-environment:
-  DOTNET_CLI_DO_NOT_USE_MSBUILD_SERVER: 1
 branches:
   only:
     - main
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
-image: Previous Visual Studio 2022
+image: Visual Studio 2022
 configuration: Release
 platform: x86  
 assembly_info:
@@ -17,7 +15,7 @@ assembly_info:
   assembly_file_version: '{version}'
 build:
   project: FeedCenter.sln
-  verbosity: normal
+  verbosity: minimal
 artifacts:
 - path: Bootstrapper\bin\Release\FeedCenterSetup.exe
   name: Release
