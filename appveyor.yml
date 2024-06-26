@@ -17,7 +17,7 @@ assembly_info:
   assembly_file_version: '{version}'
 build:
   project: FeedCenter.sln
-  verbosity: minimal
+  verbosity: normal
 artifacts:
 - path: Bootstrapper\bin\Release\FeedCenterSetup.exe
   name: Release
