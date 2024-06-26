@@ -1,4 +1,6 @@
 version: 1.1.0.{build}
+environment:
+  DOTNET_CLI_DO_NOT_USE_MSBUILD_SERVER: 1
 branches:
   only:
     - main
