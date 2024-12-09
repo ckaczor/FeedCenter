@@ -49,14 +49,14 @@ public partial class MainWindow
     {
         // Set the last window location
         Settings.Default.WindowLocation = new Point(Left, Top);
+        Settings.Default.Save();
 
         // Set the last window size
         Settings.Default.WindowSize = new Size(Width, Height);
+        Settings.Default.Save();
 
         // Save the dock on the navigation tray
         Settings.Default.ToolbarLocation = NameBasedGrid.NameBasedGrid.GetRow(NavigationToolbarTray) == "TopToolbarRow" ? Dock.Top : Dock.Bottom;
-
-        // Save settings
         Settings.Default.Save();
     }
 

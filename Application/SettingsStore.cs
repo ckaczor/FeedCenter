@@ -36,6 +36,9 @@ public static class SettingsStore
         // Try to get the setting from the database that matches the name and version
         var setting = entities.Settings.FirstOrDefault(s => s.Name == name);
 
+        if (setting?.Value == value)
+            return;
+
         entities.SaveChanges(() =>
         {
             // If there was no setting we need to create it
