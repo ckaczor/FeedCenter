@@ -34,6 +34,6 @@ public partial class MainWindow
 
     private void HandleNewVersionLinkClick(object sender, RoutedEventArgs e)
     {
-        UpdateCheck.DisplayUpdateInformation(true);
+        UpdateCheck.DisplayUpdateInformation(true, Settings.Default.IncludePrerelease);
     }
 }

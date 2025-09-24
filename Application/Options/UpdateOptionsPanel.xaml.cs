@@ -15,7 +15,7 @@ public partial class UpdateOptionsPanel
 
     private void HandleCheckVersionNowButtonClick(object sender, RoutedEventArgs e)
     {
-        UpdateCheck.DisplayUpdateInformation(true);
+        UpdateCheck.DisplayUpdateInformation(true, Settings.Default.IncludePrerelease);
     }
 
     private void OnSaveSettings(object sender, RoutedEventArgs e)
