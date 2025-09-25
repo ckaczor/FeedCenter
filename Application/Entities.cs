@@ -15,10 +15,17 @@ public class FeedCenterEntities
             SchemaVersion = 2,
             MigrationCallback = (migration, oldSchemaVersion) =>
             {
-                if (oldSchemaVersion == 1)
-                    migration.NewRealm.Add(Account.CreateDefault());
+                Account localAccount;
 
-                var localAccount = migration.NewRealm.All<Account>().First(a => a.Type == AccountType.Local);
+                if (oldSchemaVersion == 1)
+                {
+                    localAccount = Account.CreateDefault();
+                    migration.NewRealm.Add(localAccount);
+                }
+                else
+                {
+                    localAccount = migration.NewRealm.All<Account>().First(a => a.Type == AccountType.Local);
+                }
 
                 var newVersionCategories = migration.NewRealm.All<Category>();
 
