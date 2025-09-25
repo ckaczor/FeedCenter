@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using ChrisKaczor.InstalledBrowsers;
-using FeedCenter.Data;
 using FeedCenter.Options;
 using FeedCenter.Properties;
 
@@ -14,6 +13,7 @@ namespace FeedCenter;
 public partial class FeedErrorWindow
 {
     private CollectionViewSource _collectionViewSource;
+    private readonly FeedCenterEntities _entities = new();
 
     public FeedErrorWindow()
     {
@@ -23,7 +23,7 @@ public partial class FeedErrorWindow
     public void Display(Window owner)
     {
         // Create a view and sort it by name
-        _collectionViewSource = new CollectionViewSource { Source = Database.Entities.Feeds };
+        _collectionViewSource = new CollectionViewSource { Source = _entities.Feeds };
         _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
         _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
@@ -62,7 +62,7 @@ public partial class FeedErrorWindow
 
         var feed = (Feed) FeedDataGrid.SelectedItem;
 
-        var feedWindow = new FeedWindow();
+        var feedWindow = new FeedWindow(_entities);
 
         feedWindow.Display(feed, GetWindow(this));
     }
@@ -74,7 +74,7 @@ public partial class FeedErrorWindow
 
         var feed = (Feed) FeedDataGrid.SelectedItem;
 
-        Database.Entities.SaveChanges(() => Database.Entities.Feeds.Remove(feed));
+        _entities.SaveChanges(() => _entities.Feeds.Remove(feed));
 
         SetFeedButtonStates();
     }
@@ -117,8 +117,6 @@ public partial class FeedErrorWindow
 
             entities.SaveChanges(() => feed.Read(true));
         });
-
-        Database.Entities.Refresh();
 
         var selectedIndex = FeedDataGrid.SelectedIndex;
 

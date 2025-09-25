@@ -61,11 +61,128 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string AccountNameColumnHeader {
+            get {
+                return ResourceManager.GetString("AccountNameColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string accountNameLabel {
+            get {
+                return ResourceManager.GetString("accountNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Refresh account every.
+        /// </summary>
+        public static string accountReadIntervalPrefix {
+            get {
+                return ResourceManager.GetString("accountReadIntervalPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to minutes.
+        /// </summary>
+        public static string accountReadIntervalSuffix {
+            get {
+                return ResourceManager.GetString("accountReadIntervalSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Account requires authentication.
+        /// </summary>
+        public static string accountRequiresAuthenticationCheckBox {
+            get {
+                return ResourceManager.GetString("accountRequiresAuthenticationCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string AccountTypeColumnHeader {
+            get {
+                return ResourceManager.GetString("AccountTypeColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fever.
+        /// </summary>
+        public static string AccountTypeFever {
+            get {
+                return ResourceManager.GetString("AccountTypeFever", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google Reader.
+        /// </summary>
+        public static string AccountTypeGoogleReader {
+            get {
+                return ResourceManager.GetString("AccountTypeGoogleReader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string accountTypeLabel {
+            get {
+                return ResourceManager.GetString("accountTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL.
+        /// </summary>
+        public static string accountUrlLabel {
+            get {
+                return ResourceManager.GetString("accountUrlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Account.
+        /// </summary>
+        public static string AccountWindowAdd {
+            get {
+                return ResourceManager.GetString("AccountWindowAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Account.
+        /// </summary>
+        public static string AccountWindowEdit {
+            get {
+                return ResourceManager.GetString("AccountWindowEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A_ctions.
         /// </summary>
         public static string ActionsButton {
             get {
                 return ResourceManager.GetString("ActionsButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Account.
+        /// </summary>
+        public static string AddAccountButton {
+            get {
+                return ResourceManager.GetString("AddAccountButton", resourceCulture);
             }
         }
         
@@ -274,6 +391,15 @@ namespace FeedCenter.Properties {
         public static string CloseButton {
             get {
                 return ResourceManager.GetString("CloseButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this account?.
+        /// </summary>
+        public static string ConfirmDeleteAccount {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteAccount", resourceCulture);
             }
         }
         
@@ -544,6 +670,15 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Account.
+        /// </summary>
+        public static string DeleteAccountButton {
+            get {
+                return ResourceManager.GetString("DeleteAccountButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Category.
         /// </summary>
         public static string DeleteCategoryButton {
@@ -594,6 +729,15 @@ namespace FeedCenter.Properties {
         public static string displayEmptyFeedsCheckBox {
             get {
                 return ResourceManager.GetString("displayEmptyFeedsCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Account.
+        /// </summary>
+        public static string EditAccountButton {
+            get {
+                return ResourceManager.GetString("EditAccountButton", resourceCulture);
             }
         }
         
@@ -1156,6 +1300,15 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accounts.
+        /// </summary>
+        public static string optionCategoryAccounts {
+            get {
+                return ResourceManager.GetString("optionCategoryAccounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Categories.
         /// </summary>
         public static string optionCategoryCategories {
@@ -1174,7 +1327,7 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feeds.
+        ///   Looks up a localized string similar to Local Feeds.
         /// </summary>
         public static string optionCategoryFeeds {
             get {

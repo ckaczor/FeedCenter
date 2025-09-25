@@ -4,7 +4,7 @@ namespace FeedCenter.Options;
 
 public partial class AboutOptionsPanel
 {
-    public AboutOptionsPanel(Window parentWindow) : base(parentWindow)
+    public AboutOptionsPanel(Window parentWindow, FeedCenterEntities entities) : base(parentWindow, entities)
     {
         InitializeComponent();
     }

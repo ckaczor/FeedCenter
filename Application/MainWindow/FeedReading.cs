@@ -34,13 +34,13 @@ public partial class MainWindow
         }
     }
 
-    private void SetProgressMode(bool value, int feedCount)
+    private void SetProgressMode(bool showProgress, int maximum)
     {
         // Refresh the progress bar if we need it
-        if (value)
+        if (showProgress)
         {
             FeedReadProgress.Value = 0;
-            FeedReadProgress.Maximum = feedCount + 2;
+            FeedReadProgress.Maximum = maximum + 2;
             FeedReadProgress.Visibility = Visibility.Visible;
         }
         else
@@ -76,11 +76,13 @@ public partial class MainWindow
             return;
 
         // Don't read if there is nothing to read
-        if (!_database.Feeds.Any())
+        if (!_database.Accounts.Any())
             return;
 
+        var progressSteps = _database.Accounts.Sum(a => a.GetProgressSteps(_database));
+
         // Switch to progress mode
-        SetProgressMode(true, _database.Feeds.Count);
+        SetProgressMode(true, progressSteps);
 
         // Create the input class
         var workerInput = new FeedReadWorkerInput(forceRead);
@@ -138,35 +140,68 @@ public partial class MainWindow
         var database = new FeedCenterEntities();
 
         // Get the worker
-        var worker = (BackgroundWorker) sender;
+        var worker = (BackgroundWorker)sender;
 
         // Get the input information
-        var workerInput = (FeedReadWorkerInput) e.Argument ?? new FeedReadWorkerInput();
+        var workerInput = (FeedReadWorkerInput)e.Argument ?? new FeedReadWorkerInput();
 
         // Setup for progress
         var currentProgress = 0;
 
-        // Create the list of feeds to read
-        var feedsToRead = new List<Feed>();
+        var accountsToRead = new List<Account>();
 
-        // If we have a single feed then add it to the list - otherwise add them all
+        // If we have a single feed then get the account for that feed
         if (workerInput.FeedId != null)
-            feedsToRead.Add(database.Feeds.First(feed => feed.Id == workerInput.FeedId));
-        else
-            feedsToRead.AddRange(database.Feeds);
-
-        // Loop over each feed and read it
-        foreach (var feed in feedsToRead)
         {
-            // Read the feed
-            database.SaveChanges(() => feed.Read(workerInput.ForceRead));
+            var feed = database.Feeds.FirstOrDefault(f => f.Id == workerInput.FeedId);
 
+            if (feed != null)
+                accountsToRead.Add(feed.Account);
+        }
+        else
+        {
+            // Otherwise get all accounts
+            accountsToRead.AddRange(database.Accounts);
+        }
+
+        var incrementProgress = () =>
+        {
             // Increment progress
             currentProgress += 1;
 
             // Report progress
             worker.ReportProgress(currentProgress);
+        };
+
+        // Loop over each account and read it
+        foreach (var account in accountsToRead)
+        {
+            var accountReadInput = new AccountReadInput(database, workerInput.FeedId, workerInput.ForceRead, incrementProgress);
+
+            account.Read(accountReadInput);
         }
+
+        //// Create the list of feeds to read
+        //var feedsToRead = new List<Feed>();
+
+        //// If we have a single feed then add it to the list - otherwise add them all
+        //if (workerInput.FeedId != null)
+        //    feedsToRead.Add(database.Feeds.First(feed => feed.Id == workerInput.FeedId));
+        //else
+        //    feedsToRead.AddRange(database.Feeds);
+
+        //// Loop over each feed and read it
+        //foreach (var feed in feedsToRead)
+        //{
+        //    // Read the feed
+        //    database.SaveChanges(() => feed.Read(workerInput.ForceRead));
+
+        //    // Increment progress
+        //    currentProgress += 1;
+
+        //    // Report progress
+        //    worker.ReportProgress(currentProgress);
+        //}
 
         // Increment progress
         currentProgress += 1;

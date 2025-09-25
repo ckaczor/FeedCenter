@@ -12,7 +12,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChrisKaczor.ApplicationUpdate;
-using FeedCenter.Data;
 using FeedCenter.FeedParsers;
 using FeedCenter.Properties;
 using FeedCenter.Xml;
@@ -34,14 +33,16 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
         _dataErrorDictionary.ErrorsChanged += DataErrorDictionaryErrorsChanged;
     }
 
+    [PrimaryKey]
+    public Guid Id { get; set; }
+
+    public string RemoteId { get; set; }
     public bool Authenticate { get; set; }
     public Guid CategoryId { get; set; }
     public int CheckInterval { get; set; } = 60;
     public string Description { get; set; }
     public bool Enabled { get; set; } = true;
-
-    [PrimaryKey]
-    public Guid Id { get; set; }
+    public Account Account { get; set; }
 
     [UsedImplicitly]
     public IList<FeedItem> Items { get; }
@@ -171,9 +172,9 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
 
     public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-    public static Feed Create()
+    public static Feed Create(FeedCenterEntities entities)
     {
-        return new Feed { Id = Guid.NewGuid(), CategoryId = Database.Entities.DefaultCategory.Id };
+        return new Feed { Id = Guid.NewGuid(), CategoryId = entities.DefaultCategory.Id, Account = entities.LocalAccount };
     }
 
     private void DataErrorDictionaryErrorsChanged(object sender, DataErrorsChangedEventArgs e)
@@ -215,7 +216,7 @@ public partial class Feed : RealmObject, INotifyDataErrorInfo
                 break;
         }
 
-        // If the feed was successfully read and we have no last update timestamp - set the last update timestamp to now
+        // If the feed was successfully read, and we have no last update timestamp - set the last update timestamp to now
         if (result == FeedReadResult.Success && LastUpdated == default)
             LastUpdated = DateTimeOffset.Now;
 

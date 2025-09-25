@@ -1,7 +1,4 @@
 version: 1.1.0.{build}
-branches:
-  only:
-    - main
 pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
@@ -19,8 +16,28 @@ build:
 artifacts:
 - path: Bootstrapper\bin\Release\FeedCenterSetup.exe
   name: Release
-deploy:
-- provider: Environment
-  name: GitHub
 before_build:
 - cmd: nuget restore
+
+for:
+-
+  branches:
+    only:
+      - main
+
+  deploy:
+  - provider: Environment
+    name: GitHub
+    prerelease: false
+
+-
+  branches:
+    only:
+      - prerelease
+
+  version: 1.2.0.{build}
+
+  deploy:
+  - provider: Environment
+    name: GitHub
+    prerelease: true

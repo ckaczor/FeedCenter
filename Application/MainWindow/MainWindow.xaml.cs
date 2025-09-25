@@ -1,12 +1,12 @@
 ﻿using ChrisKaczor.ApplicationUpdate;
 using ChrisKaczor.Wpf.Application;
-using FeedCenter.Data;
 using FeedCenter.Properties;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -39,19 +39,19 @@ public partial class MainWindow : IDisposable
         base.OnSourceInitialized(e);
 
         // Initialize the window
-        Initialize();
+        Initialize().ContinueWith(_ => { }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
-    protected override async void OnClosed(EventArgs e)
+    protected override void OnClosed(EventArgs e)
     {
         base.OnClosed(e);
 
-        await SingleInstance.Stop();
+        SingleInstance.Stop().ContinueWith(_ => { }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
-    public async void Initialize()
+    public async Task Initialize()
     {
-        // Setup the update handler
+        // Set up the update handler
         InitializeUpdate();
 
         // Show the notification icon
@@ -72,8 +72,8 @@ public partial class MainWindow : IDisposable
         _feedReadWorker.ProgressChanged += HandleFeedReadWorkerProgressChanged;
         _feedReadWorker.RunWorkerCompleted += HandleFeedReadWorkerCompleted;
 
-        // Setup the database
-        _database = Database.Entities;
+        // Set up the database
+        _database = new FeedCenterEntities();
 
         // Initialize the single instance listener
         SingleInstance.MessageReceived += SingleInstance_MessageReceived;
@@ -151,7 +151,7 @@ public partial class MainWindow : IDisposable
         var currentId = _currentFeed?.IsValid ?? false ? _currentFeed.Id : Guid.Empty;
 
         // Create a new database object
-        _database.Refresh();
+        _database = new FeedCenterEntities();
 
         _feedList = _currentCategory == null
             ? _database.Feeds.ToList()
@@ -188,7 +188,9 @@ public partial class MainWindow : IDisposable
     private void UpdateToolbarButtonState()
     {
         // Cache the feed count to save (a little) time
-        var feedCount = Settings.Default.DisplayEmptyFeeds ? _feedList.Count() : _feedList.Count(x => x.Items.Any(y => !y.BeenRead));
+        var feedCount = Settings.Default.DisplayEmptyFeeds
+            ? _feedList.Count()
+            : _feedList.Count(x => x.Items.Any(y => !y.BeenRead));
 
         // Set button states
         PreviousToolbarButton.IsEnabled = feedCount > 1;
@@ -200,6 +202,11 @@ public partial class MainWindow : IDisposable
         FeedLabel.Visibility = feedCount == 0 ? Visibility.Hidden : Visibility.Visible;
         FeedButton.Visibility = feedCount == 0 ? Visibility.Hidden : Visibility.Visible;
         CategoryGrid.Visibility = _database.Categories.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
+
+        EditCurrentFeedMenuItem.Visibility = _currentFeed?.Account.SupportsFeedEdit ?? false ? Visibility.Visible : Visibility.Collapsed;
+        DeleteCurrentFeedMenuItem.Visibility = _currentFeed?.Account.SupportsFeedDelete ?? false ? Visibility.Visible : Visibility.Collapsed;
+        CurrentFeedMenu.Visibility = EditCurrentFeedMenuItem.IsVisible || DeleteCurrentFeedMenuItem.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+        SettingsMenuSeparator.Visibility = CurrentFeedMenu.Visibility;
     }
 
     private void InitializeDisplay()
@@ -405,16 +412,14 @@ public partial class MainWindow : IDisposable
         }
 
         UpdateOpenAllButton();
+        UpdateToolbarButtonState();
     }
 
-    private void MarkAllItemsAsRead()
+    private async Task MarkAllItemsAsRead()
     {
         // Loop over all items and mark them as read
-        _database.SaveChanges(() =>
-        {
-            foreach (FeedItem feedItem in LinkTextList.Items)
-                feedItem.BeenRead = true;
-        });
+        foreach (FeedItem feedItem in LinkTextList.Items)
+            await feedItem.MarkAsRead(_database);
 
         // Clear the list
         LinkTextList.Items.Clear();

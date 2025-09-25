@@ -22,6 +22,10 @@ public class Category : RealmObject, INotifyDataErrorInfo
     [PrimaryKey]
     public Guid Id { get; set; } = Guid.NewGuid();
 
+    public string RemoteId { get; set; }
+
+    public Account Account { get; set; }
+
     public bool IsDefault { get; internal set; }
 
     public string Name
@@ -56,9 +60,9 @@ public class Category : RealmObject, INotifyDataErrorInfo
         ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(e.PropertyName));
     }
 
-    public static Category CreateDefault()
+    public static Category CreateDefault(Account account)
     {
-        return new Category { Name = DefaultName, IsDefault = true };
+        return new Category { Name = DefaultName, IsDefault = true, Account = account };
     }
 
     private void ValidateName()

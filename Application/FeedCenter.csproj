@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net70-windows</TargetFramework>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
 		<OutputType>WinExe</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWindowsForms>false</UseWindowsForms>
@@ -25,6 +25,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.5" />
+		<PackageReference Include="ChrisKaczor.FeverClient" Version="1.0.1" />
 		<PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.5" />
@@ -48,7 +49,7 @@
 		<PackageReference Include="NameBasedGrid" Version="0.10.1">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
-		<PackageReference Include="Realm" Version="10.21.1" />
+		<PackageReference Include="Realm" Version="20.1.0" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />

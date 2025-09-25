@@ -1,19 +1,22 @@
 ﻿using ChrisKaczor.Wpf.Validation;
-using FeedCenter.Data;
 using System.Windows;
 
 namespace FeedCenter.Options;
 
 public partial class FeedWindow
 {
-    public FeedWindow()
+    private readonly FeedCenterEntities _entities;
+
+    public FeedWindow(FeedCenterEntities entities)
     {
+        _entities = entities;
+
         InitializeComponent();
     }
 
     public bool? Display(Feed feed, Window owner)
     {
-        CategoryComboBox.ItemsSource = Database.Entities.Categories;
+        CategoryComboBox.ItemsSource = _entities.Categories;
 
         DataContext = feed;
 
@@ -26,7 +29,7 @@ public partial class FeedWindow
 
     private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
     {
-        var transaction = Database.Entities.BeginTransaction();
+        var transaction = _entities.BeginTransaction();
 
         if (!this.IsValid(OptionsTabControl))
         {
@@ -35,7 +38,6 @@ public partial class FeedWindow
         }
 
         transaction.Commit();
-        Database.Entities.Refresh();
 
         DialogResult = true;
 

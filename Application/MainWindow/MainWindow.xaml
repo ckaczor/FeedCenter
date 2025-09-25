@@ -285,11 +285,13 @@
                                 <MenuItem Header="{x:Static properties:Resources.lockWindowCheckBox}"
                                           IsCheckable="True"
                                           IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=WindowLocked}" />
-                                <Separator />
-                                <MenuItem Header="{x:Static properties:Resources.CurrentFeed}">
-                                    <MenuItem Header="{x:Static properties:Resources.EditMenu}"
+                                <Separator Name="SettingsMenuSeparator" />
+                                <MenuItem Name="CurrentFeedMenu" Header="{x:Static properties:Resources.CurrentFeed}">
+                                    <MenuItem Name="EditCurrentFeedMenuItem"
+                                              Header="{x:Static properties:Resources.EditMenu}"
                                               Click="HandleEditCurrentFeedMenuItemClick" />
-                                    <MenuItem Header="{x:Static properties:Resources.DeleteMenu}"
+                                    <MenuItem Name="DeleteCurrentFeedMenuItem"
+                                              Header="{x:Static properties:Resources.DeleteMenu}"
                                               Click="HandleDeleteCurrentFeedMenuItemClick" />
                                 </MenuItem>
                             </ContextMenu>

@@ -6,6 +6,7 @@ namespace FeedCenter.Options;
 public partial class OptionsWindow
 {
     private readonly List<OptionsPanelBase> _optionPanels = new();
+    private readonly FeedCenterEntities _entities = new();
 
     public OptionsWindow()
     {
@@ -20,11 +21,12 @@ public partial class OptionsWindow
 
     private void AddCategories()
     {
-        _optionPanels.Add(new GeneralOptionsPanel(this));
-        _optionPanels.Add(new DisplayOptionsPanel(this));
-        _optionPanels.Add(new FeedsOptionsPanel(this));
-        _optionPanels.Add(new UpdateOptionsPanel(this));
-        _optionPanels.Add(new AboutOptionsPanel(this));
+        _optionPanels.Add(new GeneralOptionsPanel(this, _entities));
+        _optionPanels.Add(new DisplayOptionsPanel(this, _entities));
+        _optionPanels.Add(new FeedsOptionsPanel(this, _entities));
+        _optionPanels.Add(new AccountsOptionsPanel(this, _entities));
+        _optionPanels.Add(new UpdateOptionsPanel(this, _entities));
+        _optionPanels.Add(new AboutOptionsPanel(this, _entities));
     }
 
     private void LoadCategories()

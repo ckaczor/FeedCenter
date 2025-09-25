@@ -1,12 +1,16 @@
-﻿using System.IO;
+﻿using ChrisKaczor.InstalledBrowsers;
+using FeedCenter.Options;
+using FeedCenter.Properties;
+using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.UI;
 using System.Windows;
 using System.Windows.Controls;
-using ChrisKaczor.InstalledBrowsers;
-using FeedCenter.Options;
-using FeedCenter.Properties;
+using Serilog;
+using Serilog.Events;
 
 namespace FeedCenter;
 
@@ -22,7 +26,7 @@ public partial class MainWindow
         NextFeed();
     }
 
-    private void OpenAllFeedItemsIndividually()
+    private async Task OpenAllFeedItemsIndividually()
     {
         // Create a new list of feed items
         var feedItems = (from FeedItem feedItem in LinkTextList.Items select feedItem).ToList();
@@ -40,7 +44,7 @@ public partial class MainWindow
             if (InstalledBrowser.OpenLink(Settings.Default.Browser, feedItem.Link))
             {
                 // Mark the feed as read
-                _database.SaveChanges(() => feedItem.BeenRead = true);
+                await feedItem.MarkAsRead(_database);
 
                 // Remove the item
                 LinkTextList.Items.Remove(feedItem);
@@ -71,9 +75,21 @@ public partial class MainWindow
         UpdateErrorLink();
     }
 
-    private void HandleMarkReadToolbarButtonClick(object sender, RoutedEventArgs e)
+    private static void HandleException(Exception exception)
     {
-        MarkAllItemsAsRead();
+        Log.Logger.Write(LogEventLevel.Debug, exception, "");
+    }
+
+    private async void HandleMarkReadToolbarButtonClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            await MarkAllItemsAsRead();
+        }
+        catch (Exception exception)
+        {
+            HandleException(exception);
+        }
     }
 
     private void HandleShowErrorsButtonClick(object sender, RoutedEventArgs e)
@@ -108,35 +124,49 @@ public partial class MainWindow
         ReadFeeds(true);
     }
 
-    private void HandleOpenAllMenuItemClick(object sender, RoutedEventArgs e)
+    private async void HandleOpenAllMenuItemClick(object sender, RoutedEventArgs e)
     {
-        var menuItem = (MenuItem) e.Source;
+        try
+        {
+            var menuItem = (MenuItem) e.Source;
 
-        if (Equals(menuItem, MenuOpenAllSinglePage))
-            OpenAllFeedItemsOnSinglePage();
-        else if (Equals(menuItem, MenuOpenAllMultiplePages))
-            OpenAllFeedItemsIndividually();
+            if (Equals(menuItem, MenuOpenAllSinglePage))
+                await OpenAllFeedItemsOnSinglePage();
+            else if (Equals(menuItem, MenuOpenAllMultiplePages))
+                await OpenAllFeedItemsIndividually();
+        }
+        catch (Exception exception)
+        {
+            HandleException(exception);
+        }
     }
 
-    private void HandleOpenAllToolbarButtonClick(object sender, RoutedEventArgs e)
+    private async void HandleOpenAllToolbarButtonClick(object sender, RoutedEventArgs e)
     {
-        var multipleOpenAction = _currentFeed.MultipleOpenAction;
-
-        switch (multipleOpenAction)
+        try
         {
-            case MultipleOpenAction.IndividualPages:
-                OpenAllFeedItemsIndividually();
-                break;
-            case MultipleOpenAction.SinglePage:
-                OpenAllFeedItemsOnSinglePage();
-                break;
+            var multipleOpenAction = _currentFeed.MultipleOpenAction;
+
+            switch (multipleOpenAction)
+            {
+                case MultipleOpenAction.IndividualPages:
+                    await OpenAllFeedItemsIndividually();
+                    break;
+                case MultipleOpenAction.SinglePage:
+                    await OpenAllFeedItemsOnSinglePage();
+                    break;
+            }
+        }
+        catch (Exception exception)
+        {
+            HandleException(exception);
         }
     }
 
     private void HandleEditCurrentFeedMenuItemClick(object sender, RoutedEventArgs e)
     {
         // Create a new feed window
-        var feedWindow = new FeedWindow();
+        var feedWindow = new FeedWindow(_database);
 
         // Display the feed window and get the result
         var result = feedWindow.Display(_currentFeed, this);
@@ -174,19 +204,19 @@ public partial class MainWindow
         DisplayFeed();
     }
 
-    private void OpenAllFeedItemsOnSinglePage()
+    private async Task OpenAllFeedItemsOnSinglePage()
     {
         var fileName = Path.GetTempFileName() + ".html";
         TextWriter textWriter = new StreamWriter(fileName);
 
-        using (var htmlTextWriter = new HtmlTextWriter(textWriter))
+        await using (var htmlTextWriter = new HtmlTextWriter(textWriter))
         {
             htmlTextWriter.RenderBeginTag(HtmlTextWriterTag.Html);
 
             htmlTextWriter.RenderBeginTag(HtmlTextWriterTag.Head);
 
             htmlTextWriter.RenderBeginTag(HtmlTextWriterTag.Title);
-            htmlTextWriter.Write(_currentFeed.Title);
+            await htmlTextWriter.WriteAsync(_currentFeed.Title);
             htmlTextWriter.RenderEndTag();
 
             htmlTextWriter.AddAttribute("http-equiv", "Content-Type");
@@ -214,13 +244,13 @@ public partial class MainWindow
 
                 htmlTextWriter.AddAttribute(HtmlTextWriterAttribute.Href, item.Link);
                 htmlTextWriter.RenderBeginTag(HtmlTextWriterTag.A);
-                htmlTextWriter.Write(item.Title.Length == 0 ? item.Link : item.Title);
+                await htmlTextWriter.WriteAsync(item.Title.Length == 0 ? item.Link : item.Title);
                 htmlTextWriter.RenderEndTag();
 
                 htmlTextWriter.RenderBeginTag(HtmlTextWriterTag.Br);
                 htmlTextWriter.RenderEndTag();
 
-                htmlTextWriter.Write(item.Description);
+                await htmlTextWriter.WriteAsync(item.Description);
 
                 htmlTextWriter.RenderEndTag();
 
@@ -231,11 +261,11 @@ public partial class MainWindow
             htmlTextWriter.RenderEndTag();
         }
 
-        textWriter.Flush();
+        await textWriter.FlushAsync();
         textWriter.Close();
 
         InstalledBrowser.OpenLink(Settings.Default.Browser, fileName);
 
-        MarkAllItemsAsRead();
+        await MarkAllItemsAsRead();
     }
 }

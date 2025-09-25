@@ -11,20 +11,13 @@ namespace FeedCenter;
 
 public partial class SplashWindow : IDisposable
 {
-    private class ProgressStep
+    private class ProgressStep(string key, string caption, ProgressStep.ProgressCallback callback)
     {
         public delegate bool ProgressCallback();
 
-        public readonly string Key;
-        public readonly string Caption;
-        public readonly ProgressCallback Callback;
-
-        public ProgressStep(string key, string caption, ProgressCallback callback)
-        {
-            Key = key;
-            Caption = caption;
-            Callback = callback;
-        }
+        public readonly string Key = key;
+        public readonly string Caption = caption;
+        public readonly ProgressCallback Callback = callback;
     }
 
     private readonly List<ProgressStep> _progressSteps = new();
@@ -180,12 +173,7 @@ public partial class SplashWindow : IDisposable
 
     private bool LoadDatabase()
     {
-        _dispatcher.Invoke(() =>
-        {
-            Database.Load();
-
-            Settings.Default.Reload();
-        });
+        _dispatcher.Invoke(() => Settings.Default.Reload());
 
         return true;
     }

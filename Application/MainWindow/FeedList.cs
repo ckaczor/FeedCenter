@@ -2,6 +2,7 @@
 using FeedCenter.Properties;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -30,7 +31,7 @@ public partial class MainWindow
         }
     }
 
-    private void HandleItemMouseUp(object sender, MouseButtonEventArgs e)
+    private async void HandleItemMouseUp(object sender, MouseButtonEventArgs e)
     {
         // Only handle the middle button
         if (e.ChangedButton != MouseButton.Middle)
@@ -39,18 +40,14 @@ public partial class MainWindow
         // Get the feed item
         var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
 
-        // The feed item has been read and is no longer new
-        _database.SaveChanges(() =>
-        {
-            feedItem.BeenRead = true;
-            feedItem.New = false;
-        });
-
         // Remove the item from the list
         LinkTextList.Items.Remove(feedItem);
+
+        // The feed item has been read and is no longer new
+        await feedItem.MarkAsRead(_database);
     }
 
-    private void HandleItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private async void HandleItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         // Get the feed item
         var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
@@ -59,15 +56,11 @@ public partial class MainWindow
         if (!InstalledBrowser.OpenLink(Settings.Default.Browser, feedItem.Link))
             return;
 
-        // The feed item has been read and is no longer new
-        _database.SaveChanges(() =>
-        {
-            feedItem.BeenRead = true;
-            feedItem.New = false;
-        });
-
         // Remove the item from the list
         LinkTextList.Items.Remove(feedItem);
+
+        // The feed item has been read and is no longer new
+        await feedItem.MarkAsRead(_database);
     }
 
     private void HandleFeedButtonClick(object sender, RoutedEventArgs e)

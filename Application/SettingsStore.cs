@@ -9,12 +9,7 @@ public static class SettingsStore
 {
     public static object OpenDataStore()
     {
-        if (!Database.Exists)
-            return null;
-
-        Database.Load();
-
-        return Database.Entities;
+        return !Database.Exists ? null : new FeedCenterEntities();
     }
 
     public static string GetSettingValue(object dataStore, string name, Version _)

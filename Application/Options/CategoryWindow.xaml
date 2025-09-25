@@ -24,14 +24,17 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.cobalt.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.cobalt.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <StackPanel Margin="6"
                 options:Spacing.Vertical="5">
-        <TextBox mah:TextBoxHelper.UseFloatingWatermark="True"
+        <TextBox Name="NameTextBox"
+                 mah:TextBoxHelper.UseFloatingWatermark="True"
                  mah:TextBoxHelper.Watermark="{x:Static properties:Resources.categoryNameLabel}"
                  mah:TextBoxHelper.SelectAllOnFocus="True"
                  Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, ValidatesOnExceptions=True}" />

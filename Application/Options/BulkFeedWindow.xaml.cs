@@ -1,5 +1,4 @@
-﻿using FeedCenter.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -12,9 +11,12 @@ public partial class BulkFeedWindow
 {
     private List<CheckedListItem<Feed>> _checkedListBoxItems;
     private CollectionViewSource _collectionViewSource;
+    private readonly FeedCenterEntities _entities;
 
-    public BulkFeedWindow()
+    public BulkFeedWindow(FeedCenterEntities entities)
     {
+        _entities = entities;
+
         InitializeComponent();
     }
 
@@ -22,7 +24,7 @@ public partial class BulkFeedWindow
     {
         _checkedListBoxItems = new List<CheckedListItem<Feed>>();
 
-        foreach (var feed in Database.Entities.Feeds)
+        foreach (var feed in _entities.Feeds)
             _checkedListBoxItems.Add(new CheckedListItem<Feed> { Item = feed });
 
         _collectionViewSource = new CollectionViewSource { Source = _checkedListBoxItems };
@@ -52,7 +54,7 @@ public partial class BulkFeedWindow
 
     private void HandleOkButtonClick(object sender, RoutedEventArgs e)
     {
-        Database.Entities.SaveChanges(() =>
+        _entities.SaveChanges(() =>
         {
             foreach (var item in _checkedListBoxItems.Where(i => i.IsChecked))
             {

@@ -21,9 +21,8 @@ public partial class MainWindow
     private void HandleNewFeed(string feedUrl)
     {
         // Create and configure the new feed
-        var feed = Feed.Create();
+        var feed = Feed.Create(_database);
         feed.Source = feedUrl;
-        feed.CategoryId = _database.DefaultCategory.Id;
 
         // Try to detect the feed type
         var feedTypeResult = feed.DetectFeedType();
@@ -31,7 +30,7 @@ public partial class MainWindow
         // If we can't figure it out it could be an HTML page
         if (feedTypeResult.Item1 == FeedType.Unknown)
         {
-            // Only check if the feed was able to be read - otherwise fall through and show the dialog
+            // Only check if the feed was read - otherwise fall through and show the dialog
             if (feedTypeResult.Item2.Length > 0)
             {
                 // Create and load an HTML document with the text
@@ -87,19 +86,11 @@ public partial class MainWindow
 
             // Show a tip
             NotificationIcon.ShowBalloonTip(string.Format(Properties.Resources.FeedAddedNotification, feed.Name), H.NotifyIcon.Core.NotificationIcon.Info);
-
-            _currentFeed = feed;
-
-            // Refresh the database to current settings
-            ResetDatabase();
-
-            // Re-initialize the feed display
-            DisplayFeed();
         }
         else
         {
             // Feed read failed - create a new feed window
-            var feedForm = new FeedWindow();
+            var feedForm = new FeedWindow(_database);
 
             var dialogResult = feedForm.Display(feed, this);
 
@@ -109,14 +100,14 @@ public partial class MainWindow
 
             // Add the feed to the feed table
             _database.SaveChanges(() => _database.Feeds.Add(feed));
-
-            _currentFeed = feed;
-
-            // Refresh the database to current settings
-            ResetDatabase();
-
-            // Re-initialize the feed display
-            DisplayFeed();
         }
+
+        _currentFeed = feed;
+
+        // Refresh the database to current settings
+        ResetDatabase();
+
+        // Re-initialize the feed display
+        DisplayFeed();
     }
 }

@@ -4,24 +4,17 @@ using System.Collections.Specialized;
 
 namespace FeedCenter.Data;
 
-public class RealmObservableCollection<T> : ObservableCollection<T> where T : IRealmObject
+public class RealmObservableCollection<T>(Realm realm) : ObservableCollection<T>(realm.All<T>()) where T : IRealmObject
 {
-    private readonly Realm _realm;
-
-    public RealmObservableCollection(Realm realm) : base(realm.All<T>())
-    {
-        _realm = realm;
-    }
-
     protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
     {
         if (e.OldItems != null)
             foreach (T item in e.OldItems)
-                _realm.Remove(item);
+                realm.Remove(item);
 
         if (e.NewItems != null)
             foreach (T item in e.NewItems)
-                _realm.Add(item);
+                realm.Add(item);
 
         base.OnCollectionChanged(e);
     }

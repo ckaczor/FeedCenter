@@ -6,7 +6,7 @@ namespace FeedCenter.Options;
 
 public partial class GeneralOptionsPanel
 {
-    public GeneralOptionsPanel(Window parentWindow) : base(parentWindow)
+    public GeneralOptionsPanel(Window parentWindow, FeedCenterEntities entities) : base(parentWindow, entities)
     {
         InitializeComponent();
     }

@@ -230,7 +230,7 @@
     <value>About</value>
   </data>
   <data name="optionCategoryFeeds" xml:space="preserve">
-    <value>Feeds</value>
+    <value>Local Feeds</value>
   </data>
   <data name="optionCategoryUpdate" xml:space="preserve">
     <value>Update</value>
@@ -560,5 +560,56 @@ All feeds currently in category "{0}" will be moved to the default category.</va
   </data>
   <data name="FeedReadResult_TooManyRequests" xml:space="preserve">
     <value>Too many requests</value>
+  </data>
+  <data name="optionCategoryAccounts" xml:space="preserve">
+    <value>Accounts</value>
+  </data>
+  <data name="AccountNameColumnHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="AddAccountButton" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="EditAccountButton" xml:space="preserve">
+    <value>Edit Account</value>
+  </data>
+  <data name="DeleteAccountButton" xml:space="preserve">
+    <value>Delete Account</value>
+  </data>
+  <data name="AccountWindowAdd" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AccountWindowEdit" xml:space="preserve">
+    <value>Edit Account</value>
+  </data>
+  <data name="ConfirmDeleteAccount" xml:space="preserve">
+    <value>Are you sure you want to delete this account?</value>
+  </data>
+  <data name="accountNameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="accountUrlLabel" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="accountReadIntervalPrefix" xml:space="preserve">
+    <value>_Refresh account every</value>
+  </data>
+  <data name="accountReadIntervalSuffix" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="accountRequiresAuthenticationCheckBox" xml:space="preserve">
+    <value>_Account requires authentication</value>
+  </data>
+  <data name="accountTypeLabel" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="AccountTypeFever" xml:space="preserve">
+    <value>Fever</value>
+  </data>
+  <data name="AccountTypeColumnHeader" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="AccountTypeGoogleReader" xml:space="preserve">
+    <value>Google Reader</value>
   </data>
 </root>

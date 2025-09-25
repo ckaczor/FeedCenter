@@ -1,13 +1,16 @@
-﻿using System.Windows;
-using ChrisKaczor.Wpf.Validation;
-using FeedCenter.Data;
+﻿using ChrisKaczor.Wpf.Validation;
+using System.Windows;
 
 namespace FeedCenter.Options;
 
 public partial class CategoryWindow
 {
-    public CategoryWindow()
+    private readonly FeedCenterEntities _entities;
+
+    public CategoryWindow(FeedCenterEntities entities)
     {
+        _entities = entities;
+
         InitializeComponent();
     }
 
@@ -30,7 +33,7 @@ public partial class CategoryWindow
 
     private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
     {
-        var transaction = Database.Entities.BeginTransaction();
+        var transaction = _entities.BeginTransaction();
 
         if (!this.IsValid())
         {
@@ -39,7 +42,6 @@ public partial class CategoryWindow
         }
 
         transaction.Commit();
-        Database.Entities.Refresh();
 
         // Dialog is good
         DialogResult = true;

@@ -6,7 +6,7 @@ namespace FeedCenter.Options;
 
 public partial class UpdateOptionsPanel
 {
-    public UpdateOptionsPanel(Window parentWindow) : base(parentWindow)
+    public UpdateOptionsPanel(Window parentWindow, FeedCenterEntities entities) : base(parentWindow, entities)
     {
         InitializeComponent();
     }

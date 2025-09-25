@@ -1,5 +1,4 @@
-﻿using FeedCenter.Data;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -14,9 +13,12 @@ namespace FeedCenter.Options;
 public partial class FeedsOptionsPanel
 {
     private CollectionViewSource _collectionViewSource;
+    private readonly FeedCenterEntities _entities;
 
-    public FeedsOptionsPanel(Window parentWindow) : base(parentWindow)
+    public FeedsOptionsPanel(Window parentWindow, FeedCenterEntities entities) : base(parentWindow, entities)
     {
+        _entities = entities;
+
         InitializeComponent();
     }
 
@@ -26,7 +28,7 @@ public partial class FeedsOptionsPanel
     {
         base.LoadPanel();
 
-        var collectionViewSource = new CollectionViewSource { Source = Database.Entities.Categories };
+        var collectionViewSource = new CollectionViewSource { Source = _entities.Categories };
         collectionViewSource.SortDescriptions.Add(new SortDescription("SortKey", ListSortDirection.Ascending));
         collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
         collectionViewSource.IsLiveSortingRequested = true;
@@ -44,20 +46,20 @@ public partial class FeedsOptionsPanel
 
     private void AddFeed()
     {
-        var feed = Feed.Create();
+        var feed = Feed.Create(_entities);
 
         var category = (Category) CategoryDataGrid.SelectedItem;
 
         feed.CategoryId = category.Id;
 
-        var feedWindow = new FeedWindow();
+        var feedWindow = new FeedWindow(_entities);
 
         var result = feedWindow.Display(feed, Window.GetWindow(this));
 
         if (!result.HasValue || !result.Value)
             return;
 
-        Database.Entities.SaveChanges(() => Database.Entities.Feeds.Add(feed));
+        _entities.SaveChanges(() => _entities.Feeds.Add(feed));
 
         FeedDataGrid.SelectedItem = feed;
 
@@ -71,7 +73,7 @@ public partial class FeedsOptionsPanel
 
         var feed = (Feed) FeedDataGrid.SelectedItem;
 
-        var feedWindow = new FeedWindow();
+        var feedWindow = new FeedWindow(_entities);
 
         feedWindow.Display(feed, Window.GetWindow(this));
     }
@@ -86,7 +88,7 @@ public partial class FeedsOptionsPanel
         FeedDataGrid.SelectedItems.CopyTo(selectedItems, 0);
 
         foreach (var feed in selectedItems)
-            Database.Entities.SaveChanges(() => Database.Entities.Feeds.Remove(feed));
+            _entities.SaveChanges(() => _entities.Feeds.Remove(feed));
 
         SetFeedButtonStates();
     }
@@ -116,7 +118,7 @@ public partial class FeedsOptionsPanel
         ExportFeeds();
     }
 
-    private static void ExportFeeds()
+    private void ExportFeeds()
     {
         var saveFileDialog = new SaveFileDialog
         {
@@ -143,7 +145,7 @@ public partial class FeedsOptionsPanel
         xmlWriter.WriteStartElement("opml");
         xmlWriter.WriteStartElement("body");
 
-        foreach (var feed in Database.Entities.Feeds.OrderBy(feed => feed.Name))
+        foreach (var feed in _entities.Feeds.OrderBy(feed => feed.Name))
         {
             xmlWriter.WriteStartElement("outline");
 
@@ -162,7 +164,7 @@ public partial class FeedsOptionsPanel
         xmlWriter.Close();
     }
 
-    private static void ImportFeeds()
+    private void ImportFeeds()
     {
         var openFileDialog = new OpenFileDialog
         {
@@ -188,8 +190,7 @@ public partial class FeedsOptionsPanel
 
             while (xmlReader.NodeType != XmlNodeType.EndElement)
             {
-                var feed = Feed.Create();
-                feed.CategoryId = Database.Entities.Categories.First(c => c.IsDefault).Id;
+                var feed = Feed.Create(_entities);
 
                 while (xmlReader.MoveToNextAttribute())
                 {
@@ -218,7 +219,7 @@ public partial class FeedsOptionsPanel
                 if (string.IsNullOrEmpty(feed.Name))
                     feed.Name = feed.Title;
 
-                Database.Entities.Feeds.Add(feed);
+                _entities.SaveChanges(() => _entities.Feeds.Add(feed));
 
                 xmlReader.MoveToElement();
 
@@ -242,23 +243,23 @@ public partial class FeedsOptionsPanel
         var selectedId = ((Category) CategoryDataGrid.SelectedItem).Id;
 
         EditCategoryButton.IsEnabled = CategoryDataGrid.SelectedItem != null &&
-                                       selectedId != Database.Entities.DefaultCategory.Id;
+                                       selectedId != _entities.DefaultCategory.Id;
         DeleteCategoryButton.IsEnabled = CategoryDataGrid.SelectedItem != null &&
-                                         selectedId != Database.Entities.DefaultCategory.Id;
+                                         selectedId != _entities.DefaultCategory.Id;
     }
 
     private void AddCategory()
     {
         var category = new Category();
 
-        var categoryWindow = new CategoryWindow();
+        var categoryWindow = new CategoryWindow(_entities);
 
         var result = categoryWindow.Display(category, Window.GetWindow(this));
 
         if (!result.HasValue || !result.Value)
             return;
 
-        Database.Entities.SaveChanges(() => Database.Entities.Categories.Add(category));
+        _entities.SaveChanges(() => _entities.Categories.Add(category));
 
         CategoryDataGrid.SelectedItem = category;
 
@@ -272,7 +273,7 @@ public partial class FeedsOptionsPanel
 
         var category = (Category) CategoryDataGrid.SelectedItem;
 
-        var categoryWindow = new CategoryWindow();
+        var categoryWindow = new CategoryWindow(_entities);
 
         categoryWindow.Display(category, Window.GetWindow(this));
     }
@@ -284,10 +285,10 @@ public partial class FeedsOptionsPanel
         if (MessageBox.Show(ParentWindow, string.Format(Properties.Resources.ConfirmDeleteCategory, category.Name), Properties.Resources.ConfirmDeleteTitle, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
             return;
 
-        var defaultCategory = Database.Entities.DefaultCategory;
+        var defaultCategory = _entities.DefaultCategory;
 
-        foreach (var feed in Database.Entities.Feeds.Where(f => f.CategoryId == category.Id))
-            Database.Entities.SaveChanges(() => feed.CategoryId = defaultCategory.Id);
+        foreach (var feed in _entities.Feeds.Where(f => f.CategoryId == category.Id))
+            _entities.SaveChanges(() => feed.CategoryId = defaultCategory.Id);
 
         var index = CategoryDataGrid.SelectedIndex;
 
@@ -296,7 +297,7 @@ public partial class FeedsOptionsPanel
         else
             CategoryDataGrid.SelectedIndex = index + 1;
 
-        Database.Entities.SaveChanges(() => Database.Entities.Categories.Remove(category));
+        _entities.SaveChanges(() => _entities.Categories.Remove(category));
 
         SetCategoryButtonStates();
     }
@@ -320,7 +321,7 @@ public partial class FeedsOptionsPanel
     {
         if (_collectionViewSource == null)
         {
-            _collectionViewSource = new CollectionViewSource { Source = Database.Entities.Feeds };
+            _collectionViewSource = new CollectionViewSource { Source = _entities.Feeds };
             _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
             _collectionViewSource.Filter += HandleCollectionViewSourceFilter;
 
@@ -342,7 +343,7 @@ public partial class FeedsOptionsPanel
 
         var feed = (Feed) e.Item;
 
-        e.Accepted = feed.CategoryId == selectedCategory.Id;
+        e.Accepted = feed.CategoryId == selectedCategory.Id && feed.Account.Type == AccountType.Local;
     }
 
     private void HandleCategoryDataGridRowDrop(object sender, DragEventArgs e)
@@ -352,7 +353,7 @@ public partial class FeedsOptionsPanel
         var category = (Category) ((DataGridRow) sender).Item;
 
         foreach (var feed in feedList!)
-            Database.Entities.SaveChanges(() => feed.CategoryId = category.Id);
+            _entities.SaveChanges(() => feed.CategoryId = category.Id);
 
         _collectionViewSource.View.Refresh();
 
@@ -382,7 +383,7 @@ public partial class FeedsOptionsPanel
 
     private void HandleMultipleEditClick(object sender, RoutedEventArgs e)
     {
-        var bulkFeedWindow = new BulkFeedWindow();
+        var bulkFeedWindow = new BulkFeedWindow(_entities);
         bulkFeedWindow.Display(Window.GetWindow(this));
     }
 

@@ -1,25 +1,28 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using FeedCenter.Options;
+﻿using FeedCenter.Options;
 using Realms;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FeedCenter;
 
 public partial class FeedItem : RealmObject
 {
+    [PrimaryKey]
+    public Guid Id { get; set; }
+
     public bool BeenRead { get; set; }
     public string Description { get; set; }
     public Guid FeedId { get; set; }
     public string Guid { get; set; }
-
-    [PrimaryKey]
-    public Guid Id { get; set; }
-
     public DateTimeOffset LastFound { get; set; }
     public string Link { get; set; }
     public bool New { get; set; }
     public int Sequence { get; set; }
     public string Title { get; set; }
+    public string RemoteId { get; set; }
 
     public static FeedItem Create()
     {
@@ -42,7 +45,7 @@ public partial class FeedItem : RealmObject
             case MultipleLineDisplay.FirstLine:
 
                 // Find the first newline
-                var newlineIndex = title.IndexOf("\n", StringComparison.Ordinal);
+                var newlineIndex = title.IndexOf('\n', StringComparison.Ordinal);
 
                 // If a newline was found return everything before it
                 if (newlineIndex > -1)
@@ -68,6 +71,34 @@ public partial class FeedItem : RealmObject
             title = Properties.Resources.NoTitleText;
 
         return title;
+    }
+
+    public async Task MarkAsRead(FeedCenterEntities entities)
+    {
+        var feed = entities.Feeds.FirstOrDefault(f => f.Id == FeedId);
+
+        entities.SaveChanges(() =>
+        {
+            BeenRead = true;
+            New = false;
+        });
+
+        if (feed == null || feed.Account.Type == AccountType.Local)
+            return;
+
+        switch (feed.Account.Type)
+        {
+            case AccountType.Fever:
+                // Delegate to the right reader based on the account type
+                await FeverReader.MarkFeedItemRead(feed.Account, RemoteId);
+
+                break;
+            case AccountType.Local:
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
     }
 
     [GeneratedRegex("\\n")]
