@@ -11,7 +11,7 @@ assembly_info:
   assembly_version: "{version}"
   assembly_file_version: "{version}"
 before_build:
-  - ps: nuget restore
+  - ps: nuget restore .\Installer
   - ps: dotnet publish .\Application\ /p:PublishProfile=Properties\PublishProfiles\x64.pubxml
 build:
   project: Installer\Installer.sln
