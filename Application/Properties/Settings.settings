@@ -74,5 +74,8 @@
     <Setting Name="DatabaseFile" Type="System.String" Scope="Application">
       <Value Profile="(Default)">FeedCenter.realm</Value>
     </Setting>
+    <Setting Name="IncludePrerelease" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

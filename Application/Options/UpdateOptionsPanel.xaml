@@ -13,6 +13,10 @@
                   Name="CheckVersionOnStartupCheckBox"
                   IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=CheckVersionAtStartup}"
                   Click="OnSaveSettings" />
+        <CheckBox Content="{x:Static properties:Resources.includePrereleaseCheckBox}"
+                  Name="IncludePrereleaseCheckBox"
+                  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=IncludePrerelease}"
+                  Click="OnSaveSettings" />
         <Button Content="{x:Static properties:Resources.checkVersionNowButton}"
                 HorizontalAlignment="Left"
                 Click="HandleCheckVersionNowButtonClick" />

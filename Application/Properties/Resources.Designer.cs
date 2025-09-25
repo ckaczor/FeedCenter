@@ -1102,6 +1102,15 @@ namespace FeedCenter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include _prerelease.
+        /// </summary>
+        public static string includePrereleaseCheckBox {
+            get {
+                return ResourceManager.GetString("includePrereleaseCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last Updated.
         /// </summary>
         public static string LastUpdatedColumnHeader {

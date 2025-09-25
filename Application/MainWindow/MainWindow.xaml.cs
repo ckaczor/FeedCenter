@@ -90,7 +90,7 @@ public partial class MainWindow : IDisposable
 
         // Check for update
         if (Settings.Default.CheckVersionAtStartup)
-            await UpdateCheck.CheckForUpdate();
+            await UpdateCheck.CheckForUpdate(Settings.Default.IncludePrerelease);
 
         // Show the link if updates are available
         if (UpdateCheck.UpdateAvailable)

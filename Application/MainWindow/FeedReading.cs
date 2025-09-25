@@ -213,7 +213,7 @@ public partial class MainWindow
         if (DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval)
         {
             // Get the update information
-            UpdateCheck.CheckForUpdate().Wait();
+            UpdateCheck.CheckForUpdate(Settings.Default.IncludePrerelease).Wait();
 
             // Update the last check time
             Settings.Default.LastVersionCheck = DateTime.Now;
