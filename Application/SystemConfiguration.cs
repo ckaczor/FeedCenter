@@ -1,7 +1,6 @@
 ﻿using FeedCenter.Properties;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace FeedCenter;
 
@@ -9,7 +8,7 @@ public static class SystemConfiguration
 {
     private static bool UseDebugPath => Environment.CommandLine.IndexOf("/debugPath", StringComparison.InvariantCultureIgnoreCase) != -1;
 
-    public static string DataDirectory => UseDebugPath ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) : UserSettingsPath;
+    public static string DataDirectory => UseDebugPath ? Path.GetDirectoryName(AppContext.BaseDirectory) : UserSettingsPath;
 
     public static string UserSettingsPath
     {
@@ -17,7 +16,7 @@ public static class SystemConfiguration
         {
             // If we're running in debug mode then use a local path for the database and logs
             if (UseDebugPath)
-                return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                return Path.GetDirectoryName(AppContext.BaseDirectory);
 
             // Get the path to the local application data directory
             var path = Path.Combine(
