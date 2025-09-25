@@ -4,40 +4,35 @@ pull_requests:
 skip_tags: true
 image: Visual Studio 2022
 configuration: Release
-platform: x86  
+platform: x86
 assembly_info:
   patch: true
   file: 'Properties\AssemblyInfo.cs'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+before_build:
+  - ps: dotnet restore .\Application\
+  - ps: dotnet publish .\Application\ /p:PublishProfile=Properties\PublishProfiles\x64.pubxml
 build:
-  project: FeedCenter.sln
+  project: Installer\Installer.sln
   verbosity: minimal
 artifacts:
-- path: Bootstrapper\bin\Release\FeedCenterSetup.exe
-  name: Release
-before_build:
-- cmd: nuget restore
-
+  - path: Bootstrapper\bin\Release\FeedCenterSetup.exe
+    name: Release
 for:
--
-  branches:
-    only:
-      - main
+  - branches:
+      only:
+        - main
+    deploy:
+      - provider: Environment
+        name: GitHub
+        prerelease: false
 
-  deploy:
-  - provider: Environment
-    name: GitHub
-    prerelease: false
-
--
-  branches:
-    only:
-      - prerelease
-
-  version: 1.2.0.{build}
-
-  deploy:
-  - provider: Environment
-    name: GitHub
-    prerelease: true
+  - branches:
+      only:
+        - prerelease
+    version: "{version}-prerelease"
+    deploy:
+      - provider: Environment
+        name: GitHub
+        prerelease: true
