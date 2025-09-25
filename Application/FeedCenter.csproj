@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<TargetFramework>net9.0-windows8.0</TargetFramework>
 		<OutputType>WinExe</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWindowsForms>false</UseWindowsForms>
@@ -30,30 +30,30 @@
 		<PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.5" />
 		<PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.5" />
-		<PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.3" />
+		<PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.6" />
 		<PackageReference Include="ChrisKaczor.Wpf.Controls.Link" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.Wpf.Controls.Toolbar" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.Wpf.Validation" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.Wpf.Windows.ControlBox" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.Wpf.Windows.SnappingWindow" Version="1.0.4" />
-		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="DebounceThrottle" Version="2.0.0" />
-		<PackageReference Include="H.NotifyIcon.Wpf" Version="2.0.108" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-		<PackageReference Include="HtmlTextWriter" Version="2.1.1" />
-		<PackageReference Include="MahApps.Metro" Version="2.4.9" />
+		<PackageReference Include="Dapper" Version="2.1.66" />
+		<PackageReference Include="DebounceThrottle" Version="3.0.1" />
+		<PackageReference Include="H.NotifyIcon.Wpf" Version="2.3.0" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.12.3" />
+		<PackageReference Include="HtmlTextWriter" Version="3.0.2" />
+		<PackageReference Include="MahApps.Metro" Version="2.4.11" />
 		<PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" GeneratePathProperty="true">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.6" />
-		<PackageReference Include="NameBasedGrid" Version="0.10.1">
+		<PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.9" />
+		<PackageReference Include="NameBasedGrid" Version="1.0.0">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
 		<PackageReference Include="Realm" Version="20.1.0" />
-		<PackageReference Include="Serilog" Version="2.12.0" />
-		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="Serilog" Version="4.3.0" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 	</ItemGroup>
 	<ItemGroup>

@@ -8,11 +8,12 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Chris Kaczor")]
 [assembly: AssemblyProduct("Feed Center")]
-[assembly: AssemblyCopyright("Copyright © Chris Kaczor 2023")]
+[assembly: AssemblyCopyright("Copyright © Chris Kaczor 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: SupportedOSPlatform("windows")]
+[assembly: TargetPlatform("Windows10.0")]
+[assembly: SupportedOSPlatform("Windows10.0")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug build")]

@@ -96,7 +96,7 @@ public partial class MainWindow
         NotificationIcon.Dispose();
     }
 
-    private readonly DebounceDispatcher _updateWindowSettingsDispatcher = new(500);
+    private readonly DebounceDispatcher _updateWindowSettingsDispatcher = new(TimeSpan.FromMilliseconds(500));
 
     private void HandleWindowSizeChanged(object sender, SizeChangedEventArgs e)
     {
