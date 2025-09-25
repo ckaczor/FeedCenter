@@ -11,13 +11,13 @@ assembly_info:
   assembly_version: "{version}"
   assembly_file_version: "{version}"
 before_build:
-  - ps: nuget restore .\Installer
+  - ps: nuget restore .\Installer\
   - ps: dotnet publish .\Application\ /p:PublishProfile=Properties\PublishProfiles\x64.pubxml
 build:
   project: Installer\Installer.sln
   verbosity: minimal
 artifacts:
-  - path: Bootstrapper\bin\Release\FeedCenterSetup.exe
+  - path: Installer\Bootstrapper\bin\Release\FeedCenterSetup.exe
     name: Release
 for:
   - branches:
@@ -36,3 +36,4 @@ for:
       - provider: Environment
         name: GitHub
         prerelease: true
+        tag: $(version)-prerelease
