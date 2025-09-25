@@ -19,20 +19,18 @@ build:
 artifacts:
   - path: Installer\Bootstrapper\bin\Release\FeedCenterSetup.exe
     name: Release
-deploy:
-  - provider: Environment
-    name: GitHub
 for:
   - branches:
       only:
         - main
     deploy:
-      prerelease: false
+      - provider: Environment
+        name: GitHub
 
   - branches:
       only:
         - prerelease
     version: 1.2.0.{build}
     deploy:
-      prerelease: true
-      tag: $(version)-prerelease
+      - provider: Environment
+        name: GitHub-Prerelease
