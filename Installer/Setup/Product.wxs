@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+	<?define ExecutableName="FeedCenter.exe" ?>
+
+	<?define BuildPath="..\..\Application\bin\Release\net8.0-windows7.0\publish\win-x64" ?>
+	<?define BuildExecutable="$(var.BuildPath)\$(var.ExecutableName)" ?>
+
+	<?define ProductName="$(fileVersion.ProductName($(var.BuildExecutable)))" ?>
+	<?define CompanyName="$(fileVersion.CompanyName($(var.BuildExecutable)))" ?>
+	<?define ProductVersion="$(fileVersion.ProductVersion($(var.BuildExecutable)))" ?>
+	<?define FileDescription="$(fileVersion.FileDescription($(var.BuildExecutable)))" ?>
+
+	<Product Id="*"
+	         Name="$(var.ProductName)"
+	         Language="1033"
+	         Version="$(var.ProductVersion)"
+	         Manufacturer="$(var.CompanyName)"
+	         UpgradeCode="47f30e4a-a861-47ac-b82d-35e4b886992a">
+		<Package InstallerVersion="405"
+		         Compressed="yes"
+		         InstallScope="perUser" />
+
+		<util:CloseApplication Id="CloseApplication"
+		                       Target="$(var.ExecutableName)"
+		                       CloseMessage="yes"
+		                       Timeout="5" />
+
+		<MajorUpgrade Schedule="afterInstallValidate"
+		              AllowDowngrades="no"
+		              AllowSameVersionUpgrades="no"
+		              DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature"
+		         Title="$(var.ProductName)"
+		         Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR"
+		           Name="SourceDir">
+			<Directory Id="LocalAppDataFolder">
+				<Directory Id="INSTALLFOLDER"
+				           Name="$(var.ProductName)">
+					<Directory Id="SqlServerCe_32"
+					           Name="x86" />
+					<Directory Id="SqlServerCe_64"
+					           Name="amd64" />
+					<Directory Id="Runtimes"
+					           Name="runtimes">
+						<Directory Id="Runtimes_Win_x32"
+						           Name="win-x32">
+							<Directory Id="Runtimes_Win_x32_Native"
+							           Name="native" />
+						</Directory>
+						<Directory Id="Runtimes_Win_x64"
+						           Name="win-x64">
+							<Directory Id="Runtimes_Win_x64_Native"
+							           Name="native" />
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder"
+				           Name="$(var.ProductName)" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents">
+			<Component Id="SqlServerCe_64"
+			           Guid="{67DB1CF4-23F2-4252-896C-714438959C9A}"
+			           Directory="SqlServerCe_64">
+
+				<RegistryValue Root='HKCU'
+				               Key='Software\Feed Center\Setup'
+				               Type='integer'
+				               Name='SqlServerCe_64'
+				               Value='1'
+				               KeyPath='yes' />
+
+				<File Id="sqlceca40_64"
+				      Source="$(var.BuildPath)\amd64\sqlceca40.dll" />
+				<File Id="sqlcecompact40_64"
+				      Source="$(var.BuildPath)\amd64\sqlcecompact40.dll" />
+				<File Id="sqlceer40EN_64"
+				      Source="$(var.BuildPath)\amd64\sqlceer40EN.dll" />
+				<File Id="sqlceme40_64"
+				      Source="$(var.BuildPath)\amd64\sqlceme40.dll" />
+				<File Id="sqlceqp40_64"
+				      Source="$(var.BuildPath)\amd64\sqlceqp40.dll" />
+				<File Id="sqlcese40_64"
+				      Source="$(var.BuildPath)\amd64\sqlcese40.dll" />
+
+				<RemoveFolder Id='SqlServerCe_64'
+				              On='uninstall' />
+			</Component>
+			<Component Id="FeedCenter"
+			           Guid="{9B2B9C65-8E68-4F82-9AC5-16EBCAC34B9E}"
+			           Directory="INSTALLFOLDER">
+
+				<RegistryValue Root='HKCU'
+				               Key='Software\Feed Center\Setup'
+				               Type='integer'
+				               Name='FeedCenter'
+				               Value='1'
+				               KeyPath='yes' />
+
+				<!-- Capabilities keys for Vista/7 "Set Program Access and Defaults" -->
+				<RegistryValue Root="HKCU"
+				               Key="SOFTWARE\Feed Center\Capabilities"
+				               Name="ApplicationDescription"
+				               Value="$(var.FileDescription)"
+				               Type="string" />
+				<RegistryValue Root="HKCU"
+				               Key="SOFTWARE\Feed Center\Capabilities"
+				               Name="ApplicationName"
+				               Value="$(var.ProductName)"
+				               Type="string" />
+				<RegistryValue Root="HKCU"
+				               Key="SOFTWARE\Feed Center\Capabilities\URLAssociations"
+				               Name="feed"
+				               Value="FeedCenter.URL.feed"
+				               Type="string" />
+				<RegistryValue Root="HKCU"
+				               Key="SOFTWARE\Feed Center\Capabilities\URLAssociations"
+				               Name="feeds"
+				               Value="FeedCenter.URL.feed"
+				               Type="string" />
+
+				<RegistryValue Root="HKCU"
+				               Key="SOFTWARE\RegisteredApplications"
+				               Name="Feed Center"
+				               Value="SOFTWARE\Feed Center\Capabilities"
+				               Type="string" />
+
+				<RegistryValue Root="HKCU"
+				               Key="Software\Classes\FeedCenter.URL.feed"
+				               Value="URL:Feed Center Add RSS Feed"
+				               Type="string" />
+				<RegistryValue Root="HKCU"
+				               Key="Software\Classes\FeedCenter.URL.feed\DefaultIcon"
+				               Value="[INSTALLFOLDER]$(var.ExecutableName)"
+				               Type="string" />
+				<RegistryValue Root="HKCU"
+				               Key="Software\Classes\FeedCenter.URL.feed\shell\open\command"
+				               Value="&quot;[INSTALLFOLDER]$(var.ExecutableName)&quot; %1"
+				               Type="string" />
+
+				<File Id="D3DCompiler_47_cor3.dll" Source="$(var.BuildPath)\D3DCompiler_47_cor3.dll" />
+				<File Id="FeedCenter.dll.config" Source="$(var.BuildPath)\FeedCenter.dll.config" />
+				<File Id="FeedCenter.exe" Source="$(var.BuildPath)\FeedCenter.exe" />
+				<File Id="FeedCenter.pdb" Source="$(var.BuildPath)\FeedCenter.pdb" />
+				<File Id="PenImc_cor3.dll" Source="$(var.BuildPath)\PenImc_cor3.dll" />
+				<File Id="PresentationNative_cor3.dll" Source="$(var.BuildPath)\PresentationNative_cor3.dll" />
+				<File Id="realm_wrappers.dll" Source="$(var.BuildPath)\realm-wrappers.dll" />
+				<File Id="sni.dll" Source="$(var.BuildPath)\sni.dll" />
+				<File Id="vcruntime140_cor3.dll" Source="$(var.BuildPath)\vcruntime140_cor3.dll" />
+				<File Id="wpfgfx_cor3.dll" Source="$(var.BuildPath)\wpfgfx_cor3.dll" />
+
+				<RemoveFolder Id='INSTALLFOLDER'
+				              On='uninstall' />
+			</Component>
+			<Component Id="ApplicationShortcut"
+			           Guid="{63CF0995-E117-4BB9-9077-76F570FDFAA9}"
+			           Directory="ApplicationProgramsFolder">
+
+				<Shortcut Id="StartMenuShortcut"
+				          Directory="ApplicationProgramsFolder"
+				          Advertise="no"
+				          Name="$(var.ProductName)"
+						  Target="[INSTALLFOLDER]\$(var.ExecutableName)"
+				          WorkingDirectory="INSTALLFOLDER" />
+
+				<RemoveFolder Id="ApplicationProgramsFolder"
+				              On="uninstall" />
+
+				<RegistryValue Root="HKCU"
+				               Key="Software\Feed Center\Setup"
+				               Name="Shortcut"
+				               Type="integer"
+				               Value="1"
+				               KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

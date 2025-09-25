@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+	<?define ExecutableName="FeedCenter.exe" ?>
+
+	<?define BuildPath="..\..\Application\bin\Release\net8.0-windows7.0\publish\win-x64" ?>
+	<?define BuildExecutable="$(var.BuildPath)\$(var.ExecutableName)" ?>
+
+	<?define ProductName="$(fileVersion.ProductName($(var.BuildExecutable)))" ?>
+	<?define CompanyName="$(fileVersion.CompanyName($(var.BuildExecutable)))" ?>
+	<?define ProductVersion="$(fileVersion.ProductVersion($(var.BuildExecutable)))" ?>
+
+	<Bundle Name="$(var.ProductName)"
+	        Version="$(var.ProductVersion)"
+	        Manufacturer="$(var.CompanyName)"
+	        UpgradeCode="5e5c13a5-635e-4310-a653-0f9760f46935"
+	        Compressed="no">
+
+		<BootstrapperApplicationRef Id="WixExtendedBootstrapperApplication.HyperlinkLicense">
+			<bal:WixExtendedBootstrapperApplication LicenseUrl=""
+			                                        SuppressOptionsUI="yes"
+			                                        ShowVersion="yes"
+			                                        LocalizationFile="Bundle.wxl"
+			                                        LaunchPassive="yes"
+			                                        LaunchQuiet="yes"
+			                                        LaunchTarget="[LocalAppDataFolder]$(var.ProductName)\FeedCenter.exe" />
+		</BootstrapperApplicationRef>
+
+		<Chain>
+			<MsiPackage Id="FeedCenter"
+			            SourceFile="$(var.Setup.TargetPath)"
+			            Compressed="yes" />
+		</Chain>
+	</Bundle>
+</Wix>
