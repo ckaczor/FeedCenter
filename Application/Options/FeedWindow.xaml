@@ -4,10 +4,11 @@
         xmlns:properties="clr-namespace:FeedCenter.Properties"
         xmlns:feedCenter="clr-namespace:FeedCenter"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        d:DataContext="{d:DesignInstance Type=feedCenter:Feed}"
+        d:DataContext="{d:DesignInstance Type=feeds:Feed}"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:options="clr-namespace:FeedCenter.Options"
+        xmlns:feeds="clr-namespace:FeedCenter.Feeds"
         mc:Ignorable="d"
         Title="FeedWindow"
         Height="350"
@@ -90,9 +91,9 @@
                               mah:TextBoxHelper.UseFloatingWatermark="True"
                               mah:TextBoxHelper.Watermark="{x:Static properties:Resources.openLabel}">
                         <ComboBoxItem Content="{x:Static properties:Resources.openAllSingleToolbarButton}"
-                                      Tag="{x:Static feedCenter:MultipleOpenAction.SinglePage}" />
+                                      Tag="{x:Static feeds:MultipleOpenAction.SinglePage}" />
                         <ComboBoxItem Content="{x:Static properties:Resources.openAllMultipleToolbarButton}"
-                                      Tag="{x:Static feedCenter:MultipleOpenAction.IndividualPages}" />
+                                      Tag="{x:Static feeds:MultipleOpenAction.IndividualPages}" />
                     </ComboBox>
                     <ComboBox Name="UserAgentComboBox"
                               mah:TextBoxHelper.UseFloatingWatermark="True"

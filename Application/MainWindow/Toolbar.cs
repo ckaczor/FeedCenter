@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.UI;
 using System.Windows;
 using System.Windows.Controls;
+using FeedCenter.Feeds;
 using Serilog;
 using Serilog.Events;
 
@@ -75,7 +76,7 @@ public partial class MainWindow
         UpdateErrorLink();
     }
 
-    private static void HandleException(Exception exception)
+    internal static void HandleException(Exception exception)
     {
         Log.Logger.Write(LogEventLevel.Debug, exception, "");
     }
@@ -109,19 +110,33 @@ public partial class MainWindow
         UpdateErrorLink();
     }
 
-    private void HandleRefreshMenuItemClick(object sender, RoutedEventArgs e)
+    private async void HandleRefreshMenuItemClick(object sender, RoutedEventArgs e)
     {
-        var menuItem = (MenuItem) e.Source;
+        try
+        {
+            var menuItem = (MenuItem) e.Source;
 
-        if (Equals(menuItem, MenuRefresh))
-            ReadCurrentFeed(true);
-        else if (Equals(menuItem, MenuRefreshAll))
-            ReadFeeds(true);
+            if (Equals(menuItem, MenuRefresh))
+                ReadCurrentFeed(true);
+            else if (Equals(menuItem, MenuRefreshAll))
+                await ReadFeeds(true);
+        }
+        catch (Exception exception)
+        {
+            HandleException(exception);
+        }
     }
 
-    private void HandleRefreshToolbarButtonClick(object sender, RoutedEventArgs e)
+    private async void HandleRefreshToolbarButtonClick(object sender, RoutedEventArgs e)
     {
-        ReadFeeds(true);
+        try
+        {
+            await ReadFeeds(true);
+        }
+        catch (Exception exception)
+        {
+            HandleException(exception);
+        }
     }
 
     private async void HandleOpenAllMenuItemClick(object sender, RoutedEventArgs e)

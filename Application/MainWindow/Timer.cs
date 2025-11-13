@@ -38,29 +38,36 @@ public partial class MainWindow
         _mainTimer?.Stop();
     }
 
-    private void HandleMainTimerElapsed(object sender, EventArgs e)
+    private async void HandleMainTimerElapsed(object sender, EventArgs e)
     {
-        _dispatcher.Invoke(() =>
+        try
         {
-            // If the background worker is busy then don't do anything
-            if (_feedReadWorker.IsBusy)
-                return;
+            await _dispatcher.Invoke(async () =>
+            {
+                // If the background worker is busy then don't do anything
+                if (_reading)
+                    return;
 
-            // Stop the timer for now
-            StopTimer();
+                // Stop the timer for now
+                StopTimer();
 
-            // Move to the next feed if the scroll interval has expired and the mouse isn't hovering
-            if (LinkTextList.IsMouseOver)
-                _lastFeedDisplay = DateTime.Now;
-            else if (DateTime.Now - _lastFeedDisplay >= Settings.Default.FeedScrollInterval)
-                NextFeed();
+                // Move to the next feed if the scroll interval has expired and the mouse isn't hovering
+                if (LinkTextList.IsMouseOver)
+                    _lastFeedDisplay = DateTime.Now;
+                else if (DateTime.Now - _lastFeedDisplay >= Settings.Default.FeedScrollInterval)
+                    NextFeed();
 
-            // Check to see if we should try to read the feeds
-            if (DateTime.Now - _lastFeedRead >= Settings.Default.FeedCheckInterval)
-                ReadFeeds();
+                // Check to see if we should try to read the feeds
+                if (DateTime.Now - _lastFeedRead >= Settings.Default.FeedCheckInterval)
+                    await ReadFeeds();
 
-            // Get the timer going again
-            StartTimer();
-        });
+                // Get the timer going again
+                StartTimer();
+            });
+        }
+        catch (Exception exception)
+        {
+            HandleException(exception);
+        }
     }
 }

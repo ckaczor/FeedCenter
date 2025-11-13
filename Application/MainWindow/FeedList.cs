@@ -38,7 +38,7 @@ public partial class MainWindow
             return;
 
         // Get the feed item
-        var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
+        var feedItem = (Feeds.FeedItem) ((ListBoxItem) sender).DataContext;
 
         // Remove the item from the list
         LinkTextList.Items.Remove(feedItem);
@@ -50,7 +50,7 @@ public partial class MainWindow
     private async void HandleItemMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         // Get the feed item
-        var feedItem = (FeedItem) ((ListBoxItem) sender).DataContext;
+        var feedItem = (Feeds.FeedItem) ((ListBoxItem) sender).DataContext;
 
         // Try to open the item link
         if (!InstalledBrowser.OpenLink(Settings.Default.Browser, feedItem.Link))
@@ -104,7 +104,7 @@ public partial class MainWindow
         var menuItem = (MenuItem) sender;
 
         // Get the feed from the menu item tab
-        var feed = (Feed) menuItem.Tag;
+        var feed = (Feeds.Feed) menuItem.Tag;
 
         // Loop over all feeds and look for the index of the new one		
         var feedIndex = 0;

@@ -1,7 +1,10 @@
-﻿namespace FeedCenter;
+﻿using System.Threading.Tasks;
+
+namespace FeedCenter.Feeds;
 
 public interface IAccountReader
 {
-    public int GetProgressSteps(FeedCenterEntities entities);
-    public AccountReadResult Read(Account account, AccountReadInput accountReadInput);
+    public Task<int> GetProgressSteps(AccountReadInput accountReadInput);
+    public Task<AccountReadResult> Read(AccountReadInput accountReadInput);
+    public Task MarkFeedItemRead(string feedItemId);
 }

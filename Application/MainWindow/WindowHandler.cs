@@ -76,13 +76,6 @@ public partial class MainWindow
     {
         base.OnClosing(e);
 
-        // Ditch the worker
-        if (_feedReadWorker != null)
-        {
-            _feedReadWorker.CancelAsync();
-            _feedReadWorker.Dispose();
-        }
-
         // Get rid of the timer
         TerminateTimer();
 

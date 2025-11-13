@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
-internal class GoogleReaderReader : IAccountReader
+internal class GoogleReaderReader(Account account) : IAccountReader
 {
-    public int GetProgressSteps(FeedCenterEntities entities)
+    public Task<int> GetProgressSteps(AccountReadInput accountReadInput)
     {
-        return 7;
+        return Task.FromResult(7);
     }
 
-    public AccountReadResult Read(Account account, AccountReadInput accountReadInput)
+    public async Task<AccountReadResult> Read(AccountReadInput accountReadInput)
     {
         var checkTime = DateTimeOffset.UtcNow;
 
@@ -119,20 +116,22 @@ internal class GoogleReaderReader : IAccountReader
 
         account.LastChecked = checkTime;
 
-        transaction.Commit();
+        await transaction.CommitAsync();
 
         accountReadInput.IncrementProgress();
 
         return AccountReadResult.Success;
     }
 
-    public static async Task MarkFeedItemRead(Account account, string feedItemId)
+    public Task MarkFeedItemRead(string feedItemId)
     {
         //var apiKey = account.Authenticate ? GetApiKey(account) : string.Empty;
 
         //var feverClient = new FeverClient.FeverClient(account.Url, apiKey);
 
         //await feverClient.MarkFeedItemAsRead(int.Parse(feedItemId));
+
+        return Task.CompletedTask;
     }
 
     //private static string GetApiKey(Account account)

@@ -9,6 +9,7 @@
         xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:options="clr-namespace:FeedCenter.Options"
+        xmlns:feeds="clr-namespace:FeedCenter.Feeds"
         WindowStartupLocation="CenterOwner"
         Icon="/FeedCenter;component/Resources/Application.ico"
         FocusManager.FocusedElement="{Binding ElementName=FeedLinkFilterText}">
@@ -99,9 +100,9 @@
                       mah:TextBoxHelper.Watermark="{x:Static my:Resources.openLabel}"
                       IsEnabled="{Binding ElementName=OpenCheckBox, Path=IsChecked}">
                 <ComboBoxItem Content="{x:Static my:Resources.openAllMultipleToolbarButton}"
-                              Tag="{x:Static feedCenter:MultipleOpenAction.IndividualPages}" />
+                              Tag="{x:Static feeds:MultipleOpenAction.IndividualPages}" />
                 <ComboBoxItem Content="{x:Static my:Resources.openAllSingleToolbarButton}"
-                              Tag="{x:Static feedCenter:MultipleOpenAction.SinglePage}" />
+                              Tag="{x:Static feeds:MultipleOpenAction.SinglePage}" />
             </ComboBox>
         </Grid>
         <StackPanel Grid.Column="0"

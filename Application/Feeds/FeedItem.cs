@@ -1,12 +1,12 @@
-﻿using FeedCenter.Options;
-using Realms;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FeedCenter.Options;
+using Realms;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
 public partial class FeedItem : RealmObject
 {
@@ -90,7 +90,12 @@ public partial class FeedItem : RealmObject
         {
             case AccountType.Fever:
                 // Delegate to the right reader based on the account type
-                await FeverReader.MarkFeedItemRead(feed.Account, RemoteId);
+                await new FeverReader(feed.Account).MarkFeedItemRead(RemoteId);
+
+                break;
+            case AccountType.Miniflux:
+                // Delegate to the right reader based on the account type
+                await new MinifluxReader(feed.Account).MarkFeedItemRead(RemoteId);
 
                 break;
             case AccountType.Local:

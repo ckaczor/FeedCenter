@@ -14,7 +14,7 @@ public partial class FeedWindow
         InitializeComponent();
     }
 
-    public bool? Display(Feed feed, Window owner)
+    public bool? Display(Feeds.Feed feed, Window owner)
     {
         CategoryComboBox.ItemsSource = _entities.Categories;
 

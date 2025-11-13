@@ -12,7 +12,7 @@ public class UserAgentItem
     {
         new UserAgentItem
         {
-            Caption = Properties.Resources.ApplicationUserAgentCaption,
+            Caption = Resources.ApplicationUserAgentCaption,
             UserAgent = string.Empty
         },
         new UserAgentItem

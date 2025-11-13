@@ -1,5 +1,6 @@
 ﻿using ChrisKaczor.Wpf.Validation;
 using System.Windows;
+using FeedCenter.Feeds;
 
 namespace FeedCenter.Options;
 

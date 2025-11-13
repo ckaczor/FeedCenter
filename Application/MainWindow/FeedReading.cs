@@ -1,38 +1,19 @@
 ﻿using ChrisKaczor.ApplicationUpdate;
+using FeedCenter.Feeds;
 using FeedCenter.Properties;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace FeedCenter;
 
 public partial class MainWindow
 {
-    private BackgroundWorker _feedReadWorker;
-
-    private class FeedReadWorkerInput
-    {
-        public bool ForceRead { get; }
-        public Guid? FeedId { get; }
-
-        public FeedReadWorkerInput()
-        {
-        }
-
-        public FeedReadWorkerInput(bool forceRead)
-        {
-            ForceRead = forceRead;
-        }
-
-        public FeedReadWorkerInput(bool forceRead, Guid? feedId)
-        {
-            ForceRead = forceRead;
-            FeedId = feedId;
-        }
-    }
+    private bool _reading;
 
     private void SetProgressMode(bool showProgress, int maximum)
     {
@@ -49,55 +30,72 @@ public partial class MainWindow
         }
     }
 
-    private void ReadCurrentFeed(bool forceRead = false)
+    private async void ReadCurrentFeed(bool forceRead = false)
     {
-        // Don't read if we're already working
-        if (_feedReadWorker.IsBusy)
-            return;
+        try
+        {
+            // Don't read if we're already working
+            if (_reading)
+                return;
 
-        // Don't read if there is nothing to read
-        if (!_database.Feeds.Any())
-            return;
+            _reading = true;
 
-        // Switch to progress mode
-        SetProgressMode(true, 1);
+            // Don't read if there is nothing to read
+            if (!_database.Feeds.Any())
+                return;
 
-        // Create the input class
-        var workerInput = new FeedReadWorkerInput(forceRead, _currentFeed.Id);
+            var accountReadInput = new AccountReadInput(_database, _currentFeed.Id, forceRead, () => { });
 
-        // Start the worker
-        _feedReadWorker.RunWorkerAsync(workerInput);
+            // Switch to progress mode
+            SetProgressMode(true, await _currentFeed.Account.GetProgressSteps(_currentFeed.Account, accountReadInput));
+
+            // Start reading
+            await HandleFeedReadWorkerStart(forceRead, _currentFeed.Id);
+        }
+        catch (Exception exception)
+        {
+            HandleException(exception);
+        }
     }
 
-    private void ReadFeeds(bool forceRead = false)
+    private async Task ReadFeeds(bool forceRead = false)
     {
         // Don't read if we're already working
-        if (_feedReadWorker.IsBusy)
+        if (_reading)
             return;
+
+        _reading = true;
 
         // Don't read if there is nothing to read
         if (!_database.Accounts.Any())
             return;
 
-        var progressSteps = _database.Accounts.Sum(a => a.GetProgressSteps(_database));
+        var accountReadInput = new AccountReadInput(_database, null, forceRead, () => { });
+
+        // Calculate total progress steps
+        var progressSteps = 0;
+
+        foreach (var account in _database.Accounts)
+        {
+            progressSteps += await account.GetProgressSteps(account, accountReadInput);
+        }
 
         // Switch to progress mode
         SetProgressMode(true, progressSteps);
 
-        // Create the input class
-        var workerInput = new FeedReadWorkerInput(forceRead);
-
-        // Start the worker
-        _feedReadWorker.RunWorkerAsync(workerInput);
+        // Start reading 
+        await HandleFeedReadWorkerStart(forceRead, null);
     }
 
-    private void HandleFeedReadWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+    private void IncrementProgress()
     {
+        Debug.Assert(FeedReadProgress.Value + 1 <= FeedReadProgress.Maximum);
+
         // Set progress
-        FeedReadProgress.Value = e.ProgressPercentage;
+        FeedReadProgress.Value++;
     }
 
-    private void HandleFeedReadWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    private void CompleteRead()
     {
         // Refresh the database to current settings
         ResetDatabase();
@@ -119,6 +117,8 @@ public partial class MainWindow
             NewVersionLink.Visibility = Visibility.Visible;
 
         UpdateErrorLink();
+
+        _reading = false;
     }
 
     private void UpdateErrorLink()
@@ -134,98 +134,61 @@ public partial class MainWindow
             : string.Format(Properties.Resources.FeedErrorsLink, feedErrorCount);
     }
 
-    private static void HandleFeedReadWorkerStart(object sender, DoWorkEventArgs e)
+    private async Task HandleFeedReadWorkerStart(bool forceRead, Guid? feedId)
     {
-        // Create a new database instance for just this thread
-        var database = new FeedCenterEntities();
-
-        // Get the worker
-        var worker = (BackgroundWorker)sender;
-
-        // Get the input information
-        var workerInput = (FeedReadWorkerInput)e.Argument ?? new FeedReadWorkerInput();
-
-        // Setup for progress
-        var currentProgress = 0;
-
-        var accountsToRead = new List<Account>();
-
-        // If we have a single feed then get the account for that feed
-        if (workerInput.FeedId != null)
+        try
         {
-            var feed = database.Feeds.FirstOrDefault(f => f.Id == workerInput.FeedId);
+            // Create a new database instance for just this thread
+            var database = new FeedCenterEntities();
 
-            if (feed != null)
-                accountsToRead.Add(feed.Account);
-        }
-        else
-        {
-            // Otherwise get all accounts
-            accountsToRead.AddRange(database.Accounts);
-        }
+            var accountsToRead = new List<Account>();
 
-        var incrementProgress = () =>
-        {
-            // Increment progress
-            currentProgress += 1;
+            // If we have a single feed then get the account for that feed
+            if (feedId != null)
+            {
+                var feed = database.Feeds.FirstOrDefault(f => f.Id == feedId);
+
+                if (feed != null)
+                    accountsToRead.Add(feed.Account);
+            }
+            else
+            {
+                // Otherwise get all accounts
+                accountsToRead.AddRange(database.Accounts);
+            }
+
+            // Loop over each account and read it
+            foreach (var account in accountsToRead)
+            {
+                var accountReadInput = new AccountReadInput(database, feedId, forceRead, IncrementProgress);
+
+                await account.Read(accountReadInput);
+            }
 
             // Report progress
-            worker.ReportProgress(currentProgress);
-        };
+            IncrementProgress();
 
-        // Loop over each account and read it
-        foreach (var account in accountsToRead)
-        {
-            var accountReadInput = new AccountReadInput(database, workerInput.FeedId, workerInput.ForceRead, incrementProgress);
+            // See if we're due for a version check
+            if (UpdateCheck.LocalVersion.Major > 0 && DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval)
+            {
+                // Get the update information
+                await UpdateCheck.CheckForUpdate(Settings.Default.IncludePrerelease);
 
-            account.Read(accountReadInput);
+                // Update the last check time
+                Settings.Default.LastVersionCheck = DateTime.Now;
+            }
+
+            // Report progress
+            IncrementProgress();
+
+            // Sleep for a little bit so the user can see the update
+            Thread.Sleep(Settings.Default.ProgressSleepInterval * 3);
+
+            CompleteRead();
         }
-
-        //// Create the list of feeds to read
-        //var feedsToRead = new List<Feed>();
-
-        //// If we have a single feed then add it to the list - otherwise add them all
-        //if (workerInput.FeedId != null)
-        //    feedsToRead.Add(database.Feeds.First(feed => feed.Id == workerInput.FeedId));
-        //else
-        //    feedsToRead.AddRange(database.Feeds);
-
-        //// Loop over each feed and read it
-        //foreach (var feed in feedsToRead)
-        //{
-        //    // Read the feed
-        //    database.SaveChanges(() => feed.Read(workerInput.ForceRead));
-
-        //    // Increment progress
-        //    currentProgress += 1;
-
-        //    // Report progress
-        //    worker.ReportProgress(currentProgress);
-        //}
-
-        // Increment progress
-        currentProgress += 1;
-
-        // Report progress
-        worker.ReportProgress(currentProgress);
-
-        // See if we're due for a version check
-        if (DateTime.Now - Settings.Default.LastVersionCheck >= Settings.Default.VersionCheckInterval)
+        catch (Exception exception)
         {
-            // Get the update information
-            UpdateCheck.CheckForUpdate(Settings.Default.IncludePrerelease).Wait();
-
-            // Update the last check time
-            Settings.Default.LastVersionCheck = DateTime.Now;
+            HandleException(exception);
         }
-
-        // Increment progress
-        currentProgress += 1;
-
-        // Report progress
-        worker.ReportProgress(currentProgress);
-
-        // Sleep for a little bit so the user can see the update
-        Thread.Sleep(Settings.Default.ProgressSleepInterval * 3);
     }
 }

@@ -1,6 +1,3 @@
-﻿namespace FeedCenter.Options
-{
-    public class CheckedFeedListItem : CheckedListItem<Feed>
-    {
-    }
-}
+﻿namespace FeedCenter.Options;
+
+public class CheckedFeedListItem : CheckedListItem<Feeds.Feed>;

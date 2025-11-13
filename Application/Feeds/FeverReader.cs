@@ -1,20 +1,26 @@
-﻿using System;
+﻿using ChrisKaczor.FeverClient;
+using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using ChrisKaczor.FeverClient;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
-internal class FeverReader : IAccountReader
+internal class FeverReader(Account account) : IAccountReader
 {
-    public int GetProgressSteps(FeedCenterEntities entities)
+    public async Task<int> GetProgressSteps(AccountReadInput accountReadInput)
     {
-        return 7;
+        var apiKey = account.Authenticate ? GetApiKey(account) : string.Empty;
+
+        var feverClient = new FeverClient(account.Url, apiKey);
+
+        var feeds = await feverClient.GetFeeds();
+
+        return feeds.Count() * 2 + 5;
     }
 
-    public AccountReadResult Read(Account account, AccountReadInput accountReadInput)
+    public async Task<AccountReadResult> Read(AccountReadInput accountReadInput)
     {
         var checkTime = DateTimeOffset.UtcNow;
 
@@ -24,11 +30,11 @@ internal class FeverReader : IAccountReader
 
         accountReadInput.IncrementProgress();
 
-        var feverFeeds = feverClient.GetFeeds().Result.ToList();
+        var feverFeeds = (await feverClient.GetFeeds()).ToList();
 
         accountReadInput.IncrementProgress();
 
-        var allFeverFeedItems = feverClient.GetAllFeedItems().Result.ToList();
+        var allFeverFeedItems = (await feverClient.GetAllFeedItems()).ToList();
 
         accountReadInput.IncrementProgress();
 
@@ -120,14 +126,14 @@ internal class FeverReader : IAccountReader
 
         account.LastChecked = checkTime;
 
-        transaction.Commit();
+        await transaction.CommitAsync();
 
         accountReadInput.IncrementProgress();
 
         return AccountReadResult.Success;
     }
 
-    public static async Task MarkFeedItemRead(Account account, string feedItemId)
+    public async Task MarkFeedItemRead(string feedItemId)
     {
         var apiKey = account.Authenticate ? GetApiKey(account) : string.Empty;
 

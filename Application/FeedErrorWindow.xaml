@@ -4,6 +4,7 @@
         xmlns:linkControl="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
         xmlns:controlBox="clr-namespace:ChrisKaczor.Wpf.Windows;assembly=ChrisKaczor.Wpf.Windows.ControlBox" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:feedCenter="clr-namespace:FeedCenter"
+        xmlns:feeds="clr-namespace:FeedCenter.Feeds"
         mc:Ignorable="d"
         x:Class="FeedCenter.FeedErrorWindow"
         Title="{x:Static my:Resources.FeedErrorWindow}"
@@ -46,7 +47,7 @@
                   HeadersVisibility="Column"
                   Background="{x:Null}"
                   CanUserSortColumns="True"
-                  d:DataContext="{d:DesignInstance Type=feedCenter:Feed}" SelectionChanged="FeedDataGrid_SelectionChanged">
+                  d:DataContext="{d:DesignInstance Type=feeds:Feed}" SelectionChanged="FeedDataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{x:Static my:Resources.FeedNameColumnHeader}"
                                     Binding="{Binding Name}"

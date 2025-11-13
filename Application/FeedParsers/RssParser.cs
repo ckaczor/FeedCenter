@@ -2,6 +2,7 @@
 using Serilog;
 using System;
 using System.Xml;
+using FeedCenter.Feeds;
 
 namespace FeedCenter.FeedParsers;
 

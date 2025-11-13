@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
 internal class DataErrorDictionary : Dictionary<string, List<string>>
 {

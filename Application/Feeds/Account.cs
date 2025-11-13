@@ -1,10 +1,11 @@
-﻿using Realms;
-using System;
+﻿using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using Realms;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
 public class Account : RealmObject, INotifyDataErrorInfo
 {
@@ -37,6 +38,7 @@ public class Account : RealmObject, INotifyDataErrorInfo
     {
         AccountType.Fever => false,
         AccountType.GoogleReader => false,
+        AccountType.Miniflux => true,
         AccountType.Local => true,
         _ => throw new NotSupportedException()
     };
@@ -45,6 +47,7 @@ public class Account : RealmObject, INotifyDataErrorInfo
     {
         AccountType.Fever => false,
         AccountType.GoogleReader => false,
+        AccountType.Miniflux => true,
         AccountType.Local => true,
         _ => throw new NotSupportedException()
     };
@@ -158,21 +161,22 @@ public class Account : RealmObject, INotifyDataErrorInfo
         return new Account { Name = DefaultName, Type = AccountType.Local };
     }
 
-    public int GetProgressSteps(FeedCenterEntities entities)
+    public async Task<int> GetProgressSteps(Account account, AccountReadInput accountReadInput)
     {
         var progressSteps = Type switch
         {
             // Delegate to the right reader based on the account type
-            AccountType.Fever => new FeverReader().GetProgressSteps(entities),
-            AccountType.GoogleReader => new GoogleReaderReader().GetProgressSteps(entities),
-            AccountType.Local => new LocalReader().GetProgressSteps(entities),
+            AccountType.Fever => await new FeverReader(account).GetProgressSteps(accountReadInput),
+            AccountType.GoogleReader => await new GoogleReaderReader(account).GetProgressSteps(accountReadInput),
+            AccountType.Miniflux => await new MinifluxReader(account).GetProgressSteps(accountReadInput),
+            AccountType.Local => await new LocalReader(account).GetProgressSteps(accountReadInput),
             _ => throw new NotSupportedException()
         };
 
         return progressSteps;
     }
 
-    public AccountReadResult Read(AccountReadInput accountReadInput)
+    public async Task<AccountReadResult> Read(AccountReadInput accountReadInput)
     {
         // If not enabled then do nothing
         if (!Enabled)
@@ -189,14 +193,25 @@ public class Account : RealmObject, INotifyDataErrorInfo
                 return AccountReadResult.NotDue;
         }
 
-        var accountReadResult = Type switch
+        AccountReadResult accountReadResult;
+        switch (Type)
         {
             // Delegate to the right reader based on the account type
-            AccountType.Fever => new FeverReader().Read(this, accountReadInput),
-            AccountType.GoogleReader => new GoogleReaderReader().Read(this, accountReadInput),
-            AccountType.Local => new LocalReader().Read(this, accountReadInput),
-            _ => throw new NotSupportedException()
-        };
+            case AccountType.Fever:
+                accountReadResult = await new FeverReader(this).Read(accountReadInput);
+                break;
+            case AccountType.GoogleReader:
+                accountReadResult = await new GoogleReaderReader(this).Read(accountReadInput);
+                break;
+            case AccountType.Miniflux:
+                accountReadResult = await new MinifluxReader(this).Read(accountReadInput);
+                break;
+            case AccountType.Local:
+                accountReadResult = await new LocalReader(this).Read(accountReadInput);
+                break;
+            default:
+                throw new NotSupportedException();
+        }
 
         return accountReadResult;
     }

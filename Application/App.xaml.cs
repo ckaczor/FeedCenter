@@ -35,8 +35,8 @@ public partial class App
         var app = new App();
         app.InitializeComponent();
 
-        // Create an single instance handle to see if we are already running
-        var isolationHandle = SingleInstance.GetSingleInstanceHandleAsync(Name).Result;
+        // Create a single instance handle to see if we are already running
+        var isolationHandle = SingleInstance.GetSingleInstanceHandleAsync(Name).GetAwaiter().GetResult();
 
         // If there is another copy then pass it the command line and exit
         if (isolationHandle == null)

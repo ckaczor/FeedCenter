@@ -1,11 +1,11 @@
-﻿using JetBrains.Annotations;
-using Realms;
-using System;
+﻿using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
+using Realms;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
 public class Category : RealmObject, INotifyDataErrorInfo
 {

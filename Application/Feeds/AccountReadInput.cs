@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
 public class AccountReadInput(FeedCenterEntities entities, Guid? feedId, bool forceRead, Action incrementProgress)
 {

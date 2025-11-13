@@ -1,6 +1,7 @@
 ﻿using ChrisKaczor.Wpf.Validation;
+using FeedCenter.Feeds;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -33,46 +34,46 @@ public partial class AccountWindow
         return ShowDialog();
     }
 
-    private void HandleOkayButtonClick(object sender, RoutedEventArgs e)
+    private async void HandleOkayButtonClick(object sender, RoutedEventArgs e)
     {
-        var transaction = _entities.BeginTransaction();
-
-        if (!this.IsValid(OptionsTabControl))
+        try
         {
-            transaction.Rollback();
-            return;
-        }
+            var transaction = _entities.BeginTransaction();
 
-        if (_isNew)
-        {
-            _entities.Accounts.Add(_account);
-        }
-
-        transaction.Commit();
-
-        var accountId = _account.Id;
-
-        AccountReadProgressBar.Value = 0;
-        AccountReadProgressBar.Maximum = _account.GetProgressSteps(_entities) + 1;
-
-        AccountReadProgress.Visibility = Visibility.Visible;
-        ButtonPanel.Visibility = Visibility.Collapsed;
-
-        var dispatcher = Dispatcher.CurrentDispatcher;
-
-        Task.Run(() =>
-        {
-            var entities = new FeedCenterEntities();
-            var account = entities.Accounts.First(a => a.Id == accountId);
-            var accountReadInput = new AccountReadInput(entities, null, true, () => dispatcher.Invoke(() => AccountReadProgressBar.Value++));
-            account.Read(accountReadInput);
-
-            dispatcher.Invoke(() =>
+            if (!this.IsValid(OptionsTabControl))
             {
-                DialogResult = true;
+                transaction.Rollback();
+                return;
+            }
 
-                Close();
-            });
-        });
+            if (_isNew)
+            {
+                _entities.Accounts.Add(_account);
+            }
+
+            await transaction.CommitAsync();
+
+            var accountId = _account.Id;
+
+            var accountReadInput = new AccountReadInput(_entities, null, true, () => AccountReadProgressBar.Value++);
+
+            AccountReadProgressBar.Value = 0;
+            AccountReadProgressBar.Maximum = await _account.GetProgressSteps(_account, accountReadInput);
+
+            AccountReadProgress.Visibility = Visibility.Visible;
+            ButtonPanel.Visibility = Visibility.Collapsed;
+
+            //var entities = new FeedCenterEntities();
+            var account = _entities.Accounts.First(a => a.Id == accountId);
+            await account.Read(accountReadInput);
+
+            DialogResult = true;
+
+            Close();
+        }
+        catch (Exception exception)
+        {
+            MainWindow.HandleException(exception);
+        }
     }
 }

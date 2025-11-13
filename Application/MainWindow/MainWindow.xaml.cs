@@ -1,5 +1,6 @@
 ﻿using ChrisKaczor.ApplicationUpdate;
 using ChrisKaczor.Wpf.Application;
+using FeedCenter.Feeds;
 using FeedCenter.Properties;
 using Serilog;
 using System;
@@ -29,7 +30,6 @@ public partial class MainWindow : IDisposable
     public void Dispose()
     {
         _mainTimer?.Dispose();
-        _feedReadWorker?.Dispose();
 
         GC.SuppressFinalize(this);
     }
@@ -66,12 +66,6 @@ public partial class MainWindow : IDisposable
             : Brushes.Black;
         HeaderLabel.Foreground = LinkTextList.Foreground;
 
-        // Create the background worker that does the actual reading
-        _feedReadWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-        _feedReadWorker.DoWork += HandleFeedReadWorkerStart;
-        _feedReadWorker.ProgressChanged += HandleFeedReadWorkerProgressChanged;
-        _feedReadWorker.RunWorkerCompleted += HandleFeedReadWorkerCompleted;
-
         // Set up the database
         _database = new FeedCenterEntities();
 
@@ -88,13 +82,16 @@ public partial class MainWindow : IDisposable
         // Initialize the feed display
         InitializeDisplay();
 
-        // Check for update
-        if (Settings.Default.CheckVersionAtStartup)
-            await UpdateCheck.CheckForUpdate(Settings.Default.IncludePrerelease);
+        if (UpdateCheck.LocalVersion.Major > 0)
+        {
+            // Check for update
+            if (Settings.Default.CheckVersionAtStartup)
+                await UpdateCheck.CheckForUpdate(Settings.Default.IncludePrerelease);
 
-        // Show the link if updates are available
-        if (UpdateCheck.UpdateAvailable)
-            NewVersionLink.Visibility = Visibility.Visible;
+            // Show the link if updates are available
+            if (UpdateCheck.UpdateAvailable)
+                NewVersionLink.Visibility = Visibility.Visible;
+        }
 
         Log.Logger.Information("MainForm creation finished");
     }

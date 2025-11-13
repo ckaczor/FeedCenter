@@ -7,6 +7,7 @@
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
                           xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
                           xmlns:feedCenter="clr-namespace:FeedCenter"
+                          xmlns:feeds="clr-namespace:FeedCenter.Feeds"
                           mc:Ignorable="d"
                           d:DesignHeight="311"
                           d:DesignWidth="425">
@@ -46,7 +47,7 @@
                   BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                   AllowDrop="True"
                   Background="{x:Null}"
-                  d:DataContext="{d:DesignInstance feedCenter:Account }">
+                  d:DataContext="{d:DesignInstance feeds:Account }">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}"
                                     Header="{x:Static properties:Resources.AccountNameColumnHeader}"

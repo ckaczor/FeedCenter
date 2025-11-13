@@ -19,7 +19,7 @@ using JetBrains.Annotations;
 using Realms;
 using Serilog;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
 public partial class Feed : RealmObject, INotifyDataErrorInfo
 {

@@ -7,6 +7,7 @@
                           xmlns:properties="clr-namespace:FeedCenter.Properties"
                           xmlns:controls="clr-namespace:ChrisKaczor.Wpf.Controls;assembly=ChrisKaczor.Wpf.Controls.Link"
                           xmlns:feedCenter="clr-namespace:FeedCenter"
+                          xmlns:feeds="clr-namespace:FeedCenter.Feeds"
                           mc:Ignorable="d"
                           d:DesignHeight="311"
                           d:DesignWidth="425">
@@ -45,7 +46,7 @@
                   BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                   AllowDrop="True"
                   Background="{x:Null}"
-                  d:DataContext="{d:DesignInstance feedCenter:Category }">
+                  d:DataContext="{d:DesignInstance feeds:Category }">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}"
                                     Header="{x:Static properties:Resources.CategoryNameColumnHeader}"
@@ -80,7 +81,7 @@
                   BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                   Background="{x:Null}"
                   SelectionChanged="HandleFeedDataGridSelectionChanged"
-                  d:DataContext="{d:DesignInstance feedCenter:Feed }">
+                  d:DataContext="{d:DesignInstance feeds:Feed }">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}"
                                     Header="{x:Static properties:Resources.FeedNameColumnHeader}"

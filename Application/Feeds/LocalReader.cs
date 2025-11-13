@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace FeedCenter;
+namespace FeedCenter.Feeds;
 
-public class LocalReader : IAccountReader
+public class LocalReader(Account account) : IAccountReader
 {
-    public int GetProgressSteps(FeedCenterEntities entities)
+    public Task<int> GetProgressSteps(AccountReadInput accountReadInput)
     {
-        var enabledFeedCount = entities.Feeds.Count(f => f.Account.Type == AccountType.Local && f.Enabled);
+        var enabledFeedCount = accountReadInput.Entities.Feeds.Count(f => f.Account.Type == AccountType.Local && f.Enabled);
 
-        return enabledFeedCount;
+        return Task.FromResult(enabledFeedCount);
     }
 
-    public AccountReadResult Read(Account account, AccountReadInput accountReadInput)
+    public Task<AccountReadResult> Read(AccountReadInput accountReadInput)
     {
         var checkTime = DateTimeOffset.UtcNow;
 
@@ -37,6 +38,11 @@ public class LocalReader : IAccountReader
 
         accountReadInput.Entities.SaveChanges(() => account.LastChecked = checkTime);
 
-        return AccountReadResult.Success;
+        return Task.FromResult(AccountReadResult.Success);
+    }
+
+    public Task MarkFeedItemRead(string feedItemId)
+    {
+        throw new NotImplementedException();
     }
 }

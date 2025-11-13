@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data.SqlServerCe;
 using System.IO;
 using System.Linq;
+using FeedCenter.Feeds;
 
 namespace FeedCenter.Data;
 

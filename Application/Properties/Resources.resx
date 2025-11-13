@@ -614,5 +614,8 @@ All feeds currently in category "{0}" will be moved to the default category.</va
   </data>
   <data name="includePrereleaseCheckBox" xml:space="preserve">
     <value>Include _prerelease</value>
-  </data>  
+  </data>
+  <data name="AccountTypeMiniflux" xml:space="preserve">
+    <value>Miniflux</value>
+  </data>
 </root>

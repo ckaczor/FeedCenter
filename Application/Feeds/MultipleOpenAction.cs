@@ -1,4 +1,4 @@
-﻿namespace FeedCenter;
+﻿namespace FeedCenter.Feeds;
 
 public enum MultipleOpenAction
 {
