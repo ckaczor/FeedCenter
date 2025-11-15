@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace FeedCenter.Feeds;
+namespace FeedCenter.Accounts;
 
 internal class GoogleReaderReader(Account account) : IAccountReader
 {
@@ -133,6 +133,10 @@ internal class GoogleReaderReader(Account account) : IAccountReader
 
         return Task.CompletedTask;
     }
+
+    public bool SupportsFeedDelete => false;
+
+    public bool SupportsFeedEdit => false;
 
     //private static string GetApiKey(Account account)
     //{

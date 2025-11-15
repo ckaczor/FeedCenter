@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FeedCenter.Feeds;
 
-namespace FeedCenter.Feeds;
+namespace FeedCenter.Accounts;
 
 public class LocalReader(Account account) : IAccountReader
 {
@@ -45,4 +46,8 @@ public class LocalReader(Account account) : IAccountReader
     {
         throw new NotImplementedException();
     }
+
+    public bool SupportsFeedDelete => true;
+
+    public bool SupportsFeedEdit => true;
 }

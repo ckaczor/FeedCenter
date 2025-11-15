@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using FeedCenter.Feeds;
+using FeedCenter.Accounts;
 
 namespace FeedCenter.Options;
 

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
+using FeedCenter.Accounts;
 using FeedCenter.Feeds;
 
 namespace FeedCenter.Options;

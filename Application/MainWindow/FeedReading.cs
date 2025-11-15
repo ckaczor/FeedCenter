@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using FeedCenter.Accounts;
 
 namespace FeedCenter;
 
@@ -47,7 +48,7 @@ public partial class MainWindow
             var accountReadInput = new AccountReadInput(_database, _currentFeed.Id, forceRead, () => { });
 
             // Switch to progress mode
-            SetProgressMode(true, await _currentFeed.Account.GetProgressSteps(_currentFeed.Account, accountReadInput));
+            SetProgressMode(true, await _currentFeed.Account.GetProgressSteps(accountReadInput));
 
             // Start reading
             await HandleFeedReadWorkerStart(forceRead, _currentFeed.Id);
@@ -77,7 +78,7 @@ public partial class MainWindow
 
         foreach (var account in _database.Accounts)
         {
-            progressSteps += await account.GetProgressSteps(account, accountReadInput);
+            progressSteps += await account.GetProgressSteps(accountReadInput);
         }
 
         // Switch to progress mode

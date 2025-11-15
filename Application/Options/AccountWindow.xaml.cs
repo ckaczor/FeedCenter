@@ -1,9 +1,8 @@
 ﻿using ChrisKaczor.Wpf.Validation;
-using FeedCenter.Feeds;
 using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
+using FeedCenter.Accounts;
 
 namespace FeedCenter.Options;
 
@@ -58,7 +57,7 @@ public partial class AccountWindow
             var accountReadInput = new AccountReadInput(_entities, null, true, () => AccountReadProgressBar.Value++);
 
             AccountReadProgressBar.Value = 0;
-            AccountReadProgressBar.Maximum = await _account.GetProgressSteps(_account, accountReadInput);
+            AccountReadProgressBar.Maximum = await _account.GetProgressSteps(accountReadInput);
 
             AccountReadProgress.Visibility = Visibility.Visible;
             ButtonPanel.Visibility = Visibility.Collapsed;

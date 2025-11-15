@@ -4,8 +4,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using FeedCenter.Feeds;
 
-namespace FeedCenter.Feeds;
+namespace FeedCenter.Accounts;
 
 internal class FeverReader(Account account) : IAccountReader
 {
@@ -141,6 +142,10 @@ internal class FeverReader(Account account) : IAccountReader
 
         await feverClient.MarkFeedItemAsRead(int.Parse(feedItemId));
     }
+
+    public bool SupportsFeedDelete => false;
+
+    public bool SupportsFeedEdit => false;
 
     private static string GetApiKey(Account account)
     {

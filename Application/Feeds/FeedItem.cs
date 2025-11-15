@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FeedCenter.Accounts;
 using FeedCenter.Options;
 using Realms;
 
@@ -86,24 +86,7 @@ public partial class FeedItem : RealmObject
         if (feed == null || feed.Account.Type == AccountType.Local)
             return;
 
-        switch (feed.Account.Type)
-        {
-            case AccountType.Fever:
-                // Delegate to the right reader based on the account type
-                await new FeverReader(feed.Account).MarkFeedItemRead(RemoteId);
-
-                break;
-            case AccountType.Miniflux:
-                // Delegate to the right reader based on the account type
-                await new MinifluxReader(feed.Account).MarkFeedItemRead(RemoteId);
-
-                break;
-            case AccountType.Local:
-                break;
-            default:
-                Debug.Assert(false);
-                break;
-        }
+        await AccountReaderFactory.CreateAccountReader(feed.Account).MarkFeedItemRead(RemoteId);
     }
 
     [GeneratedRegex("\\n")]

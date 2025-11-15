@@ -1,4 +1,4 @@
-﻿namespace FeedCenter.Feeds;
+﻿namespace FeedCenter.Accounts;
 
 public enum AccountType
 {

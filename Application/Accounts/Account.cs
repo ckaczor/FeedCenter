@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FeedCenter.Feeds;
+using Realms;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Realms;
 
-namespace FeedCenter.Feeds;
+namespace FeedCenter.Accounts;
 
 public class Account : RealmObject, INotifyDataErrorInfo
 {
@@ -25,6 +26,15 @@ public class Account : RealmObject, INotifyDataErrorInfo
         _dataErrorDictionary.ErrorsChanged += DataErrorDictionaryErrorsChanged;
     }
 
+    private IAccountReader _accountReader;
+
+    private IAccountReader GetAccountReader()
+    {
+        _accountReader ??= AccountReaderFactory.CreateAccountReader(this);
+
+        return _accountReader;
+    }
+
     [PrimaryKey]
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -34,23 +44,9 @@ public class Account : RealmObject, INotifyDataErrorInfo
         set => TypeRaw = value.ToString();
     }
 
-    public bool SupportsFeedEdit => Type switch
-    {
-        AccountType.Fever => false,
-        AccountType.GoogleReader => false,
-        AccountType.Miniflux => true,
-        AccountType.Local => true,
-        _ => throw new NotSupportedException()
-    };
+    public bool SupportsFeedEdit => GetAccountReader().SupportsFeedEdit;
 
-    public bool SupportsFeedDelete => Type switch
-    {
-        AccountType.Fever => false,
-        AccountType.GoogleReader => false,
-        AccountType.Miniflux => true,
-        AccountType.Local => true,
-        _ => throw new NotSupportedException()
-    };
+    public bool SupportsFeedDelete => GetAccountReader().SupportsFeedDelete;
 
     private string TypeRaw { get; set; }
 
@@ -161,17 +157,9 @@ public class Account : RealmObject, INotifyDataErrorInfo
         return new Account { Name = DefaultName, Type = AccountType.Local };
     }
 
-    public async Task<int> GetProgressSteps(Account account, AccountReadInput accountReadInput)
+    public async Task<int> GetProgressSteps(AccountReadInput accountReadInput)
     {
-        var progressSteps = Type switch
-        {
-            // Delegate to the right reader based on the account type
-            AccountType.Fever => await new FeverReader(account).GetProgressSteps(accountReadInput),
-            AccountType.GoogleReader => await new GoogleReaderReader(account).GetProgressSteps(accountReadInput),
-            AccountType.Miniflux => await new MinifluxReader(account).GetProgressSteps(accountReadInput),
-            AccountType.Local => await new LocalReader(account).GetProgressSteps(accountReadInput),
-            _ => throw new NotSupportedException()
-        };
+        var progressSteps = await GetAccountReader().GetProgressSteps(accountReadInput);
 
         return progressSteps;
     }
@@ -193,25 +181,7 @@ public class Account : RealmObject, INotifyDataErrorInfo
                 return AccountReadResult.NotDue;
         }
 
-        AccountReadResult accountReadResult;
-        switch (Type)
-        {
-            // Delegate to the right reader based on the account type
-            case AccountType.Fever:
-                accountReadResult = await new FeverReader(this).Read(accountReadInput);
-                break;
-            case AccountType.GoogleReader:
-                accountReadResult = await new GoogleReaderReader(this).Read(accountReadInput);
-                break;
-            case AccountType.Miniflux:
-                accountReadResult = await new MinifluxReader(this).Read(accountReadInput);
-                break;
-            case AccountType.Local:
-                accountReadResult = await new LocalReader(this).Read(accountReadInput);
-                break;
-            default:
-                throw new NotSupportedException();
-        }
+        var accountReadResult = await GetAccountReader().Read(accountReadInput);
 
         return accountReadResult;
     }

@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using FeedCenter.Feeds;
+using FeedCenter.Accounts;
 
 namespace FeedCenter.Options;
 
@@ -53,7 +52,7 @@ public partial class AccountsOptionsPanel
 
     private void AddAccount()
     {
-        var account = new Account(AccountType.Fever);
+        var account = new Account(AccountType.Miniflux);
 
         var accountWindow = new AccountWindow(_entities);
 

@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ChrisKaczor.MinifluxClient;
+using FeedCenter.Feeds;
 
-namespace FeedCenter.Feeds;
+namespace FeedCenter.Accounts;
 
 internal class MinifluxReader(Account account) : IAccountReader
 {
@@ -143,4 +144,8 @@ internal class MinifluxReader(Account account) : IAccountReader
 
         await minifluxClient.MarkFeedEntries([long.Parse(feedItemId)], FeedEntryStatus.Read);
     }
+
+    public bool SupportsFeedDelete => true;
+
+    public bool SupportsFeedEdit => true;
 }
