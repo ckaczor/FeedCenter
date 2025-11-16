@@ -25,9 +25,10 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ChrisKaczor.ApplicationUpdate" Version="1.0.7" />
-		<PackageReference Include="ChrisKaczor.FeverClient" Version="1.0.1" />
+		<PackageReference Include="ChrisKaczor.FeverClient" Version="1.0.2" />
 		<PackageReference Include="ChrisKaczor.GenericSettingsProvider" Version="1.0.4" />
 		<PackageReference Include="ChrisKaczor.InstalledBrowsers" Version="1.0.4" />
+		<PackageReference Include="ChrisKaczor.MinifluxClient" Version="1.0.3" />
 		<PackageReference Include="ChrisKaczor.Wpf.Application.SingleInstance" Version="1.0.5" />
 		<PackageReference Include="ChrisKaczor.Wpf.Application.StartWithWindows" Version="1.0.5" />
 		<PackageReference Include="ChrisKaczor.Wpf.Controls.HtmlTextBlock" Version="1.0.6" />
@@ -55,10 +56,6 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\FeverClient\FeverClient.csproj" />
-	  <ProjectReference Include="..\..\MinifluxClient\Library\MinifluxClient.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Resource Include="Resources\Application.ico" />
