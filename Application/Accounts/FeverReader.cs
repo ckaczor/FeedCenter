@@ -1,5 +1,6 @@
 ﻿using ChrisKaczor.FeverClient;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -7,6 +8,8 @@ using System.Threading.Tasks;
 using FeedCenter.Feeds;
 
 namespace FeedCenter.Accounts;
+
+using FeverFeedItem = ChrisKaczor.FeverClient.Models.FeedItem;
 
 internal class FeverReader(Account account) : IAccountReader
 {
@@ -35,15 +38,17 @@ internal class FeverReader(Account account) : IAccountReader
 
         accountReadInput.IncrementProgress();
 
-        var allFeverFeedItems = (await feverClient.GetAllFeedItems()).ToList();
+        var allFeverFeedItems = await GetAllFeverFeedItems(feverClient);
 
         accountReadInput.IncrementProgress();
+
+        var existingFeedsByRemoteId = accountReadInput.Entities.Feeds.Where(f => f.Account.Id == account.Id) .ToDictionary(f => f.RemoteId);
 
         var transaction = accountReadInput.Entities.BeginTransaction();
 
         foreach (var feverFeed in feverFeeds)
         {
-            var feed = accountReadInput.Entities.Feeds.FirstOrDefault(f => f.RemoteId == feverFeed.Id.ToString() && f.Account.Id == account.Id);
+            var feed = existingFeedsByRemoteId.GetValueOrDefault(feverFeed.Id.ToString(), null);
 
             if (feed == null)
             {
@@ -73,15 +78,15 @@ internal class FeverReader(Account account) : IAccountReader
 
             accountReadInput.IncrementProgress();
 
-            var feverFeedItems = allFeverFeedItems
-                .Where(f => f.FeedId == feverFeed.Id)
-                .OrderByDescending(fi => fi.CreatedOnTime).ToList();
+            var feverFeedItems = allFeverFeedItems.GetValueOrDefault(feverFeed.Id, []);
+
+            var existingFeedItemsByRemoteId = feed.Items.ToDictionary(fi => fi.RemoteId);
 
             var sequence = 1;
 
             foreach (var feverFeedItem in feverFeedItems)
             {
-                var feedItem = feed.Items.FirstOrDefault(f => f.RemoteId == feverFeedItem.Id.ToString());
+                var feedItem = existingFeedItemsByRemoteId.GetValueOrDefault(feverFeedItem.Id.ToString(), null);
 
                 if (feedItem == null)
                 {
@@ -132,6 +137,20 @@ internal class FeverReader(Account account) : IAccountReader
         accountReadInput.IncrementProgress();
 
         return AccountReadResult.Success;
+    }
+
+    private static async Task<Dictionary<int, List<FeverFeedItem>>> GetAllFeverFeedItems(FeverClient feverClient)
+    {
+        var allFeverFeedItems = new List<FeverFeedItem>();
+
+        await foreach (var page in feverClient.GetAllFeedItems())
+        {
+            allFeverFeedItems.AddRange(page);
+        }
+
+        var grouped = allFeverFeedItems.OrderByDescending(fi => fi.CreatedOnTime).GroupBy(fi => fi.FeedId);
+
+        return grouped.ToDictionary(g => g.Key, g => g.ToList());
     }
 
     public async Task MarkFeedItemRead(string feedItemId)
