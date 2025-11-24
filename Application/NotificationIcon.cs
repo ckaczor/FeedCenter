@@ -19,7 +19,7 @@ internal static class NotificationIcon
         _notificationIcon = new TaskbarIcon { Icon = Resources.Application };
         _notificationIcon.TrayMouseDoubleClick += HandleNotificationIconDoubleClick;
 
-        // Setup the menu
+        // Set up the menu
         var contextMenu = new ContextMenu();
         contextMenu.Opened += HandleContextMenuOpened;
 
@@ -76,7 +76,7 @@ internal static class NotificationIcon
     public static void Dispose()
     {
         // Get rid of the icon
-        _notificationIcon.Dispose();
+        _notificationIcon?.Dispose();
         _notificationIcon = null;
 
         _mainWindow = null;

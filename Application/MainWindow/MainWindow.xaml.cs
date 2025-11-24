@@ -54,9 +54,6 @@ public partial class MainWindow : IDisposable
         // Set up the update handler
         InitializeUpdate();
 
-        // Show the notification icon
-        NotificationIcon.Initialize(this);
-
         // Load window settings
         LoadWindowSettings();
 
@@ -91,6 +88,16 @@ public partial class MainWindow : IDisposable
             // Show the link if updates are available
             if (UpdateCheck.UpdateAvailable)
                 NewVersionLink.Visibility = Visibility.Visible;
+        }
+
+        try
+        {
+            // Show the notification icon
+            NotificationIcon.Initialize(this);
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Error(e, "");
         }
 
         Log.Logger.Information("MainForm creation finished");
